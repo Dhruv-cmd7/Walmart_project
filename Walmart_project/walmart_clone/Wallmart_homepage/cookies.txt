@@ -1,0 +1,8 @@
+# HTTrack Website Copier Cookie File
+# This file format is compatible with Netscape cookies
+www.walmart.com	TRUE	/	FALSE	1999999999	_pxhd	1ff6590af84d077e41a95428b07690d51d50dee5ebe4c596a4a9b468b60a5895:a0e55312-51ad-11f0-9335-226e71448f64
+www.walmart.com	TRUE	/	FALSE	1999999999	akavpau_p2	1750847283~id=fa8f8f19b56f4c53a5f62dd45474b537
+www.walmart.com	TRUE	/	FALSE	1999999999	SameSite	None
+.www.walmart.com	TRUE	/	FALSE	1999999999	TS012768cf	01bab6ef385944fac2333eee014e5bd61bd498e4eb5973a52b023a828693003808ab35255f318a5b2b009069138408a2b94a6af851
+.www.walmart.com	TRUE	/	FALSE	1999999999	isoLoc	IN_KA_t3
+
