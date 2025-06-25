@@ -1,0 +1,15 @@
+HTTrack3.49-2+htsswf+htsjava launched on Wed, 25 Jun 2025 15:18:35 at https://www.walmart.com/ +*.png +*.gif +*.jpg +*.jpeg +*.css +*.js -ad.doubleclick.net/* -mime:application/foobar
+(winhttrack -qwC2%Ps2u1%s%uN0%I0p3DaK0H0%kf2A25000%f#f -F "Mozilla/4.5 (compatible; HTTrack 3.0x; Windows 98)" -%F "<!-- Mirrored from %s%s by HTTrack Website Copier/3.x [XR&CO'2014], %s -->" -%l "en, *" https://www.walmart.com/ -O1 "D:\Walmart_project\Walmart_project\walmart_clone\walmart clone" +*.png +*.gif +*.jpg +*.jpeg +*.css +*.js -ad.doubleclick.net/* -mime:application/foobar )
+
+Information, Warnings and Errors reported for this mirror:
+note:	the hts-log.txt file, and hts-cache folder, may contain sensitive information,
+	such as username/password authentication for websites mirrored in this project
+	do not share these files/folders if you want these information to remain private
+
+15:19:27	Error: 	"Not Found" (404) at link https://www.walmart.com/6255ed72d86ece856725a2d80878bce6.eot (from https://www.walmart.com/blocked?url=L2FsbC1kZXBhcnRtZW50cw==&uuid=f3a85f71-51a8-11f0-b8f8-398c5782f8f5&vid=&g=b)
+15:19:27	Error: 	"Not Found" (404) at link https://www.walmart.com/fd827841624904d4b8f51d20174fa3a4.woff2 (from https://www.walmart.com/blocked?url=L2FsbC1kZXBhcnRtZW50cw==&uuid=f3a85f71-51a8-11f0-b8f8-398c5782f8f5&vid=&g=b)
+15:19:27	Error: 	"Not Found" (404) at link https://www.walmart.com/5b38b158833d0265af2b1c1093e489bd.woff (from https://www.walmart.com/blocked?url=L2FsbC1kZXBhcnRtZW50cw==&uuid=f3a85f71-51a8-11f0-b8f8-398c5782f8f5&vid=&g=b)
+15:19:27	Error: 	"Not Found" (404) at link https://www.walmart.com/2ebae25dcb1bb39acbac9cffd8f10b15.ttf (from https://www.walmart.com/blocked?url=L2FsbC1kZXBhcnRtZW50cw==&uuid=f3a85f71-51a8-11f0-b8f8-398c5782f8f5&vid=&g=b)
+
+HTTrack Website Copier/3.49-2 mirror complete in 53 seconds : 114 links scanned, 109 files written (5664733 bytes overall) [2200278 bytes received at 41514 bytes/sec], 7900212 bytes transferred using HTTP compression in 99 files, ratio 22%, 14.6 requests per connection
+(4 errors, 0 warnings, 0 messages)
