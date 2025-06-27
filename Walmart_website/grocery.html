@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Grocery - Walmart Minimal</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin />
+    <link rel="stylesheet" as="style" onload="this.rel='stylesheet'" href="https://fonts.googleapis.com/css2?display=swap&family=Noto+Sans:wght@400;500;700;900&family=Plus+Jakarta+Sans:wght@400;500;700;800" />
+    <link rel="icon" type="image/x-icon" href="data:image/x-icon;base64," />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      html, body {
+        margin: 0;
+        padding: 0;
+        background: #f0f5ff !important;
+        color: #001e60;
+      }
+      .product-card {
+        background: #fff;
+        border-radius: 1rem;
+        box-shadow: 0 2px 8px rgba(0,83,226,0.04);
+        transition: box-shadow 0.2s, transform 0.2s;
+      }
+      .product-card:hover {
+        box-shadow: 0 8px 32px rgba(0,83,226,0.10);
+        transform: translateY(-2px) scale(1.01);
+      }
+      .add-btn {
+        background: #0053e2;
+        color: #fff;
+        border-radius: 9999px;
+        padding: 0.5rem 1.5rem;
+        font-weight: 700;
+        transition: background 0.2s, transform 0.2s;
+      }
+      .add-btn:hover {
+        background: #001e60;
+        transform: scale(1.04);
+      }
+      .cart-badge {
+        background: #ffc220;
+        color: #001e60;
+        font-size: 0.75rem;
+        font-weight: 700;
+        border-radius: 9999px;
+        padding: 0 0.5em;
+        min-width: 1.5em;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        top: -0.5em;
+        right: -0.5em;
+      }
+      .text-primary { color: #001e60; }
+      .bg-primary { background: #0053e2; }
+      .bg-accent { background: #ffc220; }
+      .bg-light { background: #f0f5ff; }
+      .border-primary { border-color: #0053e2; }
+      .border-accent { border-color: #ffc220; }
+    </style>
+  </head>
+  <body>
+    <header class="flex items-center justify-between border-b-0 px-10 py-6 min-h-20 bg-[#0053e2] fixed top-0 left-0 w-full z-50">
+      <div class="flex items-center gap-8">
+        <div class="flex items-center gap-4">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/Walmart_logo.svg" alt="Walmart Logo" class="h-8 w-auto object-contain" style="filter: brightness(0) invert(1);" />
+          <h2 class="text-[#ffc220] text-lg font-bold leading-tight tracking-[-0.015em]"> </h2>
+        </div>
+        <nav class="flex items-center gap-9">
+          <a class="text-white text-sm font-medium leading-normal" href="index.html">Fashion</a>
+          <a class="text-white text-sm font-medium leading-normal" href="grocery.html">Grocery</a>
+        </nav>
+      </div>
+      <div class="flex flex-1 justify-end gap-8">
+        <label class="flex flex-col flex-1 max-w-3xl min-w-80 !h-10">
+          <div class="flex w-full flex-1 items-center rounded-full h-12 bg-white shadow-sm focus-within:shadow-md border border-transparent focus-within:border-[#0053e2] transition-all duration-200 relative">
+            <span class="pl-4 flex items-center cursor-pointer" id="search-icon-btn">
+              <svg class="w-6 h-6 text-[#0053e2]" fill="currentColor" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
+                <path d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"></path>
+              </svg>
+            </span>
+            <input id="navbar-search" placeholder="Search for products, brands, or categories" class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-full text-[#001e60] focus:outline-none focus:ring-0 border-none bg-transparent h-full placeholder:text-[#0053e2] px-4 text-base font-normal leading-normal" value="" autocomplete="off" aria-label="Search" />
+            <button type="button" id="clear-search" class="absolute right-3 top-1/2 -translate-y-1/2 text-[#0053e2] bg-[#f0f5ff] rounded-full p-1 hover:bg-[#ffc220] hover:text-[#001e60] transition-all duration-150 hidden" aria-label="Clear search">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+          </div>
+        </label>
+        <div class="flex gap-2 relative">
+          <button class="flex items-center justify-center rounded-full h-10 bg-[#f0f5ff] text-[#0053e2] px-2.5">
+            <svg class="w-5 h-5 text-[#0053e2]" fill="currentColor" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
+              <path d="M178,32c-20.65,0-38.73,8.88-50,23.89C116.73,40.88,98.65,32,78,32A62.07,62.07,0,0,0,16,94c0,70,103.79,126.66,108.21,129a8,8,0,0,0,7.58,0C136.21,220.66,240,164,240,94A62.07,62.07,0,0,0,178,32ZM128,206.8C109.74,196.16,32,147.69,32,94A46.06,46.06,0,0,1,78,48c19.45,0,35.78,10.36,42.6,27a8,8,0,0,0,14.8,0c6.82-16.67,23.15-27,42.6-27a46.06,46.06,0,0,1,46,46C224,147.61,146.24,196.15,128,206.8Z"></path>
+            </svg>
+          </button>
+          <a href="cart.html" class="flex items-center justify-center rounded-full h-10 bg-[#f0f5ff] text-[#0053e2] px-2.5 relative">
+            <svg class="w-5 h-5 text-[#0053e2]" fill="currentColor" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
+              <path d="M216,40H40A16,16,0,0,0,24,56V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40Zm0,160H40V56H216V200ZM176,88a48,48,0,0,1-96,0,8,8,0,0,1,16,0,32,32,0,0,0,64,0,8,8,0,0,1,16,0Z"></path>
+            </svg>
+            <span class="cart-badge" id="cart-badge">0</span>
+          </a>
+        </div>
+      </div>
+    </header>
+    <!-- Category Filters -->
+    <section class="w-full max-w-7xl mx-auto px-6 mb-8">
+      <div class="flex gap-3 overflow-x-auto pb-2">
+        <button class="bg-[#f1f2f4] text-[#121417] rounded-full px-6 py-2 font-medium hover:bg-[#e5e7eb]">All</button>
+        <button class="bg-[#f1f2f4] text-[#121417] rounded-full px-6 py-2 font-medium hover:bg-[#e5e7eb]">Produce</button>
+        <button class="bg-[#f1f2f4] text-[#121417] rounded-full px-6 py-2 font-medium hover:bg-[#e5e7eb]">Dairy</button>
+        <button class="bg-[#f1f2f4] text-[#121417] rounded-full px-6 py-2 font-medium hover:bg-[#e5e7eb]">Meat</button>
+        <button class="bg-[#f1f2f4] text-[#121417] rounded-full px-6 py-2 font-medium hover:bg-[#e5e7eb]">Bakery</button>
+        <button class="bg-[#f1f2f4] text-[#121417] rounded-full px-6 py-2 font-medium hover:bg-[#e5e7eb]">Snacks</button>
+        <button class="bg-[#f1f2f4] text-[#121417] rounded-full px-6 py-2 font-medium hover:bg-[#e5e7eb]">Beverages</button>
+        <button class="bg-[#f1f2f4] text-[#121417] rounded-full px-6 py-2 font-medium hover:bg-[#e5e7eb]">Frozen</button>
+      </div>
+    </section>
+    <!-- Featured Products -->
+    <section class="w-full max-w-7xl mx-auto px-6 mb-12">
+      <h2 class="text-2xl font-bold text-[#121417] mb-6">Featured Products</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+        <div class="product-card flex flex-col p-4">
+          <div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl mb-4" style="background-image: url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=400&q=80');"></div>
+          <div class="flex-1 flex flex-col">
+            <p class="text-[#121417] text-base font-medium leading-normal mb-1">Fresh Fruits</p>
+            <p class="text-[#677583] text-sm font-normal leading-normal mb-2">$3.99/lb</p>
+            <button class="add-btn mt-auto" data-product-id="101" data-product-name="Fresh Fruits" data-product-price="3.99" data-product-img="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=400&q=80">Add to Cart</button>
+          </div>
+        </div>
+        <div class="product-card flex flex-col p-4">
+          <div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl mb-4" style="background-image: url('https://images.unsplash.com/photo-1464306076886-debca5e8a6b0?auto=format&fit=crop&w=400&q=80');"></div>
+          <div class="flex-1 flex flex-col">
+            <p class="text-[#121417] text-base font-medium leading-normal mb-1">Vegetables</p>
+            <p class="text-[#677583] text-sm font-normal leading-normal mb-2">$2.49/lb</p>
+            <button class="add-btn mt-auto" data-product-id="102" data-product-name="Vegetables" data-product-price="2.49" data-product-img="https://images.unsplash.com/photo-1464306076886-debca5e8a6b0?auto=format&fit=crop&w=400&q=80">Add to Cart</button>
+          </div>
+        </div>
+        <div class="product-card flex flex-col p-4">
+          <div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl mb-4" style="background-image: url('https://images.unsplash.com/photo-1502741338009-cac2772e18bc?auto=format&fit=crop&w=400&q=80');"></div>
+          <div class="flex-1 flex flex-col">
+            <p class="text-[#121417] text-base font-medium leading-normal mb-1">Organic Produce</p>
+            <p class="text-[#677583] text-sm font-normal leading-normal mb-2">$4.99/lb</p>
+            <button class="add-btn mt-auto" data-product-id="103" data-product-name="Organic Produce" data-product-price="4.99" data-product-img="https://images.unsplash.com/photo-1502741338009-cac2772e18bc?auto=format&fit=crop&w=400&q=80">Add to Cart</button>
+          </div>
+        </div>
+        <div class="product-card flex flex-col p-4">
+          <div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl mb-4" style="background-image: url('https://images.unsplash.com/photo-1519864600265-abb23847ef2c?auto=format&fit=crop&w=400&q=80');"></div>
+          <div class="flex-1 flex flex-col">
+            <p class="text-[#121417] text-base font-medium leading-normal mb-1">Local Harvest</p>
+            <p class="text-[#677583] text-sm font-normal leading-normal mb-2">$5.99/lb</p>
+            <button class="add-btn mt-auto" data-product-id="104" data-product-name="Local Harvest" data-product-price="5.99" data-product-img="https://images.unsplash.com/photo-1519864600265-abb23847ef2c?auto=format&fit=crop&w=400&q=80">Add to Cart</button>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- Shop by Category -->
+    <section class="w-full max-w-7xl mx-auto px-6 mb-12">
+      <h2 class="text-2xl font-bold text-[#121417] mb-6">Shop by Category</h2>
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
+        <div class="flex flex-col items-center">
+          <div class="w-20 h-20 bg-center bg-no-repeat bg-cover rounded-full mb-2" style="background-image: url('https://images.unsplash.com/photo-1502741338009-cac2772e18bc?auto=format&fit=crop&w=200&q=80');"></div>
+          <span class="text-[#121417] text-sm font-medium">Produce</span>
+        </div>
+        <div class="flex flex-col items-center">
+          <div class="w-20 h-20 bg-center bg-no-repeat bg-cover rounded-full mb-2" style="background-image: url('https://images.unsplash.com/photo-1464306076886-debca5e8a6b0?auto=format&fit=crop&w=200&q=80');"></div>
+          <span class="text-[#121417] text-sm font-medium">Dairy</span>
+        </div>
+        <div class="flex flex-col items-center">
+          <div class="w-20 h-20 bg-center bg-no-repeat bg-cover rounded-full mb-2" style="background-image: url('https://images.unsplash.com/photo-1519864600265-abb23847ef2c?auto=format&fit=crop&w=200&q=80');"></div>
+          <span class="text-[#121417] text-sm font-medium">Meat</span>
+        </div>
+        <div class="flex flex-col items-center">
+          <div class="w-20 h-20 bg-center bg-no-repeat bg-cover rounded-full mb-2" style="background-image: url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=200&q=80');"></div>
+          <span class="text-[#121417] text-sm font-medium">Bakery</span>
+        </div>
+        <div class="flex flex-col items-center">
+          <div class="w-20 h-20 bg-center bg-no-repeat bg-cover rounded-full mb-2" style="background-image: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=200&q=80');"></div>
+          <span class="text-[#121417] text-sm font-medium">Snacks</span>
+        </div>
+        <div class="flex flex-col items-center">
+          <div class="w-20 h-20 bg-center bg-no-repeat bg-cover rounded-full mb-2" style="background-image: url('https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=200&q=80');"></div>
+          <span class="text-[#121417] text-sm font-medium">Beverages</span>
+        </div>
+      </div>
+    </section>
+    <!-- Product Grid -->
+    <main class="flex-1 w-full max-w-7xl mx-auto px-6 py-10" id="products">
+      <div class="flex flex-wrap gap-2 p-4">
+        <a class="text-[#677583] text-base font-medium leading-normal" href="#">Shop</a>
+        <span class="text-[#677583] text-base font-medium leading-normal">/</span>
+        <span class="text-[#121417] text-base font-medium leading-normal">Grocery</span>
+      </div>
+      <h1 class="text-[#121417] text-3xl font-bold mb-8">All Grocery Products</h1>
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+        <!-- Product Cards (repeat as needed) -->
+        <div class="product-card flex flex-col p-4" style="min-width:0;">
+          <div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl mb-4" style="background-image: url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=400&q=80');"></div>
+          <div class="flex-1 flex flex-col">
+            <p class="text-[#121417] text-base font-medium leading-normal mb-1">Fresh Fruits</p>
+            <p class="text-[#677583] text-sm font-normal leading-normal mb-2">$3.99/lb</p>
+            <button class="add-btn mt-auto" data-product-id="101" data-product-name="Fresh Fruits" data-product-price="3.99" data-product-img="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=400&q=80">Add to Cart</button>
+          </div>
+        </div>
+        <div class="product-card flex flex-col p-4" style="min-width:0;">
+          <div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl mb-4" style="background-image: url('https://images.unsplash.com/photo-1464306076886-debca5e8a6b0?auto=format&fit=crop&w=400&q=80');"></div>
+          <div class="flex-1 flex flex-col">
+            <p class="text-[#121417] text-base font-medium leading-normal mb-1">Vegetables</p>
+            <p class="text-[#677583] text-sm font-normal leading-normal mb-2">$2.49/lb</p>
+            <button class="add-btn mt-auto" data-product-id="102" data-product-name="Vegetables" data-product-price="2.49" data-product-img="https://images.unsplash.com/photo-1464306076886-debca5e8a6b0?auto=format&fit=crop&w=400&q=80">Add to Cart</button>
+          </div>
+        </div>
+        <div class="product-card flex flex-col p-4" style="min-width:0;">
+          <div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl mb-4" style="background-image: url('https://images.unsplash.com/photo-1502741338009-cac2772e18bc?auto=format&fit=crop&w=400&q=80');"></div>
+          <div class="flex-1 flex flex-col">
+            <p class="text-[#121417] text-base font-medium leading-normal mb-1">Organic Produce</p>
+            <p class="text-[#677583] text-sm font-normal leading-normal mb-2">$4.99/lb</p>
+            <button class="add-btn mt-auto" data-product-id="103" data-product-name="Organic Produce" data-product-price="4.99" data-product-img="https://images.unsplash.com/photo-1502741338009-cac2772e18bc?auto=format&fit=crop&w=400&q=80">Add to Cart</button>
+          </div>
+        </div>
+        <div class="product-card flex flex-col p-4" style="min-width:0;">
+          <div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl mb-4" style="background-image: url('https://images.unsplash.com/photo-1519864600265-abb23847ef2c?auto=format&fit=crop&w=400&q=80');"></div>
+          <div class="flex-1 flex flex-col">
+            <p class="text-[#121417] text-base font-medium leading-normal mb-1">Local Harvest</p>
+            <p class="text-[#677583] text-sm font-normal leading-normal mb-2">$5.99/lb</p>
+            <button class="add-btn mt-auto" data-product-id="104" data-product-name="Local Harvest" data-product-price="5.99" data-product-img="https://images.unsplash.com/photo-1519864600265-abb23847ef2c?auto=format&fit=crop&w=400&q=80">Add to Cart</button>
+          </div>
+        </div>
+        <!-- Add more product cards as needed -->
+      </div>
+    </main>
+    <!-- End Grocery Content -->
+    <footer class="flex justify-center mt-16">
+      <div class="flex max-w-7xl flex-1 flex-col">
+        <footer class="flex flex-col gap-6 px-5 py-10 text-center">
+          <div class="flex flex-wrap items-center justify-center gap-6">
+            <a class="text-[#677583] text-base font-normal leading-normal min-w-40" href="#">About</a>
+            <a class="text-[#677583] text-base font-normal leading-normal min-w-40" href="#">Contact</a>
+            <a class="text-[#677583] text-base font-normal leading-normal min-w-40" href="#">FAQ</a>
+            <a class="text-[#677583] text-base font-normal leading-normal min-w-40" href="#">Privacy Policy</a>
+            <a class="text-[#677583] text-base font-normal leading-normal min-w-40" href="#">Terms of Service</a>
+          </div>
+          <p class="text-[#677583] text-base font-normal leading-normal">© 2024 Walmart. All rights reserved.</p>
+        </footer>
+      </div>
+    </footer>
+    <script src="script.js"></script>
+    <script src="cart.js"></script>
+    <script>
+      document.querySelectorAll('.add-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const product = {
+            id: this.getAttribute('data-product-id'),
+            name: this.getAttribute('data-product-name'),
+            price: parseFloat(this.getAttribute('data-product-price')),
+            img: this.getAttribute('data-product-img')
+          };
+          addToCart(product);
+        });
+      });
+      // Update cart badge on load
+      if (typeof updateCartBadge === 'function') {
+        updateCartBadge();
+      }
+      const searchInput = document.getElementById('navbar-search');
+      const clearBtn = document.getElementById('clear-search');
+      const searchIconBtn = document.getElementById('search-icon-btn');
+      const productGrid = document.querySelector('.grid.grid-cols-1, .grid.grid-cols-1.sm\\:grid-cols-2');
+      const productCards = productGrid ? Array.from(productGrid.querySelectorAll('.product-card')) : [];
+      let noResultsMsg = null;
+
+      function filterProducts(query) {
+        let found = false;
+        productCards.forEach(card => {
+          const name = card.querySelector('p')?.textContent?.toLowerCase() || '';
+          if (name.includes(query.toLowerCase())) {
+            card.style.display = '';
+            found = true;
+          } else {
+            card.style.display = 'none';
+          }
+        });
+        if (!found) {
+          if (!noResultsMsg) {
+            noResultsMsg = document.createElement('div');
+            noResultsMsg.className = 'w-full text-center text-[#001e60] text-lg font-semibold py-8';
+            noResultsMsg.textContent = 'No products found.';
+            productGrid.appendChild(noResultsMsg);
+          }
+        } else if (noResultsMsg) {
+          noResultsMsg.remove();
+          noResultsMsg = null;
+        }
+      }
+
+      if (searchInput && clearBtn) {
+        searchInput.addEventListener('input', function() {
+          clearBtn.style.display = this.value ? 'block' : 'none';
+          if (!this.value) {
+            productCards.forEach(card => card.style.display = '');
+            if (noResultsMsg) { noResultsMsg.remove(); noResultsMsg = null; }
+          }
+        });
+        clearBtn.addEventListener('click', function() {
+          searchInput.value = '';
+          clearBtn.style.display = 'none';
+          searchInput.focus();
+          productCards.forEach(card => card.style.display = '');
+          if (noResultsMsg) { noResultsMsg.remove(); noResultsMsg = null; }
+        });
+        searchInput.addEventListener('keydown', function(e) {
+          if (e.key === 'Enter') {
+            filterProducts(this.value);
+          }
+        });
+        if (searchIconBtn) {
+          searchIconBtn.addEventListener('click', function() {
+            filterProducts(searchInput.value);
+          });
+        }
+      }
+    </script>
+  </body>
+</html> 
