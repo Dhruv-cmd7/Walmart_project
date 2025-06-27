@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Cart - Walmart Minimal</title>
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <header class="header pro-header">
+    <div class="header-inner">
+      <div class="logo-minimal">
+        <a href="index.html"><img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/Walmart_logo.svg" alt="Walmart Logo" height="32"></a>
+      </div>
+      <nav class="nav-minimal pro-nav">
+        <a href="index.html">Home</a>
+        <a href="#fashion">Fashion</a>
+        <a href="#decor">Decor</a>
+        <a href="#">Deals</a>
+      </nav>
+      <div class="header-actions-pro">
+        <a href="#" class="header-action-pro"><i class="fa-regular fa-user"></i> Account</a>
+        <a href="cart.html" class="header-action-pro cart-pro"><i class="fa-solid fa-cart-shopping"></i> <span class="cart-badge">2</span></a>
+      </div>
+    </div>
+  </header>
+  <main class="main-minimal cart-main pro-cart-main">
+    <section class="cart-section pro-cart-section">
+      <h2>Your Cart</h2>
+      <div class="cart-table-wrap">
+        <table class="cart-table">
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Price</th>
+              <th>Qty</th>
+              <th>Subtotal</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="cart-items-tbody"></tbody>
+        </table>
+      </div>
+      <div class="cart-links-row">
+        <a href="index.html" class="continue-link"><i class="fa-solid fa-arrow-left"></i> Continue shopping</a>
+      </div>
+      <!-- Saved for Later Section -->
+      <div id="saved-for-later-section"></div>
+    </section>
+    <aside class="cart-summary pro-cart-summary">
+      <h3>Order Summary</h3>
+      <div class="summary-row">
+        <span>Subtotal</span>
+        <span id="cart-subtotal"></span>
+      </div>
+      <div class="summary-row">
+        <span>Estimated Shipping</span>
+        <span>Free</span>
+      </div>
+      <div class="summary-row">
+        <span>Estimated Tax</span>
+        <span id="cart-tax"></span>
+      </div>
+      <div class="promo-row">
+        <input type="text" placeholder="Promo code">
+        <button class="apply-promo-btn">Apply</button>
+      </div>
+      <div class="summary-row total">
+        <span>Total</span>
+        <span id="cart-total"></span>
+      </div>
+      <button class="checkout-btn pro-checkout-btn">Proceed to Checkout</button>
+    </aside>
+  </main>
+  <div id="cart-snackbar" style="display:none;"></div>
+  <script src="cart.js"></script>
+  <script>
+  let lastCart = [];
+  function animateSummary() {
+    const summary = document.querySelector('.pro-cart-summary');
+    if (summary) {
+      summary.classList.remove('cart-summary-animate');
+      void summary.offsetWidth;
+      summary.classList.add('cart-summary-animate');
+      setTimeout(() => summary.classList.remove('cart-summary-animate'), 500);
+    }
+  }
+  function showSnackbar(message, actionText, actionFn) {
+    const snackbar = document.getElementById('cart-snackbar');
+    snackbar.innerHTML = `<span>${message}</span> ${actionText ? `<button id='undo-btn' class='shop-now-btn' style='padding:0.4rem 1.2rem;font-size:1rem;margin-left:1.2rem;'>${actionText}</button>` : ''}`;
+    snackbar.style.display = 'flex';
+    snackbar.style.position = 'fixed';
+    snackbar.style.left = '50%';
+    snackbar.style.bottom = '32px';
+    snackbar.style.transform = 'translateX(-50%)';
+    snackbar.style.background = '#222';
+    snackbar.style.color = '#fff';
+    snackbar.style.borderRadius = '2rem';
+    snackbar.style.padding = '1rem 2.2rem';
+    snackbar.style.zIndex = 9999;
+    snackbar.style.boxShadow = '0 4px 24px rgba(0,0,0,0.18)';
+    if (actionText && actionFn) {
+      document.getElementById('undo-btn').onclick = () => { actionFn(); hideSnackbar(); renderCart(); };
+    }
+    setTimeout(hideSnackbar, 5000);
+  }
+  function hideSnackbar() {
+    const snackbar = document.getElementById('cart-snackbar');
+    snackbar.style.display = 'none';
+  }
+  function renderSaved() {
+    const saved = window.cartUtils.getSaved();
+    const section = document.getElementById('saved-for-later-section');
+    if (!saved.length) { section.innerHTML = ''; return; }
+    let html = `<h3 style='margin-top:2.5rem;font-size:1.18rem;color:#0053e2;'>Saved for Later</h3><table class='cart-table'><tbody>`;
+    saved.forEach(item => {
+      html += `<tr class='cart-row'>
+        <td class='cart-item-td'><img src='${item.img}' alt='${item.name}'><div class='cart-item-info-pro'><a href='#' class='cart-item-title-pro'>${item.name}</a></div></td>
+        <td class='cart-price-pro'>$${Number(item.price).toFixed(2)}</td>
+        <td class='cart-qty-pro'>${item.qty}</td>
+        <td class='cart-subtotal-pro'>$${(Number(item.price)*Number(item.qty)).toFixed(2)}</td>
+        <td class='cart-remove-pro'>
+          <button class='shop-now-btn' style='padding:0.3rem 1.1rem;font-size:0.98rem;margin-right:0.7rem;' onclick="window.cartUtils.moveToCart('${item.id}');renderCart();renderSaved();">Move to Cart</button>
+          <button class='remove-btn-pro' title='Remove from saved' onclick="removeSavedWithAnim('${item.id}', this)"><i class='fa-solid fa-xmark'></i></button>
+        </td>
+      </tr>`;
+    });
+    html += '</tbody></table>';
+    section.innerHTML = html;
+  }
+  function removeSavedWithAnim(id, el) {
+    const tr = el.closest('tr');
+    tr.classList.remove('cart-row-animate-in');
+    tr.classList.add('cart-row-animate-out');
+    setTimeout(() => {
+      let saved = window.cartUtils.getSaved();
+      saved = saved.filter(item => item.id !== id);
+      localStorage.setItem('walmart_saved', JSON.stringify(saved));
+      renderSaved();
+    }, 350);
+  }
+  function renderCart() {
+    const cart = window.cartUtils.getCart();
+    const tbody = document.getElementById('cart-items-tbody');
+    tbody.innerHTML = '';
+    let subtotal = 0;
+    if (cart.length === 0) {
+      tbody.innerHTML = '';
+      const empty = document.createElement('tr');
+      const td = document.createElement('td');
+      td.colSpan = 5;
+      td.innerHTML = `<div class="cart-empty-state"><span class='cart-empty-icon'><i class='fa-solid fa-cart-shopping'></i></span><div class='cart-empty-message'>Your cart is empty.</div><div style='height:2.5rem'></div><a href='index.html' class='shop-now-btn'>Shop Now</a></div>`;
+      empty.appendChild(td);
+      tbody.appendChild(empty);
+      document.getElementById('cart-subtotal').textContent = '$0.00';
+      document.getElementById('cart-tax').textContent = '$0.00';
+      document.getElementById('cart-total').textContent = '$0.00';
+      animateSummary();
+      renderSaved();
+      return;
+    }
+    cart.forEach((item, idx) => {
+      const price = Number(item.price);
+      const qty = Number(item.qty);
+      const itemSubtotal = price * qty;
+      subtotal += itemSubtotal;
+      const tr = document.createElement('tr');
+      tr.className = 'cart-row cart-row-animate-in';
+      tr.setAttribute('tabindex', '0');
+      tr.innerHTML = `
+        <td class="cart-item-td">
+          <img src="${item.img}" alt="${item.name}">
+          <div class="cart-item-info-pro">
+            <a href="#" class="cart-item-title-pro">${item.name}</a>
+            <div class="cart-item-links"><a href="#" class="save-link" onclick="window.cartUtils.saveForLater('${item.id}');renderCart();renderSaved();return false;">Save for later</a></div>
+          </div>
+        </td>
+        <td class="cart-price-pro">$${price.toFixed(2)}</td>
+        <td class="cart-qty-pro">
+          <button class="qty-btn-pro" aria-label="Decrease quantity" ${qty <= 1 ? 'disabled' : ''} onclick="updateQtyWithAnim('${item.id}', ${qty-1}, this)">-</button>
+          <input type="number" value="${qty}" min="1" aria-label="Quantity for ${item.name}" onchange="updateQtyWithAnim('${item.id}', this.value, this)">
+          <button class="qty-btn-pro" aria-label="Increase quantity" onclick="updateQtyWithAnim('${item.id}', ${qty+1}, this)">+</button>
+        </td>
+        <td class="cart-subtotal-pro">$${itemSubtotal.toFixed(2)}</td>
+        <td class="cart-remove-pro"><button class="remove-btn-pro" aria-label="Remove from cart" title="Remove from cart" onclick="removeRowWithAnim('${item.id}', this)"><i class="fa-solid fa-xmark"></i></button></td>
+      `;
+      tbody.appendChild(tr);
+    });
+    document.getElementById('cart-subtotal').textContent = `$${subtotal.toFixed(2)}`;
+    const tax = subtotal * 0.05;
+    document.getElementById('cart-tax').textContent = `$${tax.toFixed(2)}`;
+    let total = subtotal + tax;
+    // Coupon logic
+    const coupon = window.cartUtils.getCoupon();
+    let discount = 0;
+    if (coupon && coupon.discount) {
+      discount = subtotal * coupon.discount;
+      total -= discount;
+      let discountRow = document.getElementById('cart-discount-row');
+      if (!discountRow) {
+        discountRow = document.createElement('div');
+        discountRow.className = 'summary-row';
+        discountRow.id = 'cart-discount-row';
+        discountRow.innerHTML = `<span>Discount (${coupon.code}) <button style='background:none;border:none;color:#0053e2;cursor:pointer;font-size:1rem;' onclick='window.cartUtils.removeCoupon();renderCart();'>Remove</button></span><span>-$${discount.toFixed(2)}</span>`;
+        document.querySelector('.pro-cart-summary .summary-row.total').before(discountRow);
+      } else {
+        discountRow.querySelector('span:last-child').textContent = `-$${discount.toFixed(2)}`;
+      }
+    } else {
+      const discountRow = document.getElementById('cart-discount-row');
+      if (discountRow) discountRow.remove();
+    }
+    document.getElementById('cart-total').textContent = `$${total.toFixed(2)}`;
+    animateSummary();
+    renderSaved();
+  }
+  function updateQtyWithAnim(id, qty, el) {
+    if (qty < 1) return;
+    // Show spinner on button
+    if (el && el.tagName === 'BUTTON') {
+      const old = el.innerHTML;
+      el.innerHTML = '<i class="fa fa-spinner fa-spin"></i>';
+      el.disabled = true;
+      setTimeout(() => {
+        window.cartUtils.updateCartQty(id, qty);
+        renderCart();
+      }, 350);
+      setTimeout(() => { el.innerHTML = old; el.disabled = false; }, 700);
+    } else {
+      window.cartUtils.updateCartQty(id, qty);
+      renderCart();
+    }
+  }
+  function removeRowWithAnim(id, el) {
+    const tr = el.closest('tr');
+    tr.classList.remove('cart-row-animate-in');
+    tr.classList.add('cart-row-animate-out');
+    setTimeout(() => {
+      window.cartUtils.removeFromCart(id);
+      renderCart();
+      showSnackbar('Item removed.', 'Undo', () => { window.cartUtils.undoRemove(); renderCart(); });
+    }, 350);
+  }
+  document.addEventListener('DOMContentLoaded', () => {
+    renderCart();
+    renderSaved();
+    // Coupon code logic
+    const promoInput = document.querySelector('.promo-row input[type="text"]');
+    const promoBtn = document.querySelector('.promo-row .apply-promo-btn');
+    if (promoInput && promoBtn) {
+      promoBtn.onclick = () => {
+        const code = promoInput.value.trim();
+        if (!code) return;
+        const result = window.cartUtils.applyCoupon(code);
+        if (result.success) {
+          renderCart();
+          promoInput.value = '';
+          showSnackbar('Coupon applied! 10% off.', null);
+        } else {
+          showSnackbar('Invalid or already applied coupon.', null);
+        }
+      };
+      promoInput.addEventListener('keydown', e => { if (e.key === 'Enter') promoBtn.click(); });
+    }
+  });
+  </script>
+</body>
+</html> 

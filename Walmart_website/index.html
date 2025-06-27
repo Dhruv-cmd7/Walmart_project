@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Walmart Minimal - Fashion & Decor</title>
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <header class="header pro-header unified-header">
+    <div class="header-inner unified-header-inner">
+      <div class="logo-minimal">
+        <a href="index.html"><img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/Walmart_logo.svg" alt="Walmart Logo" height="36"></a>
+      </div>
+      <nav class="nav-minimal pro-nav unified-nav">
+        <a href="index.html">Home</a>
+        <a href="#fashion">Fashion</a>
+        <a href="#decor">Decor</a>
+        <a href="#">Deals</a>
+      </nav>
+      <button class="nav-toggle" aria-label="Open navigation"><i class="fa fa-bars"></i></button>
+      <div class="search-minimal unified-search">
+        <input type="text" placeholder="Search fashion & decor">
+        <button><i class="fa-solid fa-magnifying-glass"></i></button>
+      </div>
+      <div class="header-actions-pro unified-actions">
+        <a href="#" class="header-action-pro"><i class="fa-regular fa-user"></i></a>
+        <a href="cart.html" class="header-action-pro cart-pro"><i class="fa-solid fa-cart-shopping"></i> <span class="cart-badge">2</span></a>
+      </div>
+    </div>
+  </header>
+  <main class="main-minimal">
+    <section class="hero-minimal">
+      <div class="hero-slider">
+        <button class="hero-arrow hero-arrow-left" aria-label="Previous slide"><i class="fa-solid fa-chevron-left"></i></button>
+        <div class="hero-slide active">
+          <div class="hero-gradient"></div>
+          <img src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=1200&q=80" alt="Fashion Banner" class="hero-img">
+          <div class="hero-content">
+            <h1>Discover the Latest in Fashion & Home Decor</h1>
+            <p>Curated picks for your style and space. Shop trending looks and beautiful decor, all in one place.</p>
+            <a href="#products" class="shop-btn">Shop Now</a>
+          </div>
+        </div>
+        <div class="hero-slide">
+          <div class="hero-gradient"></div>
+          <img src="https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&w=1200&q=80" alt="Decor Banner" class="hero-img">
+          <div class="hero-content">
+            <h1>Elevate Your Space</h1>
+            <p>Modern decor and timeless pieces to make your home uniquely yours.</p>
+            <a href="#products" class="shop-btn">Shop Decor</a>
+          </div>
+        </div>
+        <div class="hero-slide">
+          <div class="hero-gradient"></div>
+          <img src="https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=1200&q=80" alt="Accessories Banner" class="hero-img">
+          <div class="hero-content">
+            <h1>Accessories for Every Style</h1>
+            <p>Find the perfect finishing touch for any outfit or room.</p>
+            <a href="#products" class="shop-btn">Shop Accessories</a>
+          </div>
+        </div>
+        <button class="hero-arrow hero-arrow-right" aria-label="Next slide"><i class="fa-solid fa-chevron-right"></i></button>
+      </div>
+      <div class="hero-dots">
+        <span class="hero-dot active"></span>
+        <span class="hero-dot"></span>
+        <span class="hero-dot"></span>
+      </div>
+    </section>
+    <section class="products-minimal" id="products">
+      <h2>Featured Products</h2>
+      <div class="products-grid">
+        <!-- Fashion Products -->
+        <div class="product-card">
+          <button class="favorite-btn" aria-label="Add to favorites"><i class="fa-regular fa-heart"></i></button>
+          <span class="badge badge-new">New</span>
+          <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=400&q=80" alt="French Style Lace Shirt">
+          <div class="product-info">
+            <div class="product-title">French Style Lace Shirt</div>
+            <div class="product-price">$24.99</div>
+            <button class="add-btn" data-product-id="1" data-product-name="French Style Lace Shirt" data-product-price="24.99" data-product-img="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=400&q=80">Add to Cart</button>
+          </div>
+        </div>
+        <div class="product-card">
+          <button class="favorite-btn" aria-label="Add to favorites"><i class="fa-regular fa-heart"></i></button>
+          <span class="badge badge-trending">Trending</span>
+          <img src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=400&q=80" alt="High Waist Floral Skirt">
+          <div class="product-info">
+            <div class="product-title">High Waist Floral Skirt</div>
+            <div class="product-price">$29.99</div>
+            <button class="add-btn" data-product-id="2" data-product-name="High Waist Floral Skirt" data-product-price="29.99" data-product-img="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=400&q=80">Add to Cart</button>
+          </div>
+        </div>
+        <div class="product-card">
+          <button class="favorite-btn" aria-label="Add to favorites"><i class="fa-regular fa-heart"></i></button>
+          <span class="badge badge-new">New</span>
+          <img src="https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=400&q=80" alt="Plush Stitched Sweater Jacket">
+          <div class="product-info">
+            <div class="product-title">Plush Stitched Sweater Jacket</div>
+            <div class="product-price">$39.99</div>
+            <button class="add-btn" data-product-id="3" data-product-name="Plush Stitched Sweater Jacket" data-product-price="39.99" data-product-img="https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=400&q=80">Add to Cart</button>
+          </div>
+        </div>
+        <div class="product-card">
+          <button class="favorite-btn" aria-label="Add to favorites"><i class="fa-regular fa-heart"></i></button>
+          <img src="https://images.unsplash.com/photo-1519864600265-abb23847ef2c?auto=format&fit=crop&w=400&q=80" alt="Classic White Sneakers">
+          <div class="product-info">
+            <div class="product-title">Classic White Sneakers</div>
+            <div class="product-price">$44.99</div>
+            <button class="add-btn" data-product-id="4" data-product-name="Classic White Sneakers" data-product-price="44.99" data-product-img="https://images.unsplash.com/photo-1519864600265-abb23847ef2c?auto=format&fit=crop&w=400&q=80">Add to Cart</button>
+          </div>
+        </div>
+        <!-- Decor Products -->
+        <div class="product-card">
+          <button class="favorite-btn" aria-label="Add to favorites"><i class="fa-regular fa-heart"></i></button>
+          <span class="badge badge-new">New</span>
+          <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=400&q=80" alt="Vanilla White Steel Pedestal Bowl">
+          <div class="product-info">
+            <div class="product-title">Vanilla White Steel Pedestal Bowl</div>
+            <div class="product-price">$8.94</div>
+            <button class="add-btn" data-product-id="17" data-product-name="Vanilla White Steel Pedestal Bowl" data-product-price="8.94" data-product-img="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=400&q=80">Add to Cart</button>
+          </div>
+        </div>
+        <div class="product-card">
+          <button class="favorite-btn" aria-label="Add to favorites"><i class="fa-regular fa-heart"></i></button>
+          <span class="badge badge-trending">Trending</span>
+          <img src="https://images.unsplash.com/photo-1503389152951-9c3d0c6b7a5c?auto=format&fit=crop&w=400&q=80" alt="Rattan Oval Caddy">
+          <div class="product-info">
+            <div class="product-title">Rattan Oval Caddy</div>
+            <div class="product-price">$9.98</div>
+            <button class="add-btn" data-product-id="18" data-product-name="Rattan Oval Caddy" data-product-price="9.98" data-product-img="https://images.unsplash.com/photo-1503389152951-9c3d0c6b7a5c?auto=format&fit=crop&w=400&q=80">Add to Cart</button>
+          </div>
+        </div>
+        <div class="product-card">
+          <button class="favorite-btn" aria-label="Add to favorites"><i class="fa-regular fa-heart"></i></button>
+          <img src="https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=400&q=80" alt="Fabric Lined Laundry Basket">
+          <div class="product-info">
+            <div class="product-title">Fabric Lined Laundry Basket</div>
+            <div class="product-price">$24.53</div>
+            <button class="add-btn" data-product-id="19" data-product-name="Fabric Lined Laundry Basket" data-product-price="24.53" data-product-img="https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=400&q=80">Add to Cart</button>
+          </div>
+        </div>
+        <div class="product-card">
+          <button class="favorite-btn" aria-label="Add to favorites"><i class="fa-regular fa-heart"></i></button>
+          <img src="https://images.unsplash.com/photo-1465101178521-c1a9136a3b99?auto=format&fit=crop&w=400&q=80" alt="Cotton Quilt">
+          <div class="product-info">
+            <div class="product-title">Cotton Quilt</div>
+            <div class="product-price">$65.00</div>
+            <button class="add-btn" data-product-id="20" data-product-name="Cotton Quilt" data-product-price="65.00" data-product-img="https://images.unsplash.com/photo-1465101178521-c1a9136a3b99?auto=format&fit=crop&w=400&q=80">Add to Cart</button>
+          </div>
+        </div>
+        <div class="product-card">
+          <button class="favorite-btn" aria-label="Add to favorites"><i class="fa-regular fa-heart"></i></button>
+          <span class="badge badge-new">New</span>
+          <img src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=400&q=80" alt="Striped Cotton Throw">
+          <div class="product-info">
+            <div class="product-title">Striped Cotton Throw</div>
+            <div class="product-price">$12.97</div>
+            <button class="add-btn" data-product-id="21" data-product-name="Striped Cotton Throw" data-product-price="12.97" data-product-img="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=400&q=80">Add to Cart</button>
+          </div>
+        </div>
+        <div class="product-card">
+          <button class="favorite-btn" aria-label="Add to favorites"><i class="fa-regular fa-heart"></i></button>
+          <img src="https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=400&q=80" alt="Textured Collapsible Storage Bins">
+          <div class="product-info">
+            <div class="product-title">Textured Collapsible Storage Bins (4-pack)</div>
+            <div class="product-price">$16.02</div>
+            <button class="add-btn" data-product-id="22" data-product-name="Textured Collapsible Storage Bins (4-pack)" data-product-price="16.02" data-product-img="https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=400&q=80">Add to Cart</button>
+          </div>
+        </div>
+        <div class="product-card">
+          <button class="favorite-btn" aria-label="Add to favorites"><i class="fa-regular fa-heart"></i></button>
+          <span class="badge badge-trending">Trending</span>
+          <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80" alt="Matte Black Vase">
+          <div class="product-info">
+            <div class="product-title">Matte Black Vase</div>
+            <div class="product-price">$15.97</div>
+            <button class="add-btn" data-product-id="23" data-product-name="Matte Black Vase" data-product-price="15.97" data-product-img="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80">Add to Cart</button>
+          </div>
+        </div>
+        <div class="product-card">
+          <button class="favorite-btn" aria-label="Add to favorites"><i class="fa-regular fa-heart"></i></button>
+          <img src="https://images.unsplash.com/photo-1516574187841-cb9cc2ca948b?auto=format&fit=crop&w=400&q=80" alt="Hand Carved Wood Tray">
+          <div class="product-info">
+            <div class="product-title">Hand Carved Wood Tray</div>
+            <div class="product-price">$14.97</div>
+            <button class="add-btn" data-product-id="24" data-product-name="Hand Carved Wood Tray" data-product-price="14.97" data-product-img="https://images.unsplash.com/photo-1516574187841-cb9cc2ca948b?auto=format&fit=crop&w=400&q=80">Add to Cart</button>
+          </div>
+        </div>
+        <!-- New Fashion Products -->
+        <div class="product-card">
+          <button class="favorite-btn" aria-label="Add to favorites"><i class="fa-regular fa-heart"></i></button>
+          <span class="badge badge-new">New</span>
+          <img src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=400&q=80" alt="Satin Midi Slip Dress">
+          <div class="product-info">
+            <div class="product-title">Satin Midi Slip Dress</div>
+            <div class="product-price">$34.00</div>
+            <button class="add-btn" data-product-id="9" data-product-name="Satin Midi Slip Dress" data-product-price="34.00" data-product-img="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=400&q=80">Add to Cart</button>
+          </div>
+        </div>
+        <div class="product-card">
+          <button class="favorite-btn" aria-label="Add to favorites"><i class="fa-regular fa-heart"></i></button>
+          <span class="badge badge-trending">Trending</span>
+          <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=400&q=80" alt="Wide Leg Chino Pants">
+          <div class="product-info">
+            <div class="product-title">Wide Leg Chino Pants</div>
+            <div class="product-price">$26.00</div>
+            <button class="add-btn" data-product-id="10" data-product-name="Wide Leg Chino Pants" data-product-price="26.00" data-product-img="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=400&q=80">Add to Cart</button>
+          </div>
+        </div>
+        <div class="product-card">
+          <button class="favorite-btn" aria-label="Add to favorites"><i class="fa-regular fa-heart"></i></button>
+          <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=400&q=80" alt="Keyhole Halter Neck Dress">
+          <div class="product-info">
+            <div class="product-title">Keyhole Halter Neck Dress</div>
+            <div class="product-price">$40.00</div>
+            <button class="add-btn" data-product-id="11" data-product-name="Keyhole Halter Neck Dress" data-product-price="40.00" data-product-img="https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=400&q=80">Add to Cart</button>
+          </div>
+        </div>
+        <div class="product-card">
+          <button class="favorite-btn" aria-label="Add to favorites"><i class="fa-regular fa-heart"></i></button>
+          <img src="https://images.unsplash.com/photo-1519864600265-abb23847ef2c?auto=format&fit=crop&w=400&q=80" alt="Men's Rayon Shirt">
+          <div class="product-info">
+            <div class="product-title">Men's Rayon Shirt</div>
+            <div class="product-price">$12.98</div>
+            <button class="add-btn" data-product-id="12" data-product-name="Men's Rayon Shirt" data-product-price="12.98" data-product-img="https://images.unsplash.com/photo-1519864600265-abb23847ef2c?auto=format&fit=crop&w=400&q=80">Add to Cart</button>
+          </div>
+        </div>
+        <!-- New Decor Products -->
+        <div class="product-card">
+          <button class="favorite-btn" aria-label="Add to favorites"><i class="fa-regular fa-heart"></i></button>
+          <span class="badge badge-new">New</span>
+          <img src="https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=400&q=80" alt="Abstract Modern Table Lamp">
+          <div class="product-info">
+            <div class="product-title">Abstract Modern Table Lamp</div>
+            <div class="product-price">$27.99</div>
+            <button class="add-btn" data-product-id="13" data-product-name="Abstract Modern Table Lamp" data-product-price="27.99" data-product-img="https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=400&q=80">Add to Cart</button>
+          </div>
+        </div>
+        <div class="product-card">
+          <button class="favorite-btn" aria-label="Add to favorites"><i class="fa-regular fa-heart"></i></button>
+          <img src="https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=400&q=80" alt="Seagrass Storage Basket">
+          <div class="product-info">
+            <div class="product-title">Seagrass Storage Basket</div>
+            <div class="product-price">$18.99</div>
+            <button class="add-btn" data-product-id="14" data-product-name="Seagrass Storage Basket" data-product-price="18.99" data-product-img="https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=400&q=80">Add to Cart</button>
+          </div>
+        </div>
+        <div class="product-card">
+          <button class="favorite-btn" aria-label="Add to favorites"><i class="fa-regular fa-heart"></i></button>
+          <span class="badge badge-trending">Trending</span>
+          <img src="https://images.unsplash.com/photo-1519121783345-3c3b6b6b7a98?auto=format&fit=crop&w=400&q=80" alt="Tufted Decorative Ottoman">
+          <div class="product-info">
+            <div class="product-title">Tufted Decorative Ottoman</div>
+            <div class="product-price">$49.99</div>
+            <button class="add-btn" data-product-id="15" data-product-name="Tufted Decorative Ottoman" data-product-price="49.99" data-product-img="https://images.unsplash.com/photo-1519121783345-3c3b6b6b7a98?auto=format&fit=crop&w=400&q=80">Add to Cart</button>
+          </div>
+        </div>
+        <div class="product-card">
+          <button class="favorite-btn" aria-label="Add to favorites"><i class="fa-regular fa-heart"></i></button>
+          <img src="https://images.unsplash.com/photo-1516574187841-cb9cc2ca948b?auto=format&fit=crop&w=400&q=80" alt="Black and White X Bench">
+          <div class="product-info">
+            <div class="product-title">Black and White X Bench</div>
+            <div class="product-price">$59.99</div>
+            <button class="add-btn" data-product-id="16" data-product-name="Black and White X Bench" data-product-price="59.99" data-product-img="https://images.unsplash.com/photo-1516574187841-cb9cc2ca948b?auto=format&fit=crop&w=400&q=80">Add to Cart</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer class="footer-minimal">
+    <div class="footer-container">
+      <div class="footer-links-pro">
+        <ul>
+          <li><a href="#">About Walmart</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#">Our Company</a></li>
+          <li><a href="#">Store Directory</a></li>
+        </ul>
+        <ul>
+          <li><a href="#">Help</a></li>
+          <li><a href="#">Returns</a></li>
+          <li><a href="#">Product Recalls</a></li>
+          <li><a href="#">Accessibility</a></li>
+        </ul>
+        <ul>
+          <li><a href="#">Walmart+</a></li>
+          <li><a href="#">Registry</a></li>
+          <li><a href="#">Sell on Walmart.com</a></li>
+          <li><a href="#">AdChoices</a></li>
+        </ul>
+      </div>
+      <div class="footer-info">
+        <div>Everyday low prices on millions of items.</div>
+        <div>Save money. Live better.</div>
+      </div>
+    </div>
+    <div class="footer-copyright">
+      &copy; 2024 Walmart. The trademarks Walmart and the Walmart Spark design are registered with the US Patent and Trademark Office. All Rights Reserved.
+    </div>
+  </footer>
+  <script src="script.js"></script>
+  <script src="cart.js"></script>
+  <script>
+  document.querySelectorAll('.add-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      const product = {
+        id: this.getAttribute('data-product-id'),
+        name: this.getAttribute('data-product-name'),
+        price: parseFloat(this.getAttribute('data-product-price')),
+        img: this.getAttribute('data-product-img')
+      };
+      window.cartUtils.addToCart(product);
+    });
+  });
+  document.querySelector('.nav-toggle').addEventListener('click', function() {
+    document.querySelector('.nav-minimal').classList.toggle('nav-open');
+    this.classList.toggle('open');
+  });
+  </script>
+</body>
+</html> 
