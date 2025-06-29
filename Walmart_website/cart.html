@@ -1,267 +1,1274 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Walmart Cart</title>
-  <link crossorigin="" href="https://fonts.gstatic.com/" rel="preconnect"/>
-  <link as="style" href="https://fonts.googleapis.com/css2?display=swap&family=Inter%3Awght%40400%3B500%3B700%3B900&family=Noto+Sans%3Awght%40400%3B500%3B700%3B900" onload="this.rel='stylesheet'" rel="stylesheet"/>
-  <link href="data:image/x-icon;base64," rel="icon" type="image/x-icon"/>
-  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-  <style type="text/tailwindcss">
-    :root {
-      --primary-blue: #0053e2;
-      --dark-blue: #001e60;
-      --light-bg: #f0f5ff;
-      --accent-yellow: #ffc220;
-    }
-    body {
-      font-family: 'Inter', "Noto Sans", sans-serif;
-      background-color: var(--light-bg);
-      color: var(--dark-blue);
-    }
-    .futuristic-card {
-      background-color: #fff;
-      border-radius: 16px;
-      box-shadow: 0 10px 25px -5px rgba(0,83,226,0.05), 0 20px 40px -20px rgba(0,83,226,0.10);
-      transition: all 0.3s ease-in-out;
-      padding: 0.2rem !important;
-    }
-    .futuristic-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 15px 30px -5px rgba(0,83,226,0.07), 0 25px 50px -20px rgba(0,83,226,0.12);
-    }
-    .quantity-control button, .quantity-control input {
-      border-color: var(--primary-blue);
-    }
-    .quantity-control button:hover {
-      background-color: var(--primary-blue);
-      color: #fff;
-    }
-    .checkout-button {
-      background-color: var(--primary-blue);
-      color: #fff;
-      border-radius: 9999px;
-      padding: 1rem 2rem;
-      font-weight: 700;
-      transition: background-color 0.3s ease, transform 0.2s ease;
-    }
-    .checkout-button:hover {
-      background-color: var(--dark-blue);
-      transform: scale(1.02);
-    }
-    .remove-item-button {
-      color: var(--dark-blue);
-      transition: color 0.3s ease;
-    }
-    .remove-item-button:hover {
-      color: #0053e2;
-    }
-    .header-icon-button {
-      background-color: var(--light-bg);
-      border-radius: 9999px;
-      width: 40px;
-      height: 40px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background-color 0.3s ease;
-    }
-    .header-icon-button:hover {
-      background-color: #0053e2;
-      color: #fff;
-    }
-    .input-search {
-      background-color: var(--light-bg);
-      border: 1px solid var(--primary-blue);
-      border-radius: 9999px;
-      padding-left: 2.5rem;
-      color: var(--dark-blue);
-    }
-    .input-search-icon {
-      color: var(--primary-blue);
-      position: absolute;
-      left: 0.75rem;
-      top: 50%;
-      transform: translateY(-50%);
-    }
-    .cart-badge {
-      background: var(--accent-yellow);
-      color: var(--dark-blue);
-      font-size: 0.75rem;
-      font-weight: 700;
-      border-radius: 9999px;
-      padding: 0 0.5em;
-      min-width: 1.5em;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      position: absolute;
-      top: -0.5em;
-      right: -0.5em;
-    }
-    #cart-items .cart-item {
-      padding: 0.1rem 0.1rem !important;
-      gap: 0.1rem !important;
-    }
-    #cart-items .cart-item img {
-      width: 20px !important;
-      height: 20px !important;
-    }
-    #cart-items .cart-item-title {
-      font-size: 0.7rem !important;
-    }
-    #cart-items .cart-item-price {
-      font-size: 0.65rem !important;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart - BuyMore</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { 'poppins': ['Poppins', 'sans-serif'] },
+                    colors: { 
+                        'mint': '#98D8C8', 
+                        'peach': '#FFB6C1', 
+                        'pastel-yellow': '#FFFACD',
+                        'custom-blue': '#0053e2',
+                        'custom-blue-white': '#f0f5ff',
+                        'custom-white': '#ffffff',
+                        'custom-gold': '#ffc220',
+                        'custom-dark-blue': '#001e60',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Poppins', sans-serif; }
+        .sidebar-item:hover { background-color: #f0f5ff; }
+        .sidebar-item.active { background-color: #0053e2; color: white; }
+        .cart-item-card { transition: all 0.3s ease; }
+        .cart-item-card:hover { transform: translateY(-1px); box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08); }
+        .quantity-btn { transition: all 0.2s ease; }
+        .quantity-btn:hover { transform: scale(1.05); }
+        .toast { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(100px); background: #222; color: #fff; padding: 0.75rem 1.5rem; border-radius: 9999px; opacity: 0; z-index: 50; font-size: 1rem; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .toast.show { opacity: 0.95; transform: translateX(-50%) translateY(0); }
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); opacity: 0; transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .modal.show { opacity: 1; }
+        .modal-content { background-color: white; margin: 5% auto; padding: 0; border-radius: 1rem; width: 90%; max-width: 500px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); transform: translateY(-50px) scale(0.9); opacity: 0; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); border: 2px solid #0053e2; }
+        .modal.show .modal-content { transform: translateY(0) scale(1); opacity: 1; }
+        .shopping-list-card { transition: all 0.3s ease; }
+        .shopping-list-card:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); }
+        
+        /* Enhanced Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+        
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .btn-animate {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-animate::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        
+        .btn-animate:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+        
+        .btn-animate:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .success-animation {
+            animation: successPulse 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        @keyframes successPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        .cart-item-card {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cart-item-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.1), transparent);
+            transition: left 0.6s;
+        }
+        
+        .cart-item-card:hover::before {
+            left: 100%;
+        }
+        
+        .cart-item-card:hover {
+            transform: translateY(-3px) scale(1.01);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+        }
+        
+        .quantity-btn {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .quantity-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        .sidebar-item {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .sidebar-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .sidebar-item:hover::before {
+            left: 100%;
+        }
+        
+        .sidebar-item:hover {
+            background-color: #f0f5ff;
+            transform: translateX(5px);
+        }
+        
+        .sidebar-item.active {
+            background-color: #0053e2;
+            color: white;
+            transform: translateX(8px);
+            box-shadow: 0 4px 12px rgba(0, 83, 226, 0.3);
+        }
+        
+        .shopping-list-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .shopping-list-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.12);
+        }
+        
+        /* Search Bar Animation */
+        .search-container {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .search-container:focus-within {
+            transform: scale(1.02);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.15);
+        }
+        
+        /* Cart Badge Animation */
+        .cart-badge {
+            animation: pulse 2s infinite;
+            z-index: 50 !important;
+            min-width: 24px !important;
+            height: 24px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            font-size: 12px !important;
+            font-weight: 700 !important;
+            line-height: 1 !important;
+            padding: 2px !important;
+            box-sizing: border-box !important;
+            position: absolute !important;
+            top: -8px !important;
+            right: -8px !important;
+            background-color: #ef4444 !important;
+            color: white !important;
+            border-radius: 50% !important;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2) !important;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        /* Wishlist Heart Animation */
+        .fa-heart {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .fa-heart:hover {
+            transform: scale(1.2);
+        }
+        
+        .fa-heart.text-red-500 {
+            animation: heartBeat 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        @keyframes heartBeat {
+            0% { transform: scale(1); }
+            25% { transform: scale(1.3); }
+            50% { transform: scale(1.1); }
+            75% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+        
+        /* Category Button Animations */
+        .category-btn {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .category-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .category-btn:hover::before {
+            left: 100%;
+        }
+        
+        .category-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* Smooth Scroll */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Loading Animation */
+        .loading-spinner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top: 3px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+        
+        /* Page Transition */
+        .page-transition {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 9999;
+            pointer-events: none;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .transition-content {
+            text-align: center;
+            color: #3b82f6;
+            opacity: 0;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .transition-content.show {
+            opacity: 1;
+            transform: scale(1);
+        }
+        
+        .transition-logo {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            background: #f8fafc;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #e2e8f0;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .transition-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #e2e8f0;
+            border-top: 3px solid #3b82f6;
+            border-radius: 50%;
+            animation: spin 1.2s linear infinite;
+            margin: 0 auto 15px;
+        }
+        
+        .transition-text {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #1e293b;
+        }
+        
+        .transition-subtext {
+            font-size: 0.9rem;
+            color: #64748b;
+        }
+        
+        /* Page content fade animations */
+        .page-content {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .page-content.loaded {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Staggered content animation */
+        .stagger-item {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .stagger-item.animate {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Cart Button Container */
+        .cart-button-container {
+            position: relative;
+            overflow: visible;
+            padding: 8px;
+            margin: -8px;
+        }
+
+        header {
+            background: #f0f5ff;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        /* Colorful cart items */
+        .cart-item {
+            border-left: 4px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .cart-item:hover {
+            border-left-color: #0053e2;
+            background-color: #f8fafc;
+        }
+        
+        .cart-item.men {
+            border-left-color: #3b82f6;
+        }
+        
+        .cart-item.women {
+            border-left-color: #ec4899;
+        }
+        
+        .cart-item.fruits {
+            border-left-color: #ff6b6b;
+        }
+        
+        .cart-item.vegetables {
+            border-left-color: #51cf66;
+        }
+        
+        .cart-item.dairy {
+            border-left-color: #ffd43b;
+        }
+        
+        /* Colorful quantity buttons */
+        .quantity-btn {
+            background-color: #f3f4f6;
+            border: 1px solid #e5e7eb;
+            color: #6b7280;
+            transition: all 0.2s ease;
+        }
+        
+        .quantity-btn:hover {
+            background-color: #0053e2;
+            border-color: #0053e2;
+            color: white;
+            transform: scale(1.1);
+        }
+        
+        /* Colorful price displays */
+        .price-display {
+            padding: 4px 12px;
+            border-radius: 16px;
+            font-weight: bold;
+            font-size: 0.875rem;
+        }
+        
+        .price-display.men {
+            background-color: #dbeafe;
+            color: #3b82f6;
+        }
+        
+        .price-display.women {
+            background-color: #fce7f3;
+            color: #ec4899;
+        }
+        
+        .price-display.fruits {
+            background-color: #ffe3e3;
+            color: #ff6b6b;
+        }
+        
+        .price-display.vegetables {
+            background-color: #d3f9d8;
+            color: #51cf66;
+        }
+        
+        .price-display.dairy {
+            background-color: #fff3bf;
+            color: #f59f00;
+        }
+        
+        /* Colorful order summary */
+        .order-summary {
+            background: linear-gradient(135deg, #0053e2 0%, #001e60 100%);
+            color: white;
+        }
+        
+        .summary-item {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 12px 0;
+        }
+        
+        .summary-item:last-child {
+            border-bottom: none;
+        }
+        
+        /* Colorful checkout button */
+        .checkout-btn {
+            background: linear-gradient(135deg, #ffc220 0%, #f59f00 100%);
+            color: #001e60;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .checkout-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 194, 32, 0.3);
+        }
+        
+        /* Colorful remove button */
+        .remove-btn {
+            background-color: #fee2e2;
+            color: #dc2626;
+            border: 1px solid #fecaca;
+            transition: all 0.2s ease;
+        }
+        
+        .remove-btn:hover {
+            background-color: #dc2626;
+            color: white;
+            transform: scale(1.05);
+        }
+        
+        /* Colorful empty cart */
+        .empty-cart {
+            background-color: #f8fafc;
+            border: 2px dashed #d1d5db;
+            color: #6b7280;
+        }
+        
+        .empty-cart:hover {
+            border-color: #0053e2;
+            background-color: #f0f5ff;
+        }
+        
+        /* Colorful sidebar items */
+        .sidebar-item:hover {
+            background-color: #e3f2fd;
+            border-left: 4px solid #0053e2;
+        }
+        
+        .sidebar-item.active {
+            background-color: #0053e2;
+            color: white;
+            border-left: 4px solid #ffc220;
+        }
+        
+        /* Colorful last orders */
+        .last-order-item:hover {
+            background-color: #e8f5e8;
+            border-left: 4px solid #51cf66;
+        }
+    </style>
 </head>
-<body>
-<div class="relative flex size-full min-h-screen flex-col group/design-root overflow-x-hidden">
-<div class="layout-container flex h-full grow flex-col">
-<header class="flex items-center justify-between border-b-0 px-10 py-6 min-h-20 bg-[#0053e2] fixed top-0 left-0 w-full z-50">
-  <div class="flex items-center gap-8">
-    <div class="flex items-center gap-4">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/Walmart_logo.svg" alt="Walmart Logo" class="h-8 w-auto object-contain" style="filter: brightness(0) invert(1);" />
-      <h2 class="text-[#ffc220] text-lg font-bold leading-tight tracking-[-0.015em]"> </h2>
-    </div>
-    <nav class="flex items-center gap-9">
-      <a class="text-white text-sm font-medium leading-normal" href="index.html">Fashion</a>
-      <a class="text-white text-sm font-medium leading-normal" href="grocery.html">Grocery</a>
-    </nav>
-  </div>
-  <div class="flex flex-1 justify-end gap-8">
-    <label class="flex flex-col flex-1 max-w-3xl min-w-80 !h-10">
-      <div class="flex w-full flex-1 items-center rounded-full h-12 bg-white shadow-sm focus-within:shadow-md border border-transparent focus-within:border-[#0053e2] transition-all duration-200 relative">
-        <span class="pl-4 flex items-center cursor-pointer" id="search-icon-btn">
-          <svg class="w-6 h-6 text-[#0053e2]" fill="currentColor" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
-            <path d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"></path>
-          </svg>
-        </span>
-        <input id="navbar-search" placeholder="Search for products, brands, or categories" class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-full text-[#001e60] focus:outline-none focus:ring-0 border-none bg-transparent h-full placeholder:text-[#0053e2] px-4 text-base font-normal leading-normal" value="" autocomplete="off" aria-label="Search" />
-        <button type="button" id="clear-search" class="absolute right-3 top-1/2 -translate-y-1/2 text-[#0053e2] bg-[#f0f5ff] rounded-full p-1 hover:bg-[#ffc220] hover:text-[#001e60] transition-all duration-150 hidden" aria-label="Clear search">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
-        </button>
-      </div>
-    </label>
-    <div class="flex gap-2 relative">
-      <button class="flex items-center justify-center rounded-full h-10 bg-[#f0f5ff] text-[#0053e2] px-2.5">
-        <svg class="w-5 h-5 text-[#0053e2]" fill="currentColor" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
-          <path d="M178,32c-20.65,0-38.73,8.88-50,23.89C116.73,40.88,98.65,32,78,32A62.07,62.07,0,0,0,16,94c0,70,103.79,126.66,108.21,129a8,8,0,0,0,7.58,0C136.21,220.66,240,164,240,94A62.07,62.07,0,0,0,178,32ZM128,206.8C109.74,196.16,32,147.69,32,94A46.06,46.06,0,0,1,78,48c19.45,0,35.78,10.36,42.6,27a8,8,0,0,0,14.8,0c6.82-16.67,23.15-27,42.6-27a46.06,46.06,0,0,1,46,46C224,147.61,146.24,196.15,128,206.8Z"></path>
-        </svg>
-      </button>
-      <a href="cart.html" class="flex items-center justify-center rounded-full h-10 bg-[#f0f5ff] text-[#0053e2] px-2.5 relative">
-        <svg class="w-5 h-5 text-[#0053e2]" fill="currentColor" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
-          <path d="M216,40H40A16,16,0,0,0,24,56V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40Zm0,160H40V56H216V200ZM176,88a48,48,0,0,1-96,0,8,8,0,0,1,16,0,32,32,0,0,0,64,0,8,8,0,0,1,16,0Z"></path>
-        </svg>
-        <span class="cart-badge" id="cart-badge">0</span>
-      </a>
-    </div>
-  </div>
-</header>
-<main class="px-4 sm:px-10 lg:px-20 xl:px-40 flex flex-1 justify-center py-8 sm:py-12">
-  <div class="layout-content-container flex flex-col max-w-4xl w-full flex-1">
-    <div class="flex flex-wrap justify-between items-center gap-4 p-4 mb-6 sm:mb-8 mt-12">
-      <h1 class="text-[var(--text-primary)] tracking-tight text-3xl sm:text-4xl font-bold leading-tight">Your Cart</h1>
-    </div>
-    <div id="cart-items" class="space-y-6">
-      <!-- Cart items will be rendered here by JS -->
-    </div>
-    <div class="mt-8 sm:mt-12 futuristic-card p-6">
-      <h2 class="text-[var(--text-primary)] text-xl sm:text-2xl font-bold leading-tight tracking-tight mb-6">Order Summary</h2>
-      <div class="space-y-3">
-        <div class="flex justify-between gap-x-6 py-2 border-b border-[var(--border-color)]">
-          <p class="text-[var(--text-secondary)] text-sm font-normal leading-normal">Subtotal</p>
-          <p id="order-subtotal" class="text-[var(--text-primary)] text-sm font-medium leading-normal text-right">$0.00</p>
+<body class="bg-gray-50 font-poppins">
+    <!-- Page Transition Overlay -->
+    <div class="page-transition" id="pageTransition" style="display: none;">
+        <div class="transition-content">
+            <div class="transition-logo">
+                <i class="fas fa-shopping-cart text-2xl"></i>
+            </div>
+            <h1 class="transition-text">BuyMore Cart</h1>
+            <p class="transition-subtext">Loading your shopping experience</p>
+            <div class="transition-spinner"></div>
         </div>
-        <div class="flex justify-between gap-x-6 py-2 border-b border-[var(--border-color)]">
-          <p class="text-[var(--text-secondary)] text-sm font-normal leading-normal">Shipping</p>
-          <p class="text-[var(--text-primary)] text-sm font-medium leading-normal text-right">Free</p>
-        </div>
-        <div class="flex justify-between gap-x-6 py-2 border-b border-[var(--border-color)]">
-          <p class="text-[var(--text-secondary)] text-sm font-normal leading-normal">Estimated Taxes</p>
-          <p id="order-taxes" class="text-[var(--text-primary)] text-sm font-medium leading-normal text-right">$0.00</p>
-        </div>
-      </div>
-      <div class="mt-6 pt-4 border-t-2 border-[var(--text-primary)]">
-        <div class="flex justify-between gap-x-6 py-2">
-          <p class="text-[var(--text-primary)] text-lg font-semibold leading-normal">Total</p>
-          <p id="order-total" class="text-[var(--text-primary)] text-lg sm:text-xl font-bold leading-normal text-right">$0.00</p>
-        </div>
-      </div>
-      <div class="mt-8 flex">
-        <button class="checkout-button flex-1">
-          <span class="truncate">Proceed to Checkout</span>
-        </button>
-      </div>
     </div>
-  </div>
-</main>
-<footer class="bg-white border-t border-[var(--border-color)] py-8 px-6 sm:px-10 text-center text-[var(--text-secondary)] text-sm">
-  <p>© 2024 Walmart. All rights reserved.</p>
-  <p class="mt-1">Designed with a futuristic vision for your shopping experience.</p>
-</footer>
-</div>
-</div>
-<script src="cart.js"></script>
-<script>
-  const searchInput = document.getElementById('navbar-search');
-  const clearBtn = document.getElementById('clear-search');
-  const searchIconBtn = document.getElementById('search-icon-btn');
-  const productGrid = document.getElementById('cart-items');
-  const productCards = productGrid ? Array.from(productGrid.querySelectorAll('.cart-item')) : [];
-  let noResultsMsg = null;
 
-  function filterProducts(query) {
-    let found = false;
-    productCards.forEach(card => {
-      const name = card.querySelector('.cart-item-title')?.textContent?.toLowerCase() || '';
-      if (name.includes(query.toLowerCase())) {
-        card.style.display = '';
-        found = true;
-      } else {
-        card.style.display = 'none';
-      }
-    });
-    if (!found) {
-      if (!noResultsMsg) {
-        noResultsMsg = document.createElement('div');
-        noResultsMsg.className = 'w-full text-center text-[#001e60] text-lg font-semibold py-8';
-        noResultsMsg.textContent = 'No products found.';
-        productGrid.appendChild(noResultsMsg);
-      }
-    } else if (noResultsMsg) {
-      noResultsMsg.remove();
-      noResultsMsg = null;
-    }
-  }
+    <div class="page-content loaded" id="pageContent">
+        <div class="flex h-screen flex-col md:flex-row">
+            <!-- Sidebar (Drawer for mobile) -->
+            <div id="sidebarDrawer" class="fixed inset-0 z-40 bg-black bg-opacity-40 transition-opacity duration-300 md:static md:bg-transparent md:z-0 md:w-64 md:block" style="display: none;"></div>
+            <div id="sidebar" class="w-64 bg-white shadow-lg flex flex-col fixed z-50 top-0 left-0 h-full transform -translate-x-full transition-transform duration-300 md:static md:translate-x-0 md:h-auto md:block">
+                <div class="p-6 border-b flex justify-center items-center stagger-item" data-delay="0.1">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Walmart_logo.svg/2000px-Walmart_logo.svg.png" alt="Walmart Logo" class="w-32 md:w-40 h-auto object-contain">
+                </div>
 
-  if (searchInput && clearBtn) {
-    searchInput.addEventListener('input', function() {
-      clearBtn.style.display = this.value ? 'block' : 'none';
-      if (!this.value) {
-        productCards.forEach(card => card.style.display = '');
-        if (noResultsMsg) { noResultsMsg.remove(); noResultsMsg = null; }
-      }
-    });
-    clearBtn.addEventListener('click', function() {
-      searchInput.value = '';
-      clearBtn.style.display = 'none';
-      searchInput.focus();
-      productCards.forEach(card => card.style.display = '');
-      if (noResultsMsg) { noResultsMsg.remove(); noResultsMsg = null; }
-    });
-    searchInput.addEventListener('keydown', function(e) {
-      if (e.key === 'Enter') {
-        filterProducts(this.value);
-      }
-    });
-    if (searchIconBtn) {
-      searchIconBtn.addEventListener('click', function() {
-        filterProducts(searchInput.value);
-      });
-    }
-  }
-</script>
+                <nav class="flex-1 p-4">
+                    <ul class="space-y-2" id="sidebar-nav">
+                        <li class="sidebar-item rounded-lg px-3 py-2 cursor-pointer stagger-item" data-delay="0.2" data-link="index.html">
+                            <a href="index.html" class="flex items-center text-inherit no-underline w-full h-full">
+                                <i class="fas fa-tshirt text-gray-500 mr-3"></i>Clothing and Shoes
+                            </a>
+                        </li>
+                        <li class="sidebar-item rounded-lg px-3 py-2 cursor-pointer stagger-item" data-delay="0.3" data-link="grocery.html">
+                            <a href="grocery.html" class="flex items-center text-inherit no-underline w-full h-full">
+                                <i class="fas fa-shopping-basket text-gray-500 mr-3"></i>Grocery
+                            </a>
+                        </li>
+                        <li class="sidebar-item rounded-lg px-3 py-2 cursor-pointer active stagger-item" data-delay="0.4" data-link="cart.html">
+                            <a href="cart.html" class="flex items-center text-inherit no-underline w-full h-full">
+                                <i class="fas fa-shopping-cart text-white mr-3"></i>Shopping Cart
+                            </a>
+                        </li>
+                    </ul>
+
+                    <div class="mt-8 stagger-item" data-delay="0.5">
+                        <h3 class="text-sm font-semibold text-gray-700 mb-3">Cart Summary</h3>
+                        <div class="bg-custom-blue-white rounded-lg p-3">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-xs text-gray-600">Items:</span>
+                                <span class="text-xs font-semibold text-custom-blue" id="sidebar-item-count">0</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-xs text-gray-600">Total:</span>
+                                <span class="text-xs font-semibold text-custom-blue" id="sidebar-total">$0.00</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 stagger-item" data-delay="0.6">
+                        <div class="flex items-center justify-between mb-3">
+                            <h3 class="text-sm font-semibold text-gray-700">Shopping Lists</h3>
+                            <button onclick="openSaveListModal()" class="text-blue-600 hover:text-blue-700 text-xs">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                        <div id="sidebar-shopping-lists" class="space-y-2"></div>
+                    </div>
+                </nav>
+            </div>
+
+            <div class="flex-1 flex flex-col min-h-0">
+                <header class="bg-custom-blue-white shadow-sm border-b px-4 py-4 md:px-6 md:py-6 stagger-item flex items-center justify-between" data-delay="0.2">
+                    <!-- Hamburger for mobile -->
+                    <button id="hamburgerBtn" class="md:hidden p-2 rounded-lg hover:bg-gray-200 focus:outline-none mr-2">
+                        <i class="fas fa-bars text-xl text-custom-blue"></i>
+                    </button>
+                    <div class="flex-1 flex items-center justify-between">
+                        <div class="flex items-center space-x-2 md:space-x-6">
+                            <!-- Mobile Logo (visible only on small screens) -->
+                            <div class="md:hidden flex items-center">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Walmart_logo.svg/2000px-Walmart_logo.svg.png" alt="Walmart Logo" class="w-24 h-auto object-contain">
+                            </div>
+                            <!-- Desktop cart count (hidden on mobile) -->
+                            <div class="hidden md:block text-center">
+                                <div class="text-2xl font-bold text-custom-blue" id="cart-count">0</div>
+                                <div class="text-xs text-gray-500 uppercase tracking-wider">Items in cart</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-2 md:space-x-4">
+                            <button onclick="openSaveListModal()" class="flex items-center justify-center bg-custom-blue-white hover:bg-blue-100 transition-colors rounded-full shadow-sm w-8 h-8 md:w-auto md:px-4 md:py-2 btn-animate">
+                                <i class="fas fa-bookmark text-custom-blue text-sm md:mr-2"></i>
+                                <span class="hidden md:inline text-custom-blue font-medium text-sm">Save List</span>
+                            </button>
+                            <button onclick="openLoadListModal()" class="flex items-center justify-center bg-custom-gold hover:bg-yellow-400 transition-colors rounded-full shadow-sm w-8 h-8 md:w-auto md:px-4 md:py-2 btn-animate">
+                                <i class="fas fa-folder-open text-custom-dark-blue text-sm md:mr-2"></i>
+                                <span class="hidden md:inline text-custom-dark-blue font-medium text-sm">Load List</span>
+                            </button>
+                            <a href="index.html" class="flex items-center justify-center bg-gray-100 hover:bg-gray-200 transition-colors rounded-full shadow-sm w-8 h-8 md:w-auto md:px-4 md:py-2 btn-animate">
+                                <i class="fas fa-arrow-left text-gray-600 text-sm md:mr-2"></i>
+                                <span class="hidden md:inline text-gray-600 font-medium text-sm">Continue Shopping</span>
+                            </a>
+                            <button id="empty-cart" class="flex items-center justify-center bg-red-50 hover:bg-red-100 transition-colors rounded-full shadow-sm w-8 h-8 md:w-auto md:px-4 md:py-2 btn-animate">
+                                <i class="fas fa-trash text-red-500 text-sm md:mr-2"></i>
+                                <span class="hidden md:inline text-red-500 font-medium text-sm">Clear Cart</span>
+                            </button>
+                        </div>
+                    </div>
+                </header>
+
+                <main class="flex-1 p-2 sm:p-4 md:p-6 overflow-y-auto">
+                    <div class="max-w-6xl mx-auto">
+                        <div class="mb-6 sm:mb-8 stagger-item" data-delay="0.4">
+                            <h1 class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-gray-800 mb-2">Shopping Cart</h1>
+                            <p class="text-base sm:text-lg text-gray-500">Review your items and proceed to checkout</p>
+                        </div>
+
+                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
+                            <div class="lg:col-span-2 stagger-item" data-delay="0.5">
+                                <div class="bg-white rounded-2xl shadow-sm p-4 sm:p-6">
+                                    <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-4 sm:mb-6 gap-2 sm:gap-0">
+                                        <h2 class="text-lg sm:text-xl font-bold text-gray-800">Cart Items</h2>
+                                        <span class="text-sm text-gray-500" id="item-count-text">0 items</span>
+                                    </div>
+                                    <div id="cart-items" class="space-y-4"></div>
+                                </div>
+                            </div>
+
+                            <div class="lg:col-span-1 stagger-item" data-delay="0.6">
+                                <div class="bg-white rounded-2xl shadow-sm p-4 sm:p-6 lg:sticky lg:top-6">
+                                    <h2 class="text-lg sm:text-xl font-bold text-gray-800 mb-4 sm:mb-6">Order Summary</h2>
+                                    
+                                    <div class="space-y-3 sm:space-y-4 mb-4 sm:mb-6">
+                                        <div class="flex justify-between items-center">
+                                            <span class="text-sm sm:text-base text-gray-600">Subtotal</span>
+                                            <span class="font-semibold text-sm sm:text-base" id="subtotal">$0.00</span>
+                                        </div>
+                                        <div class="flex justify-between items-center">
+                                            <span class="text-sm sm:text-base text-gray-600">Shipping</span>
+                                            <span class="font-semibold text-green-600 text-sm sm:text-base">Free</span>
+                                        </div>
+                                        <div class="flex justify-between items-center">
+                                            <span class="text-sm sm:text-base text-gray-600">Tax</span>
+                                            <span class="font-semibold text-sm sm:text-base" id="tax">$0.00</span>
+                                        </div>
+                                        <div class="border-t pt-3 sm:pt-4">
+                                            <div class="flex justify-between items-center">
+                                                <span class="text-base sm:text-lg font-bold text-gray-800">Total</span>
+                                                <span class="text-xl sm:text-2xl font-bold text-custom-blue" id="total">$0.00</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-4 sm:mb-6">
+                                        <div class="flex space-x-2">
+                                            <input type="text" placeholder="Promo code" class="flex-1 px-3 sm:px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-custom-blue text-sm">
+                                            <button class="px-3 sm:px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors text-sm font-medium btn-animate">Apply</button>
+                                        </div>
+                                    </div>
+
+                                    <div id="cart-actions"></div>
+
+                                    <div class="mt-4 sm:mt-6 pt-4 sm:pt-6 border-t">
+                                        <div class="flex items-center justify-center space-x-2 text-xs sm:text-sm text-gray-500">
+                                            <i class="fas fa-shield-alt text-green-500"></i>
+                                            <span>Secure checkout powered by Stripe</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="empty-cart-state" class="hidden stagger-item" data-delay="0.7">
+                            <div class="text-center py-8 sm:py-16">
+                                <div class="empty-cart rounded-full w-16 h-16 sm:w-24 sm:h-24 flex items-center justify-center mx-auto mb-4 sm:mb-6">
+                                    <i class="fas fa-shopping-cart text-2xl sm:text-4xl"></i>
+                                </div>
+                                <h3 class="text-xl sm:text-2xl font-bold text-gray-800 mb-2">Your cart is empty</h3>
+                                <p class="text-gray-500 mb-6 sm:mb-8 text-sm sm:text-base">Looks like you haven't added any items to your cart yet.</p>
+                                <div class="flex flex-col sm:flex-row items-center justify-center space-y-2 sm:space-y-0 sm:space-x-4">
+                                    <a href="index.html" class="inline-flex items-center bg-custom-blue text-white px-6 sm:px-8 py-2 sm:py-3 rounded-lg font-semibold hover:bg-custom-dark-blue transition-colors btn-animate text-sm sm:text-base">
+                                        <i class="fas fa-arrow-left mr-2"></i>Start Shopping
+                                    </a>
+                                    <button onclick="openLoadListModal()" class="inline-flex items-center bg-custom-gold text-custom-dark-blue px-6 sm:px-8 py-2 sm:py-3 rounded-lg font-semibold hover:bg-yellow-400 transition-colors btn-animate text-sm sm:text-base">
+                                        <i class="fas fa-folder-open mr-2"></i>Load Saved List
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </div>
+    </div>
+
+    <!-- Save List Modal -->
+    <div id="saveListModal" class="modal">
+        <div class="modal-content">
+            <div class="p-6">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-xl font-bold text-gray-800">Save Shopping List</h3>
+                    <button onclick="closeSaveListModal()" class="text-gray-400 hover:text-gray-600">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">List Name</label>
+                        <input type="text" id="listName" placeholder="Enter a name for your shopping list" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-200">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Description (Optional)</label>
+                        <textarea id="listDescription" placeholder="Add a description for your list" class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-200 h-20 resize-none"></textarea>
+                    </div>
+                    <div class="bg-gray-50 rounded-lg p-4">
+                        <h4 class="font-semibold text-gray-800 mb-2">Items to Save:</h4>
+                        <div id="saveListItems" class="space-y-2"></div>
+                    </div>
+                </div>
+                <div class="flex justify-end space-x-3 mt-6">
+                    <button onclick="closeSaveListModal()" class="px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors">Cancel</button>
+                    <button onclick="saveShoppingList()" class="px-6 py-2 bg-custom-blue text-white rounded-lg hover:bg-custom-dark-blue transition-colors font-semibold">Save List</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Load List Modal -->
+    <div id="loadListModal" class="modal">
+        <div class="modal-content">
+            <div class="p-6">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-xl font-bold text-gray-800">Load Shopping List</h3>
+                    <button onclick="closeLoadListModal()" class="text-gray-400 hover:text-gray-600">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                <div id="loadListContent"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+
+    <script>
+        // Sidebar drawer toggle for mobile
+        const sidebar = document.getElementById('sidebar');
+        const sidebarDrawer = document.getElementById('sidebarDrawer');
+        const hamburgerBtn = document.getElementById('hamburgerBtn');
+        function openSidebar() {
+            sidebar.style.transform = 'translateX(0)';
+            sidebarDrawer.style.display = 'block';
+        }
+        function closeSidebar() {
+            sidebar.style.transform = 'translateX(-100%)';
+            sidebarDrawer.style.display = 'none';
+        }
+        hamburgerBtn.addEventListener('click', openSidebar);
+        sidebarDrawer.addEventListener('click', closeSidebar);
+        // Hide sidebar on resize to md+
+        window.addEventListener('resize', function() {
+            if (window.innerWidth >= 768) {
+                sidebar.style.transform = 'translateX(0)';
+                sidebarDrawer.style.display = 'none';
+            } else {
+                sidebar.style.transform = 'translateX(-100%)';
+            }
+        });
+
+        // Initialize page directly without transitions
+        window.addEventListener('load', function() {
+            // Trigger staggered animations immediately
+            setTimeout(() => {
+                animateStaggeredItems();
+            }, 100);
+        });
+
+        // Staggered animation function
+        function animateStaggeredItems() {
+            const staggerItems = document.querySelectorAll('.stagger-item');
+            staggerItems.forEach(item => {
+                const delay = parseFloat(item.getAttribute('data-delay')) * 1000;
+                setTimeout(() => {
+                    item.classList.add('animate');
+                }, delay);
+            });
+        }
+
+        // Simple navigation without transition
+        function navigateWithTransition(url) {
+            window.location.href = url;
+        }
+
+        // Enhanced toast function
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.textContent = msg;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2000);
+        }
+
+        // Sidebar active state with animation
+        document.querySelectorAll('.sidebar-item').forEach(item => {
+            item.classList.remove('active');
+            const link = item.getAttribute('data-link');
+            if (link && window.location.pathname.endsWith(link)) {
+                item.classList.add('active');
+                if (item.querySelector('i')) item.querySelector('i').classList.add('text-white');
+            }
+        });
+
+        // Product data
+        const products = [
+            { id: 1, name: 'WMX Rubber Zebra Sandal', price: 36, img: 'https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=300&h=300&fit=crop' },
+            { id: 2, name: 'Supper Skinny Jogger', price: 89, img: 'https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?w=300&h=300&fit=crop' },
+            { id: 3, name: 'Premium Cotton T-Shirt', price: 24, img: 'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=300&h=300&fit=crop' },
+            { id: 4, name: 'Pro Runner Shoes', price: 120, img: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=300&h=300&fit=crop' },
+            { id: 5, name: 'Women Peach Dress', price: 59, img: 'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?w=300&h=300&fit=crop' },
+            { id: 6, name: 'Women Mint Blazer', price: 79, img: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=300&h=300&fit=crop' },
+            { id: 7, name: 'Organic Bananas', price: 2.99, img: 'https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?w=300&h=300&fit=crop' },
+            { id: 8, name: 'Fresh Milk', price: 4.49, img: 'https://images.unsplash.com/photo-1550583724-b2692b85b150?w=300&h=300&fit=crop' },
+            { id: 9, name: 'Organic Apples', price: 3.99, img: 'https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?w=300&h=300&fit=crop' },
+            { id: 10, name: 'Fresh Tomatoes', price: 2.49, img: 'https://images.unsplash.com/photo-1546094096-0df4bcaaa337?w=300&h=300&fit=crop' },
+            { id: 11, name: 'Organic Carrots', price: 1.99, img: 'https://images.unsplash.com/photo-1447175008436-170170e8a4e3?w=300&h=300&fit=crop' },
+            { id: 12, name: 'Greek Yogurt', price: 5.99, img: 'https://images.unsplash.com/photo-1488477181946-6428a0291777?w=300&h=300&fit=crop' }
+        ];
+
+        // Cart management with enhanced animations
+        let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+        let shoppingLists = JSON.parse(localStorage.getItem('shoppingLists') || '[]');
+
+        function updateCart() {
+            const cartItems = document.getElementById('cart-items');
+            const cartCount = document.getElementById('cart-count');
+            const itemCountText = document.getElementById('item-count-text');
+            const emptyCartState = document.getElementById('empty-cart-state');
+            const cartActions = document.getElementById('cart-actions');
+            const sidebarItemCount = document.getElementById('sidebar-item-count');
+            const sidebarTotal = document.getElementById('sidebar-total');
+
+            console.log('Updating cart with items:', cart); // Debug log
+
+            if (cart.length === 0) {
+                cartItems.innerHTML = '';
+                cartCount.textContent = '0';
+                itemCountText.textContent = '0 items';
+                emptyCartState.classList.remove('hidden');
+                cartActions.innerHTML = '';
+                sidebarItemCount.textContent = '0';
+                sidebarTotal.textContent = '$0.00';
+                
+                // Clear summary values
+                document.getElementById('subtotal').textContent = '$0.00';
+                document.getElementById('tax').textContent = '$0.00';
+                document.getElementById('total').textContent = '$0.00';
+                return;
+            }
+
+            emptyCartState.classList.add('hidden');
+            
+            let totalItems = 0;
+            let subtotal = 0;
+
+            cartItems.innerHTML = cart.map((item, index) => {
+                const product = products.find(p => p.id === item.id);
+                if (!product) {
+                    console.warn('Product not found for ID:', item.id); // Debug log
+                    return '';
+                }
+                
+                const itemTotal = product.price * item.qty;
+                totalItems += item.qty;
+                subtotal += itemTotal;
+                
+                // Determine category for styling
+                const category = product.category || 'default';
+                
+                console.log(`Item ${product.name}: $${product.price} x ${item.qty} = $${itemTotal.toFixed(2)}`); // Debug log
+
+                return `
+                    <div class="cart-item bg-white border border-gray-100 rounded-xl p-4 transition-all duration-300 stagger-item ${category}" data-delay="${0.1 + index * 0.1}">
+                        <div class="flex items-center space-x-4">
+                            <img src="${product.img}" alt="${product.name}" class="w-20 h-20 object-cover rounded-lg">
+                            <div class="flex-1">
+                                <h3 class="font-semibold text-gray-800">${product.name}</h3>
+                                <p class="price-display ${category}">$${product.price.toFixed(2)}</p>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <button onclick="updateQuantity(${item.id}, -1)" class="quantity-btn w-8 h-8 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-minus text-xs"></i>
+                                </button>
+                                <span class="w-12 text-center font-semibold text-gray-800">${item.qty}</span>
+                                <button onclick="updateQuantity(${item.id}, 1)" class="quantity-btn w-8 h-8 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-plus text-xs"></i>
+                                </button>
+                            </div>
+                            <div class="text-right">
+                                <p class="font-semibold text-gray-800">$${itemTotal.toFixed(2)}</p>
+                                <button onclick="removeItem(${item.id})" class="remove-btn px-3 py-1 rounded-lg text-sm mt-1">
+                                    <i class="fas fa-trash"></i> Remove
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            const tax = subtotal * 0.08;
+            const total = subtotal + tax;
+
+            console.log(`Subtotal: $${subtotal.toFixed(2)}, Tax: $${tax.toFixed(2)}, Total: $${total.toFixed(2)}`); // Debug log
+
+            cartCount.textContent = totalItems;
+            itemCountText.textContent = `${totalItems} item${totalItems !== 1 ? 's' : ''}`;
+            sidebarItemCount.textContent = totalItems;
+            sidebarTotal.textContent = `$${total.toFixed(2)}`;
+
+            document.getElementById('subtotal').textContent = `$${subtotal.toFixed(2)}`;
+            document.getElementById('tax').textContent = `$${tax.toFixed(2)}`;
+            document.getElementById('total').textContent = `$${total.toFixed(2)}`;
+
+            cartActions.innerHTML = `
+                <button onclick="proceedToCheckout()" class="w-full bg-custom-blue text-white py-3 rounded-lg font-semibold hover:bg-custom-dark-blue transition-colors btn-animate">
+                    <i class="fas fa-lock mr-2"></i>Proceed to Checkout
+                </button>
+            `;
+            
+            // Trigger staggered animation for cart items
+            setTimeout(() => {
+                const newStaggerItems = cartItems.querySelectorAll('.stagger-item');
+                newStaggerItems.forEach((item, index) => {
+                    setTimeout(() => {
+                        item.classList.add('animate');
+                    }, index * 100);
+                });
+            }, 100);
+        }
+
+        function updateQuantity(id, change) {
+            const item = cart.find(x => x.id === id);
+            if (item) {
+                item.qty += change;
+                if (item.qty <= 0) {
+                    removeItem(id);
+                } else {
+                    localStorage.setItem('cart', JSON.stringify(cart));
+                    updateCart();
+                    showToast(change > 0 ? 'Item quantity increased!' : 'Item quantity decreased!');
+                }
+            }
+        }
+
+        function removeItem(id) {
+            cart = cart.filter(x => x.id !== id);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCart();
+            showToast('Item removed from cart!');
+        }
+
+        function clearCart() {
+            cart = [];
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCart();
+            showToast('Cart cleared!');
+        }
+
+        function proceedToCheckout() {
+            showToast('Redirecting to checkout...');
+            setTimeout(() => {
+                navigateWithTransition('checkout.html');
+            }, 1000);
+        }
+
+        // Shopping List Management with enhanced animations
+        function openSaveListModal() {
+            const modal = document.getElementById('saveListModal');
+            const saveListItems = document.getElementById('saveListItems');
+            
+            // Check if cart is empty
+            if (cart.length === 0) {
+                saveListItems.innerHTML = `
+                    <div class="text-center py-4">
+                        <div class="bg-gray-100 rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-2">
+                            <i class="fas fa-shopping-cart text-lg text-gray-400"></i>
+                        </div>
+                        <p class="text-sm text-gray-500">Your cart is empty</p>
+                    </div>
+                `;
+            } else {
+                // Calculate totals
+                let totalItems = 0;
+                let totalValue = 0;
+                
+                // Display current cart items
+                saveListItems.innerHTML = cart.map(item => {
+                    const product = products.find(p => p.id === item.id);
+                    if (!product) return '';
+                    
+                    const itemTotal = product.price * item.qty;
+                    totalItems += item.qty;
+                    totalValue += itemTotal;
+                    
+                    return `
+                        <div class="flex items-center justify-between p-2 bg-white rounded border mb-2">
+                            <div class="flex items-center space-x-3">
+                                <img src="${product.img}" alt="${product.name}" class="w-10 h-10 object-cover rounded">
+                                <div>
+                                    <p class="text-sm font-medium text-gray-800">${product.name}</p>
+                                    <p class="text-xs text-gray-500">Qty: ${item.qty} × $${product.price.toFixed(2)}</p>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-sm font-semibold text-gray-800">$${itemTotal.toFixed(2)}</p>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+                
+                // Add summary section
+                saveListItems.innerHTML += `
+                    <div class="mt-4 p-3 bg-custom-blue-white rounded-lg border border-custom-blue">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <p class="text-sm font-medium text-gray-700">Total Items: ${totalItems}</p>
+                                <p class="text-xs text-gray-500">${cart.length} different products</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-lg font-bold text-custom-blue">$${totalValue.toFixed(2)}</p>
+                                <p class="text-xs text-gray-500">Total Value</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            modal.style.display = 'block';
+            setTimeout(() => {
+                modal.classList.add('show');
+            }, 10);
+        }
+
+        function closeSaveListModal() {
+            const modal = document.getElementById('saveListModal');
+            modal.classList.remove('show');
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 300);
+        }
+
+        function saveShoppingList() {
+            const name = document.getElementById('listName').value.trim();
+            if (!name) {
+                showToast('Please enter a name for your list');
+                return;
+            }
+
+            const newList = {
+                id: Date.now(),
+                name: name,
+                items: [...cart],
+                createdAt: new Date().toISOString()
+            };
+
+            shoppingLists.push(newList);
+            localStorage.setItem('shoppingLists', JSON.stringify(shoppingLists));
+            
+            closeSaveListModal();
+            updateSidebarLists();
+            showToast('Shopping list saved successfully!');
+            
+            // Clear the input
+            document.getElementById('listName').value = '';
+        }
+
+        function openLoadListModal() {
+            const modal = document.getElementById('loadListModal');
+            const listsContainer = document.getElementById('loadListContent');
+            
+            if (shoppingLists.length === 0) {
+                listsContainer.innerHTML = `
+                    <div class="text-center py-8">
+                        <div class="bg-gray-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-folder-open text-2xl text-gray-400"></i>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gray-800 mb-2">No Saved Lists</h3>
+                        <p class="text-gray-500">You haven't saved any shopping lists yet.</p>
+                    </div>
+                `;
+            } else {
+                listsContainer.innerHTML = shoppingLists.map(list => `
+                    <div class="shopping-list-card bg-white border border-gray-200 rounded-lg p-4 cursor-pointer hover:bg-gray-50 transition-colors mb-3" onclick="loadShoppingList(${list.id})">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h3 class="font-semibold text-gray-800">${list.name}</h3>
+                                <p class="text-sm text-gray-500">${list.items.length} items</p>
+                                <p class="text-xs text-gray-400">${new Date(list.createdAt).toLocaleDateString()}</p>
+                            </div>
+                            <button onclick="deleteShoppingList(${list.id}); event.stopPropagation();" class="text-red-500 hover:text-red-700 p-2">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+            
+            modal.style.display = 'block';
+            setTimeout(() => {
+                modal.classList.add('show');
+            }, 10);
+        }
+
+        function closeLoadListModal() {
+            const modal = document.getElementById('loadListModal');
+            modal.classList.remove('show');
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 300);
+        }
+
+        function loadShoppingList(id) {
+            const list = shoppingLists.find(l => l.id === id);
+            if (list) {
+                cart = [...list.items];
+                localStorage.setItem('cart', JSON.stringify(cart));
+                updateCart();
+                closeLoadListModal();
+                showToast('Shopping list loaded successfully!');
+            }
+        }
+
+        function deleteShoppingList(id) {
+            shoppingLists = shoppingLists.filter(l => l.id !== id);
+            localStorage.setItem('shoppingLists', JSON.stringify(shoppingLists));
+            updateSidebarLists();
+            showToast('Shopping list deleted!');
+        }
+
+        function updateSidebarLists() {
+            const sidebarLists = document.getElementById('sidebar-shopping-lists');
+            sidebarLists.innerHTML = shoppingLists.slice(0, 3).map(list => `
+                <div class="shopping-list-card bg-gray-50 rounded-lg p-3 cursor-pointer hover:bg-gray-100 transition-colors" onclick="loadShoppingList(${list.id})">
+                    <div class="flex items-center justify-between">
+                        <div class="flex-1">
+                            <p class="text-xs font-semibold text-gray-700">${list.name}</p>
+                            <p class="text-xs text-gray-500">${list.items.length} items</p>
+                        </div>
+                        <button onclick="deleteShoppingList(${list.id}); event.stopPropagation();" class="text-red-400 hover:text-red-600 text-xs">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Event listeners with enhanced animations
+        document.getElementById('empty-cart').addEventListener('click', function() {
+            this.classList.add('success-animation');
+            setTimeout(() => {
+                this.classList.remove('success-animation');
+                clearCart();
+            }, 300);
+        });
+
+        // Close modals when clicking outside
+        window.addEventListener('click', function(event) {
+            const saveModal = document.getElementById('saveListModal');
+            const loadModal = document.getElementById('loadListModal');
+            
+            if (event.target === saveModal) {
+                closeSaveListModal();
+            }
+            if (event.target === loadModal) {
+                closeLoadListModal();
+            }
+        });
+
+        // Initialize with enhanced animations
+        setTimeout(() => {
+            updateCart();
+            updateSidebarLists();
+            console.log('Cart page - Initial cart state:', cart); // Debug log
+            console.log('Cart page - Products available:', products.length); // Debug log
+        }, 1500);
+
+        // Test function for debugging cart
+        function testCartCalculation() {
+            console.log('=== Testing Cart Calculation ===');
+            console.log('Current cart:', cart);
+            console.log('Available products:', products);
+            
+            // Test with sample items
+            const testCart = [
+                { id: 1, qty: 2 }, // WMX Rubber Zebra Sandal: $36 x 2 = $72
+                { id: 7, qty: 3 }  // Organic Bananas: $2.99 x 3 = $8.97
+            ];
+            
+            let testSubtotal = 0;
+            testCart.forEach(item => {
+                const product = products.find(p => p.id === item.id);
+                if (product) {
+                    const itemTotal = product.price * item.qty;
+                    testSubtotal += itemTotal;
+                    console.log(`${product.name}: $${product.price} x ${item.qty} = $${itemTotal.toFixed(2)}`);
+                }
+            });
+            
+            console.log(`Test Subtotal: $${testSubtotal.toFixed(2)}`);
+            console.log(`Test Tax (8%): $${(testSubtotal * 0.08).toFixed(2)}`);
+            console.log(`Test Total: $${(testSubtotal * 1.08).toFixed(2)}`);
+        }
+        
+        // Expose test function globally for console testing
+        window.testCartCalculation = testCartCalculation;
+        
+        // Function to add test items to cart for debugging
+        function addTestItems() {
+            console.log('Adding test items to cart...');
+            
+            // Clear current cart
+            cart = [];
+            
+            // Add test items
+            cart.push({ id: 1, qty: 2 }); // WMX Rubber Zebra Sandal: $36 x 2 = $72
+            cart.push({ id: 7, qty: 3 }); // Organic Bananas: $2.99 x 3 = $8.97
+            cart.push({ id: 3, qty: 1 }); // Premium Cotton T-Shirt: $24 x 1 = $24
+            
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCart();
+            
+            console.log('Test items added to cart:', cart);
+            showToast('Test items added to cart!');
+        }
+        
+        // Expose test function globally
+        window.addTestItems = addTestItems;
+    </script>
 </body>
 </html> 

@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details - BuyMore</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'poppins': ['Poppins', 'sans-serif'],
+                    },
+                    colors: {
+                        'mint': '#98D8C8',
+                        'peach': '#FFB6C1',
+                        'pastel-yellow': '#FFFACD',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        /* Page Transitions */
+        .page-transition {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 9999;
+            pointer-events: none;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .transition-content {
+            text-align: center;
+            color: #3b82f6;
+            opacity: 0;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .transition-content.show {
+            opacity: 1;
+            transform: scale(1);
+        }
+        
+        .transition-logo {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            background: #f8fafc;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #e2e8f0;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .transition-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #e2e8f0;
+            border-top: 3px solid #3b82f6;
+            border-radius: 50%;
+            animation: spin 1.2s linear infinite;
+            margin: 0 auto 15px;
+        }
+        
+        .transition-text {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #1e293b;
+        }
+        
+        .transition-subtext {
+            font-size: 0.9rem;
+            color: #64748b;
+        }
+        
+        /* Page content fade animations */
+        .page-content {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .page-content.loaded {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Staggered content animation */
+        .stagger-item {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .stagger-item.animate {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Loading Animation */
+        .loading-spinner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top: 3px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+        
+        /* Button Animations */
+        .btn-animate {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-animate::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        
+        .btn-animate:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+        
+        .btn-animate:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* Success Animation for Add to Cart */
+        .success-animation {
+            animation: successPulse 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        @keyframes successPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        /* Smooth Scroll */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Enhanced Toast Animation */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #222;
+            color: #fff;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            opacity: 0;
+            z-index: 50;
+            font-size: 1rem;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .toast.show {
+            opacity: 0.95;
+            transform: translateX(-50%) translateY(0);
+        }
+        
+        /* Product Card Animations */
+        .product-card {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .product-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.1), transparent);
+            transition: left 0.6s;
+        }
+        
+        .product-card:hover::before {
+            left: 100%;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* Fade In Animation for Content */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+        
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Colorful product details */
+        .product-detail {
+            border-left: 4px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .product-detail.men {
+            border-left-color: #3b82f6;
+        }
+        
+        .product-detail.women {
+            border-left-color: #ec4899;
+        }
+        
+        .product-detail.fruits {
+            border-left-color: #ff6b6b;
+        }
+        
+        .product-detail.vegetables {
+            border-left-color: #51cf66;
+        }
+        
+        .product-detail.dairy {
+            border-left-color: #ffd43b;
+        }
+        
+        /* Colorful price display */
+        .product-price {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 1.25rem;
+        }
+        
+        .product-price.men {
+            background-color: #dbeafe;
+            color: #3b82f6;
+        }
+        
+        .product-price.women {
+            background-color: #fce7f3;
+            color: #ec4899;
+        }
+        
+        .product-price.fruits {
+            background-color: #ffe3e3;
+            color: #ff6b6b;
+        }
+        
+        .product-price.vegetables {
+            background-color: #d3f9d8;
+            color: #51cf66;
+        }
+        
+        .product-price.dairy {
+            background-color: #fff3bf;
+            color: #f59f00;
+        }
+        
+        /* Colorful quantity selector */
+        .quantity-selector {
+            background-color: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+        
+        .quantity-selector:focus-within {
+            border-color: #0053e2;
+            box-shadow: 0 0 0 3px rgba(0, 83, 226, 0.1);
+        }
+        
+        .quantity-btn {
+            background-color: #f3f4f6;
+            border: 1px solid #e5e7eb;
+            color: #6b7280;
+            transition: all 0.2s ease;
+        }
+        
+        .quantity-btn:hover {
+            background-color: #0053e2;
+            border-color: #0053e2;
+            color: white;
+            transform: scale(1.1);
+        }
+        
+        /* Colorful add to cart button */
+        .add-to-cart-main {
+            background: linear-gradient(135deg, #0053e2 0%, #001e60 100%);
+            color: white;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .add-to-cart-main:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 83, 226, 0.3);
+        }
+        
+        /* Colorful wishlist button */
+        .wishlist-btn {
+            background-color: #fee2e2;
+            color: #dc2626;
+            border: 2px solid #fecaca;
+            transition: all 0.3s ease;
+        }
+        
+        .wishlist-btn:hover {
+            background-color: #dc2626;
+            color: white;
+            transform: scale(1.05);
+        }
+        
+        .wishlist-btn.active {
+            background-color: #dc2626;
+            color: white;
+        }
+        
+        /* Colorful color swatches */
+        .color-swatch {
+            border: 2px solid transparent;
+            transition: all 0.2s ease;
+        }
+        
+        .color-swatch:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .color-swatch.selected {
+            border-color: #0053e2;
+            box-shadow: 0 0 0 3px rgba(0, 83, 226, 0.2);
+        }
+        
+        /* Colorful size selector */
+        .size-btn {
+            background-color: #f8fafc;
+            border: 2px solid #e2e8f0;
+            color: #374151;
+            transition: all 0.2s ease;
+        }
+        
+        .size-btn:hover {
+            border-color: #0053e2;
+            background-color: #f0f5ff;
+        }
+        
+        .size-btn.selected {
+            background-color: #0053e2;
+            border-color: #0053e2;
+            color: white;
+        }
+        
+        /* Colorful product features */
+        .feature-item {
+            background-color: #f8fafc;
+            border-left: 4px solid #0053e2;
+            transition: all 0.3s ease;
+        }
+        
+        .feature-item:hover {
+            background-color: #f0f5ff;
+            transform: translateX(5px);
+        }
+        
+        /* Colorful related products */
+        .related-product {
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .related-product:hover {
+            border-color: #0053e2;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .related-product.men {
+            border-left-color: #3b82f6;
+        }
+        
+        .related-product.women {
+            border-left-color: #ec4899;
+        }
+        
+        .related-product.fruits {
+            border-left-color: #ff6b6b;
+        }
+        
+        .related-product.vegetables {
+            border-left-color: #51cf66;
+        }
+        
+        .related-product.dairy {
+            border-left-color: #ffd43b;
+        }
+        
+        /* Colorful sidebar items */
+        .sidebar-item:hover {
+            background-color: #e3f2fd;
+            border-left: 4px solid #0053e2;
+        }
+        
+        .sidebar-item.active {
+            background-color: #0053e2;
+            color: white;
+            border-left: 4px solid #ffc220;
+        }
+        
+        /* Colorful last orders */
+        .last-order-item:hover {
+            background-color: #e8f5e8;
+            border-left: 4px solid #51cf66;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-poppins">
+    <!-- Page Transition Overlay -->
+    <div class="page-transition" id="pageTransition" style="display: none;">
+        <div class="transition-content">
+            <div class="transition-logo">
+                <i class="fas fa-box text-2xl"></i>
+            </div>
+            <h1 class="transition-text">BuyMore Product</h1>
+            <p class="transition-subtext">Loading product details</p>
+            <div class="transition-spinner"></div>
+        </div>
+    </div>
+
+    <div class="page-content loaded" id="pageContent">
+        <header class="bg-white shadow-sm px-4 sm:px-6 py-4 flex items-center justify-between stagger-item" data-delay="0.1">
+            <a href="index.html" class="flex items-center">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Walmart_logo.svg/2000px-Walmart_logo.svg.png" alt="Walmart Logo" class="w-24 sm:w-32 h-auto object-contain">
+            </a>
+            <a href="index.html" class="bg-blue-600 text-white px-3 sm:px-4 py-2 rounded-full hover:bg-blue-700 transition flex items-center btn-animate text-sm sm:text-base">
+                <i class="fas fa-arrow-left mr-2"></i> <span class="hidden sm:inline">Back to Shop</span>
+            </a>
+        </header>
+        
+        <main class="flex-1 flex flex-col items-center justify-center p-2 sm:p-4">
+            <div id="product-details" class="w-full max-w-2xl bg-white rounded-2xl shadow-md p-4 sm:p-6 mt-4 sm:mt-8 stagger-item" data-delay="0.2"></div>
+        </main>
+    </div>
+    
+    <div id="toast" class="toast"></div>
+    
+    <script>
+        // Initialize page directly without transitions
+        window.addEventListener('load', function() {
+            // Trigger staggered animations immediately
+            setTimeout(() => {
+                animateStaggeredItems();
+            }, 100);
+        });
+
+        // Staggered animation function
+        function animateStaggeredItems() {
+            const staggerItems = document.querySelectorAll('.stagger-item');
+            staggerItems.forEach(item => {
+                const delay = parseFloat(item.getAttribute('data-delay')) * 1000;
+                setTimeout(() => {
+                    item.classList.add('animate');
+                }, delay);
+            });
+        }
+
+        // Product data (should match index.html)
+        const products = [
+            {id:1,name:'WMX Rubber Zebra Sandal',desc:'Comfortable summer footwear',price:36,category:'men',img:'https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=300&h=300&fit=crop',colors:['black','gray-300']},
+            {id:2,name:'Supper Skinny Jogger',desc:'In Brown - Premium comfort',price:89,category:'men',img:'https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?w=300&h=300&fit=crop',colors:['brown-600','gray-300']},
+            {id:3,name:'Premium Cotton T-Shirt',desc:'Soft and breathable',price:24,category:'men',img:'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=300&h=300&fit=crop',colors:['blue-500','red-500']},
+            {id:4,name:'Pro Runner Shoes',desc:'Lightweight performance',price:120,category:'men',img:'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=300&h=300&fit=crop',colors:['gray-800','blue-600']},
+            {id:5,name:'Women Peach Dress',desc:'Elegant and stylish',price:59,category:'women',img:'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?w=300&h=300&fit=crop',colors:['peach','mint']},
+            {id:6,name:'Women Mint Blazer',desc:'Fresh pastel look',price:79,category:'women',img:'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=300&h=300&fit=crop',colors:['mint','pastel-yellow']}
+        ];
+        
+        function getColorClass(color) {
+            if (color.startsWith('gray')) return `bg-${color}`;
+            if (color.startsWith('blue')) return `bg-${color}`;
+            if (color.startsWith('red')) return `bg-${color}`;
+            if (color.startsWith('brown')) return `bg-yellow-900`;
+            if (color === 'peach') return 'bg-pink-200';
+            if (color === 'mint') return 'bg-green-200';
+            if (color === 'pastel-yellow') return 'bg-yellow-100';
+            if (color === 'black') return 'bg-black';
+            return 'bg-gray-200';
+        }
+        
+        function getProductId() {
+            const params = new URLSearchParams(window.location.search);
+            return parseInt(params.get('id'), 10);
+        }
+        
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.textContent = msg;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2000);
+        }
+        
+        function updateCartBadge() {
+            // No badge on this page, but you can implement if needed
+        }
+        
+        function addToCart(id) {
+            let cart = JSON.parse(localStorage.getItem('cart')||'[]');
+            const found = cart.find(x => x.id === id);
+            if (found) {
+                found.qty += 1;
+            } else {
+                cart.push({ id, qty: 1 });
+            }
+            localStorage.setItem('cart', JSON.stringify(cart));
+            localStorage.setItem('cart_updated', Date.now());
+            
+            // Enhanced success feedback with animation
+            showToast('Added to cart!');
+            
+            // Add success animation to the button
+            const button = event.target;
+            button.classList.add('success-animation');
+            setTimeout(() => {
+                button.classList.remove('success-animation');
+            }, 600);
+        }
+        
+        function renderProduct() {
+            const id = getProductId();
+            const prod = products.find(p => p.id === id);
+            const el = document.getElementById('product-details');
+            
+            if (!prod) {
+                el.innerHTML = `
+                    <div class='text-center py-8 sm:py-12 fade-in'>
+                        <i class='fas fa-box-open text-3xl sm:text-4xl text-gray-300 mb-4'></i>
+                        <div class='text-gray-500 mb-4 text-sm sm:text-base'>Product not found.</div>
+                        <a href='index.html' class='bg-blue-600 text-white px-4 sm:px-6 py-2 rounded-full hover:bg-blue-700 transition btn-animate text-sm sm:text-base'>
+                            Back to Home
+                        </a>
+                    </div>
+                `;
+                return;
+            }
+            
+            el.innerHTML = `
+                <div class='flex flex-col md:flex-row gap-4 sm:gap-8 items-center product-detail ${prod.category}'>
+                    <img src='${prod.img}' alt='${prod.name}' class='w-48 h-48 sm:w-64 sm:h-64 object-cover rounded-2xl shadow-md border transition-transform hover:scale-105'>
+                    <div class='flex-1 text-center md:text-left'>
+                        <h2 class='text-2xl sm:text-3xl font-extrabold text-gray-800 mb-2'>${prod.name}</h2>
+                        <div class='flex items-center gap-2 mb-3 sm:mb-4 justify-center md:justify-start'>
+                            ${prod.colors.map(c => `<span class='color-swatch w-5 h-5 sm:w-6 sm:h-6 rounded-full border ${getColorClass(c)}'></span>`).join('')}
+                        </div>
+                        <div class='text-base sm:text-lg text-gray-600 mb-3 sm:mb-4'>${prod.desc}</div>
+                        <div class='product-price ${prod.category} mb-4 sm:mb-6'>$${prod.price}</div>
+                        <div class='flex flex-col sm:flex-row gap-3 sm:gap-4 mb-4 sm:mb-6'>
+                            <div class='quantity-selector flex items-center justify-center sm:justify-start'>
+                                <button class='quantity-btn w-8 h-8 rounded-l-lg flex items-center justify-center'>
+                                    <i class='fas fa-minus text-xs'></i>
+                                </button>
+                                <span class='w-12 text-center font-semibold text-gray-800'>1</span>
+                                <button class='quantity-btn w-8 h-8 rounded-r-lg flex items-center justify-center'>
+                                    <i class='fas fa-plus text-xs'></i>
+                                </button>
+                            </div>
+                            <button onclick='addToCart(${prod.id})' class='add-to-cart-main px-6 sm:px-8 py-2 sm:py-3 rounded-full font-semibold text-base sm:text-lg btn-animate w-full sm:w-auto'>
+                                <i class="fas fa-shopping-cart mr-2"></i>Add to Cart
+                            </button>
+                            <button class='wishlist-btn px-4 sm:px-6 py-2 sm:py-3 rounded-full font-semibold text-base sm:text-lg btn-animate'>
+                                <i class="fas fa-heart mr-2"></i>Wishlist
+                            </button>
+                        </div>
+                        <div class='feature-item p-3 sm:p-4 rounded-lg mb-3'>
+                            <div class='flex items-center'>
+                                <i class='fas fa-shipping-fast text-blue-600 mr-3'></i>
+                                <div>
+                                    <h4 class='font-semibold text-gray-800'>Free Shipping</h4>
+                                    <p class='text-sm text-gray-600'>Free delivery on orders over $50</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class='feature-item p-3 sm:p-4 rounded-lg mb-3'>
+                            <div class='flex items-center'>
+                                <i class='fas fa-undo text-green-600 mr-3'></i>
+                                <div>
+                                    <h4 class='font-semibold text-gray-800'>Easy Returns</h4>
+                                    <p class='text-sm text-gray-600'>30-day return policy</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Initial render with staggered animation
+        setTimeout(() => {
+            renderProduct();
+        }, 1500);
+    </script>
+</body>
+</html> 

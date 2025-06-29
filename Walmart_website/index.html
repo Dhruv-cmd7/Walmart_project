@@ -1,320 +1,1412 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Walmart Minimal - Fashion & Decor</title>
-  <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin />
-  <link rel="stylesheet" as="style" onload="this.rel='stylesheet'" href="https://fonts.googleapis.com/css2?display=swap&family=Noto+Sans:wght@400;500;700;900&family=Plus+Jakarta+Sans:wght@400;500;700;800" />
-  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-  <style type="text/tailwindcss">
-    body {
-      font-family: 'Plus Jakarta Sans', 'Noto Sans', sans-serif;
-      background-color: #f0f5ff !important;
-      background: #f0f5ff !important;
-      color: #001e60;
-    }
-    .product-card {
-      transition: box-shadow 0.2s, transform 0.2s;
-      border-radius: 1rem;
-      box-shadow: 0 2px 8px rgba(0,83,226,0.04);
-      background: #fff;
-    }
-    .product-card:hover {
-      box-shadow: 0 8px 32px rgba(0,83,226,0.10);
-      transform: translateY(-2px) scale(1.01);
-    }
-    .add-btn {
-      background: #0053e2;
-      color: #fff;
-      border-radius: 9999px;
-      padding: 0.5rem 1.5rem;
-      font-weight: 700;
-      transition: background 0.2s, transform 0.2s;
-    }
-    .add-btn:hover {
-      background: #001e60;
-      transform: scale(1.04);
-    }
-    .cart-badge {
-      background: #ffc220;
-      color: #001e60;
-      font-size: 0.75rem;
-      font-weight: 700;
-      border-radius: 9999px;
-      padding: 0 0.5em;
-      min-width: 1.5em;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      position: absolute;
-      top: -0.5em;
-      right: -0.5em;
-    }
-    .text-primary { color: #001e60; }
-    .bg-primary { background: #0053e2; }
-    .bg-accent { background: #ffc220; }
-    .bg-light { background: #f0f5ff; }
-    .border-primary { border-color: #0053e2; }
-    .border-accent { border-color: #ffc220; }
-  </style>
-</head>
-<body class="min-h-screen flex flex-col bg-white">
-  <div style='font-family: "Plus Jakarta Sans", "Noto Sans", sans-serif;'>
-    <header class="flex items-center justify-between border-b-0 px-10 py-6 min-h-20 bg-[#0053e2] fixed top-0 left-0 w-full z-50">
-      <div class="flex items-center gap-8">
-        <div class="flex items-center gap-4">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/Walmart_logo.svg" alt="Walmart Logo" class="h-8 w-auto object-contain" style="filter: brightness(0) invert(1);" />
-          <h2 class="text-[#ffc220] text-lg font-bold leading-tight tracking-[-0.015em]"> </h2>
-        </div>
-        <nav class="flex items-center gap-9">
-          <a class="text-white text-sm font-medium leading-normal" href="index.html">Fashion</a>
-          <a class="text-white text-sm font-medium leading-normal" href="grocery.html">Grocery</a>
-        </nav>
-      </div>
-      <div class="flex flex-1 justify-end gap-8">
-        <label class="flex flex-col flex-1 max-w-3xl min-w-80 !h-10">
-          <div class="flex w-full flex-1 items-center rounded-full h-12 bg-white shadow-sm focus-within:shadow-md border border-transparent focus-within:border-[#0053e2] transition-all duration-200 relative">
-            <span class="pl-4 flex items-center cursor-pointer" id="search-icon-btn">
-              <svg class="w-6 h-6 text-[#0053e2]" fill="currentColor" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
-                <path d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"></path>
-              </svg>
-            </span>
-            <input id="navbar-search" placeholder="Search for products, brands, or categories" class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-full text-[#001e60] focus:outline-none focus:ring-0 border-none bg-transparent h-full placeholder:text-[#0053e2] px-4 text-base font-normal leading-normal" value="" autocomplete="off" aria-label="Search" />
-            <button type="button" id="clear-search" class="absolute right-3 top-1/2 -translate-y-1/2 text-[#0053e2] bg-[#f0f5ff] rounded-full p-1 hover:bg-[#ffc220] hover:text-[#001e60] transition-all duration-150 hidden" aria-label="Clear search">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
-            </button>
-          </div>
-        </label>
-        <div class="flex gap-2 relative">
-          <button class="flex items-center justify-center rounded-full h-10 bg-[#f0f5ff] text-[#0053e2] px-2.5">
-            <svg class="w-5 h-5 text-[#0053e2]" fill="currentColor" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
-              <path d="M178,32c-20.65,0-38.73,8.88-50,23.89C116.73,40.88,98.65,32,78,32A62.07,62.07,0,0,0,16,94c0,70,103.79,126.66,108.21,129a8,8,0,0,0,7.58,0C136.21,220.66,240,164,240,94A62.07,62.07,0,0,0,178,32ZM128,206.8C109.74,196.16,32,147.69,32,94A46.06,46.06,0,0,1,78,48c19.45,0,35.78,10.36,42.6,27a8,8,0,0,0,14.8,0c6.82-16.67,23.15-27,42.6-27a46.06,46.06,0,0,1,46,46C224,147.61,146.24,196.15,128,206.8Z"></path>
-            </svg>
-          </button>
-          <a href="cart.html" class="flex items-center justify-center rounded-full h-10 bg-[#f0f5ff] text-[#0053e2] px-2.5 relative">
-            <svg class="w-5 h-5 text-[#0053e2]" fill="currentColor" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
-              <path d="M216,40H40A16,16,0,0,0,24,56V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40Zm0,160H40V56H216V200ZM176,88a48,48,0,0,1-96,0,8,8,0,0,1,16,0,32,32,0,0,0,64,0,8,8,0,0,1,16,0Z"></path>
-            </svg>
-            <span class="cart-badge" id="cart-badge">0</span>
-          </a>
-        </div>
-      </div>
-    </header>
-    <!-- Category Filters -->
-    <section class="w-full max-w-7xl mx-auto px-6 mb-8 pt-24">
-      <div class="flex gap-3 overflow-x-auto pb-2">
-        <button class="bg-[#f1f2f4] text-[#121417] rounded-full px-6 py-2 font-medium hover:bg-[#e5e7eb]">All</button>
-        <button class="bg-[#f1f2f4] text-[#121417] rounded-full px-6 py-2 font-medium hover:bg-[#e5e7eb]">Dresses</button>
-        <button class="bg-[#f1f2f4] text-[#121417] rounded-full px-6 py-2 font-medium hover:bg-[#e5e7eb]">Tops</button>
-        <button class="bg-[#f1f2f4] text-[#121417] rounded-full px-6 py-2 font-medium hover:bg-[#e5e7eb]">Bottoms</button>
-        <button class="bg-[#f1f2f4] text-[#121417] rounded-full px-6 py-2 font-medium hover:bg-[#e5e7eb]">Shoes</button>
-        <button class="bg-[#f1f2f4] text-[#121417] rounded-full px-6 py-2 font-medium hover:bg-[#e5e7eb]">Accessories</button>
-      </div>
-    </section>
-    <!-- Featured Products -->
-    <section class="w-full max-w-7xl mx-auto px-6 mb-12">
-      <h2 class="text-2xl font-bold text-[#121417] mb-6">Featured Products</h2>
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-        <div class="product-card flex flex-col p-4">
-          <div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl mb-4" style="background-image: url('https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=400&q=80');"></div>
-          <div class="flex-1 flex flex-col">
-            <p class="text-[#121417] text-base font-medium leading-normal mb-1">French Style Lace Shirt</p>
-            <p class="text-[#677583] text-sm font-normal leading-normal mb-2">$24.99</p>
-            <button class="add-btn mt-auto" data-product-id="1" data-product-name="French Style Lace Shirt" data-product-price="24.99" data-product-img="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=400&q=80">Add to Cart</button>
-          </div>
-        </div>
-        <div class="product-card flex flex-col p-4">
-          <div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl mb-4" style="background-image: url('https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=400&q=80');"></div>
-          <div class="flex-1 flex flex-col">
-            <p class="text-[#121417] text-base font-medium leading-normal mb-1">High Waist Floral Skirt</p>
-            <p class="text-[#677583] text-sm font-normal leading-normal mb-2">$29.99</p>
-            <button class="add-btn mt-auto" data-product-id="2" data-product-name="High Waist Floral Skirt" data-product-price="29.99" data-product-img="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=400&q=80">Add to Cart</button>
-          </div>
-        </div>
-        <div class="product-card flex flex-col p-4">
-          <div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl mb-4" style="background-image: url('https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=400&q=80');"></div>
-          <div class="flex-1 flex flex-col">
-            <p class="text-[#121417] text-base font-medium leading-normal mb-1">Plush Stitched Sweater Jacket</p>
-            <p class="text-[#677583] text-sm font-normal leading-normal mb-2">$39.99</p>
-            <button class="add-btn mt-auto" data-product-id="3" data-product-name="Plush Stitched Sweater Jacket" data-product-price="39.99" data-product-img="https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=400&q=80">Add to Cart</button>
-          </div>
-        </div>
-        <div class="product-card flex flex-col p-4">
-          <div class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl mb-4" style="background-image: url('https://images.unsplash.com/photo-1519864600265-abb23847ef2c?auto=format&fit=crop&w=400&q=80');"></div>
-          <div class="flex-1 flex flex-col">
-            <p class="text-[#121417] text-base font-medium leading-normal mb-1">Classic White Sneakers</p>
-            <p class="text-[#677583] text-sm font-normal leading-normal mb-2">$44.99</p>
-            <button class="add-btn mt-auto" data-product-id="4" data-product-name="Classic White Sneakers" data-product-price="44.99" data-product-img="https://images.unsplash.com/photo-1519864600265-abb23847ef2c?auto=format&fit=crop&w=400&q=80">Add to Cart</button>
-          </div>
-        </div>
-      </div>
-    </section>
-    <!-- Shop by Category -->
-    <section class="w-full max-w-7xl mx-auto px-6 mb-12">
-      <h2 class="text-2xl font-bold text-[#121417] mb-6">Shop by Category</h2>
-      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
-        <div class="flex flex-col items-center">
-          <div class="w-20 h-20 bg-center bg-no-repeat bg-cover rounded-full mb-2" style="background-image: url('https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=200&q=80');"></div>
-          <span class="text-[#121417] text-sm font-medium">Dresses</span>
-        </div>
-        <div class="flex flex-col items-center">
-          <div class="w-20 h-20 bg-center bg-no-repeat bg-cover rounded-full mb-2" style="background-image: url('https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=200&q=80');"></div>
-          <span class="text-[#121417] text-sm font-medium">Tops</span>
-        </div>
-        <div class="flex flex-col items-center">
-          <div class="w-20 h-20 bg-center bg-no-repeat bg-cover rounded-full mb-2" style="background-image: url('https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=200&q=80');"></div>
-          <span class="text-[#121417] text-sm font-medium">Bottoms</span>
-        </div>
-        <div class="flex flex-col items-center">
-          <div class="w-20 h-20 bg-center bg-no-repeat bg-cover rounded-full mb-2" style="background-image: url('https://images.unsplash.com/photo-1519864600265-abb23847ef2c?auto=format&fit=crop&w=200&q=80');"></div>
-          <span class="text-[#121417] text-sm font-medium">Shoes</span>
-        </div>
-        <div class="flex flex-col items-center">
-          <div class="w-20 h-20 bg-center bg-no-repeat bg-cover rounded-full mb-2" style="background-image: url('https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&w=200&q=80');"></div>
-          <span class="text-[#121417] text-sm font-medium">Accessories</span>
-        </div>
-        <div class="flex flex-col items-center">
-          <div class="w-20 h-20 bg-center bg-no-repeat bg-cover rounded-full mb-2" style="background-image: url('https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=200&q=80');"></div>
-          <span class="text-[#121417] text-sm font-medium">New Arrivals</span>
-        </div>
-      </div>
-    </section>
-    <!-- Product Grid -->
-    <main class="flex-1 w-full max-w-7xl mx-auto px-6 py-10" id="products">
-      <div class="flex flex-wrap gap-2 p-4">
-        <a class="text-[#677583] text-base font-medium leading-normal" href="#">Shop</a>
-        <span class="text-[#677583] text-base font-medium leading-normal">/</span>
-        <span class="text-[#121417] text-base font-medium leading-normal">Fashion</span>
-      </div>
-      <h1 class="text-[#121417] text-3xl font-bold mb-8">All Fashion Products</h1>
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-        <div class="product-card flex flex-col p-2" style="min-width:0;">
-          <div class="w-full bg-center bg-no-repeat bg-cover rounded-xl mb-4" style="height: 120px; background-image: url('https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=400&q=80');"></div>
-          <div class="flex-1 flex flex-col">
-            <p class="text-[#121417] text-base font-medium leading-normal mb-1">French Style Lace Shirt</p>
-            <p class="text-[#677583] text-sm font-normal leading-normal mb-2">$24.99</p>
-            <button class="add-btn mt-auto" data-product-id="1" data-product-name="French Style Lace Shirt" data-product-price="24.99" data-product-img="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=400&q=80">Add to Cart</button>
-          </div>
-        </div>
-        <div class="product-card flex flex-col p-2" style="min-width:0;">
-          <div class="w-full bg-center bg-no-repeat bg-cover rounded-xl mb-4" style="height: 120px; background-image: url('https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=400&q=80');"></div>
-          <div class="flex-1 flex flex-col">
-            <p class="text-[#121417] text-base font-medium leading-normal mb-1">High Waist Floral Skirt</p>
-            <p class="text-[#677583] text-sm font-normal leading-normal mb-2">$29.99</p>
-            <button class="add-btn mt-auto" data-product-id="2" data-product-name="High Waist Floral Skirt" data-product-price="29.99" data-product-img="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=400&q=80">Add to Cart</button>
-          </div>
-        </div>
-        <div class="product-card flex flex-col p-2" style="min-width:0;">
-          <div class="w-full bg-center bg-no-repeat bg-cover rounded-xl mb-4" style="height: 120px; background-image: url('https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=400&q=80');"></div>
-          <div class="flex-1 flex flex-col">
-            <p class="text-[#121417] text-base font-medium leading-normal mb-1">Plush Stitched Sweater Jacket</p>
-            <p class="text-[#677583] text-sm font-normal leading-normal mb-2">$39.99</p>
-            <button class="add-btn mt-auto" data-product-id="3" data-product-name="Plush Stitched Sweater Jacket" data-product-price="39.99" data-product-img="https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=400&q=80">Add to Cart</button>
-          </div>
-        </div>
-        <div class="product-card flex flex-col p-2" style="min-width:0;">
-          <div class="w-full bg-center bg-no-repeat bg-cover rounded-xl mb-4" style="height: 120px; background-image: url('https://images.unsplash.com/photo-1519864600265-abb23847ef2c?auto=format&fit=crop&w=400&q=80');"></div>
-          <div class="flex-1 flex flex-col">
-            <p class="text-[#121417] text-base font-medium leading-normal mb-1">Classic White Sneakers</p>
-            <p class="text-[#677583] text-sm font-normal leading-normal mb-2">$44.99</p>
-            <button class="add-btn mt-auto" data-product-id="4" data-product-name="Classic White Sneakers" data-product-price="44.99" data-product-img="https://images.unsplash.com/photo-1519864600265-abb23847ef2c?auto=format&fit=crop&w=400&q=80">Add to Cart</button>
-          </div>
-        </div>
-        <!-- Add more product cards as needed -->
-      </div>
-    </main>
-    <footer class="flex justify-center mt-16">
-      <div class="flex max-w-7xl flex-1 flex-col">
-        <footer class="flex flex-col gap-6 px-5 py-10 text-center">
-          <div class="flex flex-wrap items-center justify-center gap-6">
-            <a class="text-[#677583] text-base font-normal leading-normal min-w-40" href="#">About</a>
-            <a class="text-[#677583] text-base font-normal leading-normal min-w-40" href="#">Contact</a>
-            <a class="text-[#677583] text-base font-normal leading-normal min-w-40" href="#">FAQ</a>
-            <a class="text-[#677583] text-base font-normal leading-normal min-w-40" href="#">Privacy Policy</a>
-            <a class="text-[#677583] text-base font-normal leading-normal min-w-40" href="#">Terms of Service</a>
-          </div>
-          <p class="text-[#677583] text-base font-normal leading-normal">© 2024 Walmart. All rights reserved.</p>
-        </footer>
-      </div>
-    </footer>
-    <script src="script.js"></script>
-    <script src="cart.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BuyMore - E-commerce Homepage</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
-      document.querySelectorAll('.add-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-          const product = {
-            id: this.getAttribute('data-product-id'),
-            name: this.getAttribute('data-product-name'),
-            price: parseFloat(this.getAttribute('data-product-price')),
-            img: this.getAttribute('data-product-img')
-          };
-          window.cartUtils.addToCart(product);
-        });
-      });
-      // Update cart badge on load
-      if (window.cartUtils && window.cartUtils.updateCartBadge) {
-        window.cartUtils.updateCartBadge();
-      }
-
-      const searchInput = document.getElementById('navbar-search');
-      const clearBtn = document.getElementById('clear-search');
-      const searchIconBtn = document.getElementById('search-icon-btn');
-      const productGrid = document.querySelector('.grid.grid-cols-1, .grid.grid-cols-1.sm\\:grid-cols-2');
-      const productCards = productGrid ? Array.from(productGrid.querySelectorAll('.product-card')) : [];
-      let noResultsMsg = null;
-
-      function filterProducts(query) {
-        let found = false;
-        productCards.forEach(card => {
-          const name = card.querySelector('p')?.textContent?.toLowerCase() || '';
-          if (name.includes(query.toLowerCase())) {
-            card.style.display = '';
-            found = true;
-          } else {
-            card.style.display = 'none';
-          }
-        });
-        if (!found) {
-          if (!noResultsMsg) {
-            noResultsMsg = document.createElement('div');
-            noResultsMsg.className = 'w-full text-center text-[#001e60] text-lg font-semibold py-8';
-            noResultsMsg.textContent = 'No products found.';
-            productGrid.appendChild(noResultsMsg);
-          }
-        } else if (noResultsMsg) {
-          noResultsMsg.remove();
-          noResultsMsg = null;
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'poppins': ['Poppins', 'sans-serif'],
+                    },
+                    colors: {
+                        'mint': '#98D8C8',
+                        'peach': '#FFB6C1',
+                        'pastel-yellow': '#FFFACD',
+                        'custom-blue': '#0053e2',
+                        'custom-blue-white': '#f0f5ff',
+                        'custom-white': '#ffffff',
+                        'custom-gold': '#ffc220',
+                        'custom-dark-blue': '#001e60',
+                    }
+                }
+            }
         }
-      }
-
-      if (searchInput && clearBtn) {
-        searchInput.addEventListener('input', function() {
-          clearBtn.style.display = this.value ? 'block' : 'none';
-          if (!this.value) {
-            productCards.forEach(card => card.style.display = '');
-            if (noResultsMsg) { noResultsMsg.remove(); noResultsMsg = null; }
-          }
-        });
-        clearBtn.addEventListener('click', function() {
-          searchInput.value = '';
-          clearBtn.style.display = 'none';
-          searchInput.focus();
-          productCards.forEach(card => card.style.display = '');
-          if (noResultsMsg) { noResultsMsg.remove(); noResultsMsg = null; }
-        });
-        searchInput.addEventListener('keydown', function(e) {
-          if (e.key === 'Enter') {
-            filterProducts(this.value);
-          }
-        });
-        if (searchIconBtn) {
-          searchIconBtn.addEventListener('click', function() {
-            filterProducts(searchInput.value);
-          });
-        }
-      }
     </script>
-  </div>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        /* Page Transitions */
+        .page-transition {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 9999;
+            pointer-events: none;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .transition-content {
+            text-align: center;
+            color: #0053e2;
+            opacity: 0;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .transition-content.show {
+            opacity: 1;
+            transform: scale(1);
+        }
+        
+        .transition-logo {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            background: #f0f5ff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #e2e8f0;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .transition-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #e2e8f0;
+            border-top: 3px solid #0053e2;
+            border-radius: 50%;
+            animation: spin 1.2s linear infinite;
+            margin: 0 auto 15px;
+        }
+        
+        .transition-text {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #001e60;
+        }
+        
+        .transition-subtext {
+            font-size: 0.9rem;
+            color: #64748b;
+        }
+        
+        /* Page content fade animations */
+        .page-content {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .page-content.loaded {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Staggered content animation */
+        .stagger-item {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .stagger-item.animate {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Loading Animation */
+        .loading-spinner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top: 3px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+        
+        /* Enhanced Sidebar Animations */
+        .sidebar-item {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .sidebar-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .sidebar-item:hover::before {
+            left: 100%;
+        }
+        
+        .sidebar-item:hover {
+            background-color: #f0f5ff;
+            transform: translateX(5px);
+        }
+        
+        .sidebar-item.active {
+            background-color: #0053e2;
+            color: white;
+            transform: translateX(8px);
+            box-shadow: 0 4px 12px rgba(0, 83, 226, 0.3);
+        }
+        
+        /* Enhanced Product Card Animations */
+        .product-card {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            border: 2px solid transparent;
+        }
+        
+        .product-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 83, 226, 0.1), transparent);
+            transition: left 0.6s;
+        }
+        
+        .product-card:hover::before {
+            left: 100%;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            border-color: #0053e2;
+        }
+        
+        /* Colorful product cards based on category */
+        .product-card[data-category="men"] {
+            border-left: 4px solid #3b82f6;
+        }
+        
+        .product-card[data-category="women"] {
+            border-left: 4px solid #ec4899;
+        }
+        
+        /* Colorful category buttons */
+        .category-btn[data-category="men"] {
+            background-color: #3b82f6;
+            color: white;
+        }
+        
+        .category-btn[data-category="men"]:hover {
+            background-color: #2563eb;
+        }
+        
+        .category-btn[data-category="women"] {
+            background-color: #ec4899;
+            color: white;
+        }
+        
+        .category-btn[data-category="women"]:hover {
+            background-color: #db2777;
+        }
+        
+        /* Colorful price tags */
+        .price-tag {
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-weight: bold;
+            font-size: 0.75rem;
+        }
+        
+        .price-tag.men {
+            background-color: #dbeafe;
+            color: #3b82f6;
+        }
+        
+        .price-tag.women {
+            background-color: #fce7f3;
+            color: #ec4899;
+        }
+        
+        /* Colorful banners */
+        .banner-fashion {
+            background-color: #3b82f6;
+            color: white;
+        }
+        
+        .banner-trends {
+            background-color: #ec4899;
+            color: white;
+        }
+        
+        .banner-style {
+            background-color: #8b5cf6;
+            color: white;
+        }
+        
+        /* Colorful cards */
+        .card-offers {
+            background-color: #fbbf24;
+            color: #1f2937;
+        }
+        
+        .card-favorites {
+            background-color: #3b82f6;
+            color: white;
+        }
+        
+        .card-bold {
+            background-color: #1f2937;
+            color: white;
+        }
+        
+        /* Colorful sidebar items */
+        .sidebar-item:hover {
+            background-color: #e3f2fd;
+            border-left: 4px solid #0053e2;
+        }
+        
+        .sidebar-item.active {
+            background-color: #0053e2;
+            color: white;
+            border-left: 4px solid #ffc220;
+        }
+        
+        /* Colorful last orders */
+        .last-order-item:hover {
+            background-color: #e8f5e8;
+            border-left: 4px solid #51cf66;
+        }
+        
+        /* Colorful wishlist hearts */
+        .wishlist-heart.men {
+            color: #3b82f6;
+        }
+        
+        .wishlist-heart.women {
+            color: #ec4899;
+        }
+        
+        /* Button Animations */
+        .btn-animate {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-animate::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        
+        .btn-animate:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+        
+        .btn-animate:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* Banner Animations */
+        .banner-gradient {
+            background: linear-gradient(135deg, #0053e2 0%, #001e60 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .banner-gradient::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(30px, -30px) rotate(120deg); }
+            66% { transform: translate(-20px, 20px) rotate(240deg); }
+        }
+        
+        /* Search Bar Animation */
+        .search-container {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .search-container:focus-within {
+            transform: scale(1.02);
+            box-shadow: 0 8px 25px rgba(0, 83, 226, 0.15);
+        }
+        
+        /* Cart Badge Animation */
+        .cart-badge {
+            animation: pulse 2s infinite;
+            z-index: 50 !important;
+            min-width: 20px !important;
+            height: 20px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            font-size: 10px !important;
+            font-weight: 700 !important;
+            line-height: 1 !important;
+            padding: 2px !important;
+            box-sizing: border-box !important;
+            position: absolute !important;
+            top: -1px !important;
+            right: -1px !important;
+            background-color: #ffc220 !important;
+            color: #001e60 !important;
+            border-radius: 50% !important;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2) !important;
+        }
+        
+        /* Cart Button Container */
+        .cart-button-container {
+            position: relative;
+            overflow: visible;
+            padding: 8px;
+            margin: -8px;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        /* Fade In Animation for Content */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+        
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Stagger Animation for Product Grid */
+        .product-card {
+            animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        
+        .product-card:nth-child(1) { animation-delay: 0.1s; }
+        .product-card:nth-child(2) { animation-delay: 0.2s; }
+        .product-card:nth-child(3) { animation-delay: 0.3s; }
+        .product-card:nth-child(4) { animation-delay: 0.4s; }
+        .product-card:nth-child(5) { animation-delay: 0.5s; }
+        .product-card:nth-child(6) { animation-delay: 0.6s; }
+        
+        /* Enhanced Last Orders Animation */
+        .last-order-item {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .last-order-item::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.1), transparent);
+            transition: left 0.5s;
+        }
+        
+        .last-order-item:hover::after {
+            left: 100%;
+        }
+        
+        .last-order-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Add to Cart Button Styling */
+        .add-to-cart-btn {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f3f4f6;
+            border: 1px solid #e5e7eb;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 10px;
+            font-weight: 600;
+            color: #6b7280;
+        }
+        
+        .add-to-cart-btn:hover {
+            background-color: #0053e2;
+            border-color: #0053e2;
+            color: white;
+            transform: scale(1.1);
+            box-shadow: 0 2px 8px rgba(0, 83, 226, 0.3);
+        }
+        
+        .add-to-cart-btn:active {
+            transform: scale(0.95);
+        }
+        
+        .add-to-cart-btn i {
+            font-size: 8px;
+            line-height: 1;
+        }
+        
+        /* Success Animation for Add to Cart */
+        .success-animation {
+            animation: successPulse 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        @keyframes successPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        /* Smooth Scroll */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Enhanced Toast Animation */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #222;
+            color: #fff;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            opacity: 0;
+            z-index: 50;
+            font-size: 1rem;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .toast.show {
+            opacity: 0.95;
+            transform: translateX(-50%) translateY(0);
+        }
+        
+        /* Category Button Animations */
+        .category-btn {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .category-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .category-btn:hover::before {
+            left: 100%;
+        }
+        
+        .category-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* Wishlist Heart Animation */
+        .fa-heart {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .fa-heart:hover {
+            transform: scale(1.2);
+        }
+        
+        .fa-heart.text-red-500 {
+            animation: heartBeat 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        @keyframes heartBeat {
+            0% { transform: scale(1); }
+            25% { transform: scale(1.3); }
+            50% { transform: scale(1.1); }
+            75% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+        
+        /* Quantity Button Animations */
+        .quantity-btn {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .quantity-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* Shopping List Card Animations */
+        .shopping-list-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .shopping-list-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.12);
+        }
+        
+        /* Modal Animations */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            opacity: 0;
+            transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .modal.show {
+            opacity: 1;
+        }
+        
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 0;
+            border-radius: 1rem;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            transform: translateY(-50px) scale(0.9);
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .modal.show .modal-content {
+            transform: translateY(0) scale(1);
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-poppins">
+    <!-- Page Transition Overlay -->
+    <div class="page-transition" id="pageTransition" style="display: none;">
+        <div class="transition-content">
+            <div class="transition-logo">
+                <i class="fas fa-shopping-bag text-2xl"></i>
+            </div>
+            <h1 class="transition-text">BuyMore</h1>
+            <p class="transition-subtext">Your One-Stop Shop for Everything</p>
+            <div class="transition-spinner"></div>
+        </div>
+    </div>
+
+    <div class="page-content loaded" id="pageContent">
+    <div class="flex h-screen flex-col md:flex-row">
+        <!-- Sidebar (Drawer for mobile) -->
+        <div id="sidebarDrawer" class="fixed inset-0 z-40 bg-black bg-opacity-40 transition-opacity duration-300 md:static md:bg-transparent md:z-0 md:w-64 md:block" style="display: none;"></div>
+        <div id="sidebar" class="w-64 bg-white shadow-lg flex flex-col fixed z-50 top-0 left-0 h-full transform -translate-x-full transition-transform duration-300 md:static md:translate-x-0 md:h-auto md:block">
+                <div class="p-6 border-b flex justify-center items-center stagger-item" data-delay="0.1">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Walmart_logo.svg/2000px-Walmart_logo.svg.png" alt="Walmart Logo" class="w-32 md:w-40 h-auto object-contain">
+            </div>
+            <nav class="flex-1 p-4">
+                <ul class="space-y-2" id="sidebar-nav">
+                        <li class="sidebar-item rounded-lg px-3 py-2 cursor-pointer active stagger-item" data-delay="0.2" data-link="index.html">
+                        <a href="index.html" class="flex items-center text-inherit no-underline w-full h-full">
+                            <i class="fas fa-tshirt text-white mr-3"></i>
+                            Clothing and Shoes
+                        </a>
+                    </li>
+                        <li class="sidebar-item rounded-lg px-3 py-2 cursor-pointer stagger-item" data-delay="0.3" data-link="grocery.html">
+                        <a href="grocery.html" class="flex items-center text-inherit no-underline w-full h-full">
+                            <i class="fas fa-shopping-basket text-gray-500 mr-3"></i>
+                            Grocery
+                        </a>
+                    </li>
+                        <li class="sidebar-item rounded-lg px-3 py-2 cursor-pointer stagger-item" data-delay="0.4" data-link="#gifts">
+                        <i class="fas fa-gift text-gray-500 mr-3"></i>
+                        Gifts and Living
+                    </li>
+                </ul>
+                <!-- Last Orders -->
+                    <div class="mt-8 stagger-item" data-delay="0.5">
+                    <h3 class="text-sm font-semibold text-gray-700 mb-3">Last Orders</h3>
+                    <div class="space-y-3">
+                            <div class="bg-gray-50 rounded-lg p-3 cursor-pointer hover:bg-gray-100 transition-colors last-order-item" data-product-id="1">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex-1">
+                            <p class="text-xs text-gray-600">WMX Rubber Zebra Sandal</p>
+                            <p class="text-xs text-blue-600">$36.00</p>
+                        </div>
+                                    <button class="add-to-cart-btn ml-2">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="bg-gray-50 rounded-lg p-3 cursor-pointer hover:bg-gray-100 transition-colors last-order-item" data-product-id="2">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex-1">
+                            <p class="text-xs text-gray-600">Supper Skinny Jogger</p>
+                            <p class="text-xs text-blue-600">$89.00</p>
+                                    </div>
+                                    <button class="add-to-cart-btn ml-2">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-1 flex flex-col min-h-0">
+            <!-- Topbar -->
+                <header class="bg-custom-blue-white shadow-sm border-b px-4 py-4 md:px-6 md:py-6 stagger-item flex items-center justify-between" data-delay="0.2">
+                <!-- Hamburger for mobile -->
+                <button id="hamburgerBtn" class="md:hidden p-2 rounded-lg hover:bg-gray-200 focus:outline-none mr-2">
+                    <i class="fas fa-bars text-xl text-custom-blue"></i>
+                </button>
+                <div class="flex-1 flex items-center justify-between">
+                    <div class="flex items-center space-x-2 md:space-x-6">
+                            <!-- Mobile Logo (visible only on small screens) -->
+                            <div class="md:hidden flex items-center">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Walmart_logo.svg/2000px-Walmart_logo.svg.png" alt="Walmart Logo" class="w-24 h-auto object-contain">
+                            </div>
+                    </div>
+                    <div class="flex items-center space-x-2 md:space-x-4">
+                            <div class="relative flex items-center search-container w-40 sm:w-56 md:w-96 lg:w-[500px]">
+                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"><i class="fas fa-search"></i></span>
+                                <input type="text" id="product-search" placeholder="Search products..." class="pl-10 pr-4 py-2 md:py-3 rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-custom-blue transition w-full shadow-sm border border-gray-200" />
+                            </div>
+                            <div class="cart-button-container">
+                                <a href="cart.html" class="relative flex items-center justify-center bg-custom-blue hover:bg-custom-dark-blue transition-colors rounded-full shadow-md w-8 h-8 md:w-auto md:px-4 md:py-2 btn-animate">
+                                    <i class="fas fa-shopping-cart text-white text-sm md:mr-2"></i>
+                                    <span class="hidden md:inline text-white font-medium text-sm">Cart</span>
+                                </a>
+                                <span class="absolute -top-1 -right-1 bg-custom-gold text-custom-dark-blue text-xs rounded-full w-5 h-5 flex items-center justify-center cart-badge" style="min-width: 20px; height: 20px; font-size: 10px; font-weight: 700;">8</span>
+                            </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Main Content Area -->
+            <main class="flex-1 p-2 sm:p-4 md:p-6 overflow-y-auto">
+                <!-- Explore Section -->
+                    <div class="mb-6 sm:mb-8 stagger-item" data-delay="0.4">
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 sm:mb-6 gap-2 sm:gap-0">
+                        <div>
+                            <h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-gray-800 mb-1">Clothing and Shoes</h2>
+                            <p class="text-base sm:text-lg text-gray-500">Discover the latest trends and exclusive deals in fashion</p>
+                        </div>
+                        <div class="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
+                            <div class="flex space-x-2">
+                                    <button class="px-4 py-2 bg-custom-blue text-white rounded-full text-sm font-medium category-btn btn-animate" data-category="all">All</button>
+                                    <button class="px-4 py-2 bg-gray-200 text-gray-700 rounded-full text-sm font-medium hover:bg-gray-300 category-btn btn-animate" data-category="men">Men</button>
+                                    <button class="px-4 py-2 bg-gray-200 text-gray-700 rounded-full text-sm font-medium hover:bg-gray-300 category-btn btn-animate" data-category="women">Women</button>
+                            </div>
+                            <div class="flex space-x-2 items-center">
+                                    <button class="p-2 text-gray-600 hover:bg-gray-100 rounded-lg btn-animate">
+                                    <i class="fas fa-filter"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Hero Banners -->
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
+                        <!-- Large Banner -->
+                            <div class="lg:col-span-2 banner-gradient rounded-2xl lg:rounded-l-none p-4 sm:p-6 text-white relative overflow-hidden stagger-item" data-delay="0.5">
+                            <div class="relative z-10">
+                                    <h3 class="text-lg sm:text-2xl font-bold mb-2 sm:mb-3">Step Into Style: Up to 50% OFF</h3>
+                                    <p class="text-sm sm:text-base opacity-90 mb-2 sm:mb-4">Discover the latest fashion trends and exclusive deals</p>
+                                    <button class="bg-custom-gold text-custom-dark-blue px-4 sm:px-5 py-2 rounded-lg font-semibold hover:bg-yellow-400 transition-colors btn-animate text-xs sm:text-sm">
+                                    Shop Fashion
+                                </button>
+                                </div>
+                                <div class="absolute top-0 right-0 w-24 sm:w-48 h-24 sm:h-48 bg-white opacity-10 rounded-full -mr-12 sm:-mr-24 -mt-12 sm:-mt-24"></div>
+                        </div>
+
+                        <!-- Small Banner -->
+                            <div class="bg-custom-blue-white rounded-2xl p-3 sm:p-5 relative overflow-hidden stagger-item" data-delay="0.6">
+                            <div class="relative z-10">
+                                    <h4 class="text-base sm:text-lg font-bold text-custom-dark-blue mb-1 sm:mb-2">New Season Arrivals</h4>
+                                    <p class="text-gray-700 mb-2 sm:mb-3 text-xs sm:text-sm">Refresh your wardrobe</p>
+                                    <button class="bg-custom-blue text-white px-3 py-2 rounded-lg text-xs sm:text-sm font-medium hover:bg-custom-dark-blue transition-colors btn-animate">
+                                    Explore Fashion
+                                </button>
+                                </div>
+                                <img src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?w=150&h=150&fit=crop" 
+                                     alt="Fashion Model" class="absolute bottom-0 right-0 w-16 h-16 sm:w-24 sm:h-24 object-cover rounded-tl-2xl">
+                        </div>
+                    </div>
+
+                    <!-- Product Grid -->
+                        <div id="product-grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-2 sm:gap-3 mb-6 sm:mb-8">
+                        <!-- Product cards will be rendered by JS -->
+                    </div>
+
+                    <!-- Bottom Cards -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                        <!-- Avail Offers Card -->
+                        <div class="card-offers rounded-2xl p-3 sm:p-5 relative overflow-hidden stagger-item" data-delay="0.7">
+                            <div class="relative z-10">
+                                <h4 class="text-base sm:text-lg font-bold mb-1 sm:mb-2">Avail Offers</h4>
+                                <p class="opacity-90 mb-2 sm:mb-3 text-xs sm:text-sm">Special discounts just for you</p>
+                                <button class="bg-white text-yellow-600 px-3 py-2 rounded-lg font-semibold hover:bg-gray-100 transition-colors btn-animate text-xs sm:text-sm">
+                                    View Offers
+                                </button>
+                            </div>
+                            <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?w=120&h=120&fit=crop&crop=face" 
+                                 alt="Smiling Woman" class="absolute bottom-0 right-0 w-16 h-16 sm:w-24 sm:h-24 object-cover rounded-tl-2xl">
+                        </div>
+
+                        <!-- Favourites Card -->
+                        <div class="card-favorites rounded-2xl p-3 sm:p-5 relative overflow-hidden stagger-item" data-delay="0.8">
+                            <div class="relative z-10">
+                                <h4 class="text-base sm:text-lg font-bold mb-1 sm:mb-2">Favourites</h4>
+                                <p class="opacity-90 mb-2 sm:mb-3 text-xs sm:text-sm">Your most loved items</p>
+                                <button class="bg-white text-blue-600 px-3 py-2 rounded-lg font-semibold hover:bg-gray-100 transition-colors btn-animate text-xs sm:text-sm">
+                                    See All
+                                </button>
+                            </div>
+                            <div class="absolute bottom-0 right-0 flex space-x-1 sm:space-x-2">
+                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=60&h=60&fit=crop&crop=face" 
+                                     alt="Male Model 1" class="w-8 h-8 sm:w-12 sm:h-12 object-cover rounded-full border-2 border-white">
+                                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=60&h=60&fit=crop&crop=face" 
+                                     alt="Male Model 2" class="w-8 h-8 sm:w-12 sm:h-12 object-cover rounded-full border-2 border-white">
+                            </div>
+                        </div>
+
+                        <!-- Bring Bold Fashion Card -->
+                        <div class="card-bold rounded-2xl p-3 sm:p-5 relative overflow-hidden stagger-item" data-delay="0.9">
+                            <div class="relative z-10">
+                                <h4 class="text-base sm:text-lg font-bold mb-1 sm:mb-2">Bring Bold Fashion</h4>
+                                <p class="opacity-90 mb-2 sm:mb-3 text-xs sm:text-sm">Layers on Layers</p>
+                                <button class="bg-custom-gold text-custom-dark-blue px-3 py-2 rounded-lg font-semibold hover:bg-yellow-400 transition-colors btn-animate text-xs sm:text-sm">
+                                    Shop Now
+                                </button>
+                            </div>
+                            <img src="https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=150&h=150&fit=crop" 
+                                 alt="Hooded Fashion Model" class="absolute bottom-0 right-0 w-20 h-20 sm:w-32 sm:h-32 object-cover rounded-tl-2xl">
+                        </div>
+                    </div>
+                </main>
+                </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+
+    <script>
+        // Sidebar drawer toggle for mobile
+        const sidebar = document.getElementById('sidebar');
+        const sidebarDrawer = document.getElementById('sidebarDrawer');
+        const hamburgerBtn = document.getElementById('hamburgerBtn');
+        function openSidebar() {
+            sidebar.style.transform = 'translateX(0)';
+            sidebarDrawer.style.display = 'block';
+        }
+        function closeSidebar() {
+            sidebar.style.transform = 'translateX(-100%)';
+            sidebarDrawer.style.display = 'none';
+        }
+        hamburgerBtn.addEventListener('click', openSidebar);
+        sidebarDrawer.addEventListener('click', closeSidebar);
+        // Hide sidebar on resize to md+
+        window.addEventListener('resize', function() {
+            if (window.innerWidth >= 768) {
+                sidebar.style.transform = 'translateX(0)';
+                sidebarDrawer.style.display = 'none';
+            } else {
+                sidebar.style.transform = 'translateX(-100%)';
+            }
+        });
+
+        // Initialize page directly without transitions
+        window.addEventListener('load', function() {
+            // Trigger staggered animations immediately
+            setTimeout(() => {
+                animateStaggeredItems();
+            }, 100);
+        });
+
+        // Staggered animation function
+        function animateStaggeredItems() {
+            const staggerItems = document.querySelectorAll('.stagger-item');
+            staggerItems.forEach(item => {
+                const delay = parseFloat(item.getAttribute('data-delay')) * 1000;
+                setTimeout(() => {
+                    item.classList.add('animate');
+                }, delay);
+            });
+        }
+
+        // Simple navigation without transition
+        function navigateWithTransition(url) {
+            window.location.href = url;
+        }
+
+        // Enhanced toast function
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.textContent = msg;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2000);
+        }
+
+        // Sidebar active state with animation
+        document.querySelectorAll('.sidebar-item').forEach(item => {
+            item.classList.remove('active');
+            const link = item.getAttribute('data-link');
+            if (link && window.location.pathname.endsWith(link)) {
+                item.classList.add('active');
+                if (item.querySelector('i')) item.querySelector('i').classList.add('text-white');
+            }
+        });
+
+        // Add interactivity for category tabs with enhanced animations
+        document.querySelectorAll('button').forEach(button => {
+            if (button.textContent === 'All' || button.textContent === 'Men' || button.textContent === 'Women') {
+                button.addEventListener('click', function() {
+                    // Remove active class from all category buttons
+                    document.querySelectorAll('button').forEach(b => {
+                        b.classList.remove('bg-custom-blue', 'text-white', 'bg-blue-500', 'bg-pink-500');
+                        b.classList.add('bg-gray-200', 'text-gray-700');
+                    });
+                    
+                    // Add active class to clicked button with category-specific styling
+                    this.classList.remove('bg-gray-200', 'text-gray-700');
+                    const category = this.dataset.category;
+                    
+                    if (category === 'all') {
+                        this.classList.add('bg-custom-blue', 'text-white');
+                    } else if (category === 'men') {
+                        this.classList.add('bg-blue-500', 'text-white');
+                    } else if (category === 'women') {
+                        this.classList.add('bg-pink-500', 'text-white');
+                    }
+                    
+                    currentCategory = category;
+                    
+                    // Add success animation
+                    this.classList.add('success-animation');
+                    setTimeout(() => {
+                        this.classList.remove('success-animation');
+                    }, 600);
+                    
+                    renderProducts();
+                });
+            }
+        });
+
+        // Enhanced wishlist functionality with heart beat animation
+        document.querySelectorAll('.fa-heart').forEach(heart => {
+            heart.addEventListener('click', function(e) {
+                e.stopPropagation();
+                this.classList.toggle('text-red-500');
+                this.classList.toggle('text-gray-400');
+                
+                if (this.classList.contains('text-red-500')) {
+                    this.style.animation = 'none';
+                    this.offsetHeight; // Trigger reflow
+                    this.style.animation = 'heartBeat 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+                }
+            });
+        });
+
+        // Product Data
+        const products = [
+            {
+                id: 1,
+                name: 'WMX Rubber Zebra Sandal',
+                desc: 'Comfortable summer footwear',
+                price: 36,
+                category: 'men',
+                img: 'https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=300&h=300&fit=crop',
+                colors: ['black', 'gray-300']
+            },
+            {
+                id: 2,
+                name: 'Supper Skinny Jogger',
+                desc: 'In Brown - Premium comfort',
+                price: 89,
+                category: 'men',
+                img: 'https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?w=300&h=300&fit=crop',
+                colors: ['brown-600', 'gray-300']
+            },
+            {
+                id: 3,
+                name: 'Premium Cotton T-Shirt',
+                desc: 'Soft and breathable',
+                price: 24,
+                category: 'men',
+                img: 'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=300&h=300&fit=crop',
+                colors: ['blue-500', 'red-500']
+            },
+            {
+                id: 4,
+                name: 'Pro Runner Shoes',
+                desc: 'Lightweight performance',
+                price: 120,
+                category: 'men',
+                img: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=300&h=300&fit=crop',
+                colors: ['gray-800', 'blue-600']
+            },
+            {
+                id: 5,
+                name: 'Women Peach Dress',
+                desc: 'Elegant and stylish',
+                price: 59,
+                category: 'women',
+                img: 'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?w=300&h=300&fit=crop',
+                colors: ['peach', 'mint']
+            },
+            {
+                id: 6,
+                name: 'Women Mint Blazer',
+                desc: 'Fresh pastel look',
+                price: 79,
+                category: 'women',
+                img: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=300&h=300&fit=crop',
+                colors: ['mint', 'pastel-yellow']
+            },
+            {
+                id: 7,
+                name: 'Classic Denim Jacket',
+                desc: 'Timeless denim style',
+                price: 65,
+                category: 'men',
+                img: 'https://images.unsplash.com/photo-1576995853123-5a10305d93c0?w=300&h=300&fit=crop',
+                colors: ['blue-600', 'blue-800']
+            },
+            {
+                id: 8,
+                name: 'Leather Crossbody Bag',
+                desc: 'Premium leather quality',
+                price: 95,
+                category: 'women',
+                img: 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=300&h=300&fit=crop',
+                colors: ['brown-600', 'black']
+            },
+            {
+                id: 9,
+                name: 'Athletic Shorts',
+                desc: 'Perfect for workouts',
+                price: 32,
+                category: 'men',
+                img: 'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=300&h=300&fit=crop',
+                colors: ['gray-600', 'blue-500']
+            },
+            {
+                id: 10,
+                name: 'Summer Maxi Dress',
+                desc: 'Flowery summer vibes',
+                price: 68,
+                category: 'women',
+                img: 'https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=300&h=300&fit=crop',
+                colors: ['pink-300', 'blue-300']
+            },
+            {
+                id: 11,
+                name: 'Formal Oxford Shoes',
+                desc: 'Professional office wear',
+                price: 145,
+                category: 'men',
+                img: 'https://images.unsplash.com/photo-1549298916-b41d501d3772?w=300&h=300&fit=crop',
+                colors: ['brown-800', 'black']
+            },
+            {
+                id: 12,
+                name: 'Knit Sweater',
+                desc: 'Cozy winter warmth',
+                price: 55,
+                category: 'women',
+                img: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=300&h=300&fit=crop',
+                colors: ['gray-400', 'beige']
+            },
+            {
+                id: 13,
+                name: 'Cargo Pants',
+                desc: 'Utility and style',
+                price: 48,
+                category: 'men',
+                img: 'https://images.unsplash.com/photo-1473966968600-fa801b869a1a?w=300&h=300&fit=crop',
+                colors: ['olive', 'khaki']
+            },
+            {
+                id: 14,
+                name: 'Silk Blouse',
+                desc: 'Elegant evening wear',
+                price: 72,
+                category: 'women',
+                img: 'https://images.unsplash.com/photo-1564257631407-3deb25e9c8e6?w=300&h=300&fit=crop',
+                colors: ['white', 'cream']
+            },
+            {
+                id: 15,
+                name: 'Hiking Boots',
+                desc: 'Adventure ready',
+                price: 165,
+                category: 'men',
+                img: 'https://images.unsplash.com/photo-1549298916-b41d501d3772?w=300&h=300&fit=crop',
+                colors: ['brown-600', 'gray-700']
+            },
+            {
+                id: 16,
+                name: 'Pencil Skirt',
+                desc: 'Office professional',
+                price: 42,
+                category: 'women',
+                img: 'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=300&h=300&fit=crop',
+                colors: ['black', 'navy']
+            },
+            {
+                id: 17,
+                name: 'Polo Shirt',
+                desc: 'Casual comfort',
+                price: 28,
+                category: 'men',
+                img: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=300&h=300&fit=crop',
+                colors: ['white', 'blue-500']
+            },
+            {
+                id: 18,
+                name: 'Evening Gown',
+                desc: 'Red carpet ready',
+                price: 189,
+                category: 'women',
+                img: 'https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=300&h=300&fit=crop',
+                colors: ['black', 'red-600']
+            },
+            {
+                id: 19,
+                name: 'Track Suit',
+                desc: 'Athletic performance',
+                price: 85,
+                category: 'men',
+                img: 'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=300&h=300&fit=crop',
+                colors: ['gray-600', 'blue-600']
+            },
+            {
+                id: 20,
+                name: 'Designer Handbag',
+                desc: 'Luxury fashion statement',
+                price: 245,
+                category: 'women',
+                img: 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=300&h=300&fit=crop',
+                colors: ['brown-600', 'black']
+            }
+        ];
+
+        // Utility
+        function getColorClass(color) {
+            if (color.startsWith('gray')) return `bg-${color}`;
+            if (color.startsWith('blue')) return `bg-${color}`;
+            if (color.startsWith('red')) return `bg-${color}`;
+            if (color.startsWith('brown')) return `bg-yellow-900`;
+            if (color === 'peach') return 'bg-pink-200';
+            if (color === 'mint') return 'bg-green-200';
+            if (color === 'pastel-yellow') return 'bg-yellow-100';
+            if (color === 'black') return 'bg-black';
+            if (color === 'white') return 'bg-white';
+            if (color === 'cream') return 'bg-yellow-50';
+            if (color === 'beige') return 'bg-yellow-100';
+            if (color === 'olive') return 'bg-green-700';
+            if (color === 'khaki') return 'bg-yellow-600';
+            if (color === 'navy') return 'bg-blue-900';
+            if (color.startsWith('pink')) return `bg-${color}`;
+            return 'bg-gray-200';
+        }
+
+        // Wishlist
+        let wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
+        function toggleWishlist(id) {
+            if (wishlist.includes(id)) {
+                wishlist = wishlist.filter(x => x !== id);
+            } else {
+                wishlist.push(id);
+            }
+            localStorage.setItem('wishlist', JSON.stringify(wishlist));
+            renderProducts();
+        }
+
+        // Cart with enhanced animations
+        let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+        function addToCart(id) {
+            console.log('Adding to cart:', id); // Debug log
+            const found = cart.find(x => x.id === id);
+            if (found) {
+                found.qty += 1;
+            } else {
+                cart.push({ id, qty: 1 });
+            }
+            localStorage.setItem('cart', JSON.stringify(cart));
+            console.log('Cart updated:', cart); // Debug log
+            updateCartBadge();
+            
+            // Enhanced success feedback
+            showToast('Item added to cart!');
+            
+            // Animate cart badge
+            const cartBadge = document.querySelector('.cart-badge');
+            if (cartBadge) {
+                cartBadge.classList.add('success-animation');
+                setTimeout(() => {
+                    cartBadge.classList.remove('success-animation');
+                }, 600);
+            }
+        }
+        
+        function updateCartBadge() {
+            const badge = document.querySelector('.cart-badge');
+            if (badge) {
+                const totalItems = cart.reduce((a, b) => a + b.qty, 0);
+                badge.textContent = totalItems;
+                
+                // Ensure badge is visible and properly sized
+                badge.style.minWidth = '24px';
+                badge.style.height = '24px';
+                badge.style.display = 'flex';
+                badge.style.alignItems = 'center';
+                badge.style.justifyContent = 'center';
+                badge.style.zIndex = '10';
+                badge.style.fontSize = '12px';
+                badge.style.fontWeight = '700';
+                badge.style.position = 'absolute';
+                badge.style.top = '-8px';
+                badge.style.right = '-8px';
+                
+                // Animate badge update
+                badge.classList.add('success-animation');
+                setTimeout(() => {
+                    badge.classList.remove('success-animation');
+                }, 300);
+            }
+        }
+
+        // Filtering with smooth transitions
+        let currentCategory = 'all';
+        let currentSearch = '';
+        function renderProducts() {
+            let filtered = products.filter(p =>
+                (currentCategory === 'all' || p.category === currentCategory) &&
+                (p.name.toLowerCase().includes(currentSearch) || p.desc.toLowerCase().includes(currentSearch))
+            );
+            
+            const productGrid = document.getElementById('product-grid');
+            
+            // Fade out current products
+            productGrid.style.opacity = '0';
+            productGrid.style.transform = 'translateY(20px)';
+            
+            setTimeout(() => {
+                productGrid.innerHTML = filtered.map((p, index) => `
+                    <div class="product-card bg-white rounded-md shadow-sm p-2 transition-all duration-300 relative stagger-item" data-delay="${0.1 + index * 0.1}" data-category="${p.category}">
+                        <button onclick="toggleWishlist(${p.id})" class="absolute top-0.5 right-0.5 w-5 h-5 bg-white rounded-full flex items-center justify-center shadow-sm hover:bg-red-50 z-10">
+                            <i class="fas fa-heart ${wishlist.includes(p.id) ? 'text-red-500' : 'text-gray-400'} hover:text-red-500 text-xs wishlist-heart ${p.category}"></i>
+                        </button>
+                        <div class="relative mb-2">
+                            <img src="${p.img}" alt="${p.name}" class="w-full h-24 object-cover rounded">
+                        </div>
+                        <h4 class="font-medium text-gray-800 mb-1 text-xs leading-tight">${p.name}</h4>
+                        <p class="text-xs text-gray-500 mb-1 line-clamp-1">${p.desc}</p>
+                        <div class="flex items-center justify-between mb-1">
+                            <span class="price-tag ${p.category}">$${p.price}</span>
+                            <div class="flex space-x-0.5">
+                                ${p.colors.map(c => `<div class="w-2 h-2 rounded-full ${getColorClass(c)}"></div>`).join('')}
+                            </div>
+                        </div>
+                        <button onclick="addToCart(${p.id})" class="w-full bg-custom-blue text-white py-1 rounded text-xs font-medium hover:bg-custom-dark-blue transition btn-animate">Add to Cart</button>
+                    </div>
+                `).join('');
+                
+                // Fade in new products and trigger staggered animation
+                productGrid.style.opacity = '1';
+                productGrid.style.transform = 'translateY(0)';
+                
+                setTimeout(() => {
+                    const newStaggerItems = productGrid.querySelectorAll('.stagger-item');
+                    newStaggerItems.forEach((item, index) => {
+                        setTimeout(() => {
+                            item.classList.add('animate');
+                        }, index * 100);
+                    });
+                }, 100);
+            }, 300);
+        }
+
+        // Category filter with enhanced animations
+        Array.from(document.getElementsByClassName('category-btn')).forEach(btn => {
+            btn.onclick = function() {
+                Array.from(document.getElementsByClassName('category-btn')).forEach(b => b.classList.remove('bg-custom-blue', 'text-white'));
+                this.classList.add('bg-custom-blue', 'text-white');
+                currentCategory = this.dataset.category;
+                
+                // Add success animation
+                this.classList.add('success-animation');
+                setTimeout(() => {
+                    this.classList.remove('success-animation');
+                }, 600);
+                
+                renderProducts();
+            };
+        });
+        
+        // Search with debouncing
+        const searchInput = document.getElementById('product-search');
+        let searchTimeout;
+        searchInput.addEventListener('input', function() {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+            currentSearch = this.value.toLowerCase();
+            renderProducts();
+            }, 300);
+        });
+        
+        // Initial render with staggered animation
+        setTimeout(() => {
+        renderProducts();
+        updateCartBadge();
+            console.log('Initial cart state:', cart); // Debug log
+            console.log('Cart badge element:', document.querySelector('.cart-badge')); // Debug log
+        }, 1500);
+
+        // Last Orders functionality with enhanced animations
+        document.querySelectorAll('.last-order-item').forEach(item => {
+            const productId = parseInt(item.getAttribute('data-product-id'));
+            const addButton = item.querySelector('.add-to-cart-btn');
+            
+            // Add to cart when clicking the plus button
+            addButton.addEventListener('click', function(e) {
+                e.stopPropagation();
+                addToCart(productId);
+                
+                // Enhanced visual feedback
+                this.innerHTML = '<i class="fas fa-check text-xs text-green-600"></i>';
+                this.classList.remove('text-blue-600', 'hover:text-blue-700', 'hover:bg-blue-50');
+                this.classList.add('text-green-600', 'bg-green-50', 'success-animation');
+                
+                // Reset after 2 seconds
+                setTimeout(() => {
+                    this.innerHTML = '<i class="fas fa-plus text-xs"></i>';
+                    this.classList.remove('text-green-600', 'bg-green-50', 'success-animation');
+                    this.classList.add('text-blue-600', 'hover:text-blue-700', 'hover:bg-blue-50');
+                }, 2000);
+            });
+            
+            // Add to cart when clicking the entire item
+            item.addEventListener('click', function() {
+                addToCart(productId);
+                
+                // Enhanced visual feedback for the entire item
+                this.classList.add('bg-green-50', 'border-green-200', 'success-animation');
+                this.classList.remove('bg-gray-50', 'hover:bg-gray-100');
+                
+                // Reset after 2 seconds
+                setTimeout(() => {
+                    this.classList.remove('bg-green-50', 'border-green-200', 'success-animation');
+                    this.classList.add('bg-gray-50', 'hover:bg-gray-100');
+                }, 2000);
+            });
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Intersection Observer for scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe elements for scroll animations
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Test function for debugging cart
+        function testAddToCart() {
+            console.log('Testing cart functionality...');
+            addToCart(1); // Add WMX Rubber Zebra Sandal
+            addToCart(7); // Add Organic Bananas
+            console.log('Test items added to cart');
+        }
+        
+        // Expose test function globally for console testing
+        window.testAddToCart = testAddToCart;
+    </script>
 </body>
 </html> 
