@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Virtual Try-On | Walmart</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Poppins', sans-serif; }
+    .clothes-thumb.selected { box-shadow: 0 0 0 4px #2563eb; }
+    .fade-in {
+      animation: fadeIn 0.7s cubic-bezier(0.4,0,0.2,1);
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col">
+  <header class="w-full bg-white shadow-sm py-4 px-4 flex items-center justify-between">
+    <div class="flex items-center gap-2">
+      <a href="index.html" class="text-blue-600 font-bold text-lg hover:underline flex items-center" title="Back to Home">
+        <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+      </a>
+      <a href="tryon.html" class="flex items-center justify-center bg-blue-50 text-blue-600 hover:bg-blue-100 hover:text-blue-800 rounded-full w-10 h-10 shadow transition-all duration-200 mx-1" title="Virtual Try-On">
+        <i class="fas fa-tshirt text-xl"></i>
+      </a>
+    </div>
+    <span class="font-bold text-xl text-gray-800">Virtual Try-On</span>
+    <span></span>
+  </header>
+  <main class="flex-1 flex flex-col items-center justify-center px-4 py-8">
+    <!-- Hero Section -->
+    <section class="w-full max-w-2xl mx-auto text-center mb-10 fade-in">
+      <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-2">Try Before You Buy</h1>
+      <p class="text-lg text-gray-600 mb-4">Upload your photo and see how clothes look on you</p>
+      <div class="mb-4 text-sm text-blue-700 bg-blue-50 rounded p-2">After uploading your photo, select a clothing item. You can drag, resize, and rotate the clothing overlay for a perfect fit!</div>
+      <label class="block w-full cursor-pointer">
+        <input type="file" id="photoInput" accept="image/*" class="hidden">
+        <span class="inline-block px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow hover:bg-blue-700 transition cursor-pointer">Upload Photo</span>
+      </label>
+      <div id="photoPreviewContainer" class="mt-6 flex justify-center">
+        <div class="relative w-64 h-96 bg-gray-200 rounded-xl overflow-hidden flex items-center justify-center">
+          <img id="photoPreview" src="" alt="Preview" class="object-contain w-full h-full hidden" />
+          <div id="overlayWrapper" class="absolute top-0 left-0 w-full h-full" style="pointer-events:none;">
+            <img id="clothesOverlay" src="" alt="Clothes Overlay" class="absolute opacity-0 select-none" draggable="false" style="pointer-events:auto;" />
+            <!-- Handles will be injected here -->
+          </div>
+        </div>
+      </div>
+      <button id="downloadBtn" class="mt-6 px-6 py-3 bg-green-600 text-white font-bold rounded-lg shadow hover:bg-green-700 transition disabled:opacity-50" disabled>Download Look</button>
+    </section>
+    <!-- Product Gallery -->
+    <section class="w-full max-w-3xl mx-auto mt-4 fade-in">
+      <h2 class="text-xl font-bold text-gray-800 mb-4">Choose a Clothing Item</h2>
+      <div id="clothesGallery" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4 justify-center"></div>
+    </section>
+  </main>
+  <footer class="w-full text-center py-4 text-gray-400 text-sm">&copy; 2024 Walmart Virtual Try-On</footer>
+  <script>
+    // --- Config ---
+    const CLOTHES = [
+      'clothes/white_tshirt.png'
+    ];
+    // --- DOM Elements ---
+    const photoInput = document.getElementById('photoInput');
+    const photoPreview = document.getElementById('photoPreview');
+    const photoPreviewContainer = document.getElementById('photoPreviewContainer');
+    const clothesOverlay = document.getElementById('clothesOverlay');
+    const overlayWrapper = document.getElementById('overlayWrapper');
+    const clothesGallery = document.getElementById('clothesGallery');
+    const downloadBtn = document.getElementById('downloadBtn');
+    let uploadedImg = null;
+    let selectedClothes = null;
+    // --- Overlay Transform State ---
+    let overlayState = {
+      x: 0.2, // percent of container width
+      y: 0.22, // percent of container height
+      w: 0.6, // percent of container width
+      h: null, // percent of container height (auto)
+      scale: 1,
+      rotate: 0,
+      dragging: false,
+      resizing: false,
+      rotating: false,
+      dragOffset: {x:0, y:0},
+      resizeStart: {x:0, y:0, w:0, h:0},
+      rotateStart: {x:0, y:0, angle:0}
+    };
+    // --- Image Upload & Preview ---
+    photoInput.addEventListener('change', e => {
+      const file = e.target.files[0];
+      if (!file) return;
+      if (!file.type.startsWith('image/')) {
+        alert('Please upload a valid image file.');
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = function(ev) {
+        photoPreview.src = ev.target.result;
+        photoPreview.classList.remove('hidden');
+        clothesOverlay.classList.add('opacity-0');
+        uploadedImg = new Image();
+        uploadedImg.onload = () => {
+          autoResizeOverlay();
+        };
+        uploadedImg.src = ev.target.result;
+        downloadBtn.disabled = !selectedClothes;
+      };
+      reader.readAsDataURL(file);
+    });
+    // --- Render Clothes Gallery ---
+    function renderClothesGallery() {
+      clothesGallery.innerHTML = '';
+      CLOTHES.forEach((src, idx) => {
+        const div = document.createElement('div');
+        div.className = 'flex flex-col items-center';
+        const img = document.createElement('img');
+        img.src = src;
+        img.alt = 'Clothing';
+        img.className = 'clothes-thumb w-20 h-20 object-contain rounded-lg border border-gray-200 shadow mb-2 transition-all duration-300 hover:scale-105 cursor-pointer';
+        img.onerror = function() {
+          img.style.opacity = 0.3;
+          img.title = 'Image not found';
+        };
+        img.addEventListener('click', () => tryOnClothes(src, img));
+        const btn = document.createElement('button');
+        btn.textContent = 'Try On';
+        btn.className = 'px-3 py-1 bg-blue-500 text-white rounded shadow hover:bg-blue-700 transition text-xs font-semibold';
+        btn.addEventListener('click', () => tryOnClothes(src, img));
+        div.appendChild(img);
+        div.appendChild(btn);
+        clothesGallery.appendChild(div);
+      });
+    }
+    // --- Try On Clothes ---
+    function tryOnClothes(src, imgEl) {
+      if (!photoPreview.src) {
+        alert('Please upload your photo first!');
+        return;
+      }
+      clothesOverlay.classList.remove('opacity-0');
+      clothesOverlay.classList.add('opacity-0');
+      setTimeout(() => {
+        clothesOverlay.src = src;
+        clothesOverlay.onload = () => {
+          clothesOverlay.classList.remove('opacity-0');
+          clothesOverlay.classList.add('opacity-100');
+          resetOverlayState();
+          updateOverlayTransform();
+          injectHandles();
+        };
+      }, 100);
+      document.querySelectorAll('.clothes-thumb').forEach(el => el.classList.remove('selected'));
+      imgEl.classList.add('selected');
+      selectedClothes = src;
+      downloadBtn.disabled = false;
+    }
+    // --- Overlay Controls ---
+    function resetOverlayState() {
+      overlayState = {
+        x: 0.2,
+        y: 0.22,
+        w: 0.6,
+        h: null,
+        scale: 1,
+        rotate: 0,
+        dragging: false,
+        resizing: false,
+        rotating: false,
+        dragOffset: {x:0, y:0},
+        resizeStart: {x:0, y:0, w:0, h:0},
+        rotateStart: {x:0, y:0, angle:0}
+      };
+    }
+    function updateOverlayTransform() {
+      const container = overlayWrapper.parentElement;
+      const w = container.offsetWidth;
+      const h = container.offsetHeight;
+      let ow = overlayState.w * w * overlayState.scale;
+      let oh = ow; // default square
+      if (clothesOverlay.naturalWidth && clothesOverlay.naturalHeight) {
+        oh = ow * (clothesOverlay.naturalHeight / clothesOverlay.naturalWidth);
+      }
+      if (!overlayState.h) overlayState.h = oh / h;
+      else oh = overlayState.h * h * overlayState.scale;
+      const left = overlayState.x * w;
+      const top = overlayState.y * h;
+      clothesOverlay.style.width = ow + 'px';
+      clothesOverlay.style.height = oh + 'px';
+      clothesOverlay.style.left = left + 'px';
+      clothesOverlay.style.top = top + 'px';
+      clothesOverlay.style.transform = `rotate(${overlayState.rotate}deg)`;
+      clothesOverlay.style.opacity = 1;
+    }
+    function injectHandles() {
+      // Remove old handles
+      overlayWrapper.querySelectorAll('.resize-handle, .rotate-handle').forEach(e => e.remove());
+      // Add resize handle (bottom right)
+      const resize = document.createElement('div');
+      resize.className = 'resize-handle absolute bg-white border border-blue-500 rounded-full w-4 h-4 cursor-se-resize z-20';
+      resize.style.right = '0';
+      resize.style.bottom = '0';
+      resize.style.transform = 'translate(50%,50%)';
+      overlayWrapper.appendChild(resize);
+      // Add rotate handle (top center)
+      const rotate = document.createElement('div');
+      rotate.className = 'rotate-handle absolute bg-white border border-green-500 rounded-full w-4 h-4 cursor-pointer z-20';
+      rotate.style.left = '50%';
+      rotate.style.top = '-18px';
+      rotate.style.transform = 'translate(-50%,0)';
+      overlayWrapper.appendChild(rotate);
+      // Events
+      resize.addEventListener('mousedown', startResize);
+      rotate.addEventListener('mousedown', startRotate);
+    }
+    // --- Mouse Events for Drag/Resize/Rotate ---
+    clothesOverlay.addEventListener('mousedown', startDrag);
+    function startDrag(e) {
+      if (!selectedClothes) return;
+      overlayState.dragging = true;
+      const container = overlayWrapper.parentElement;
+      const w = container.offsetWidth;
+      const h = container.offsetHeight;
+      const rect = clothesOverlay.getBoundingClientRect();
+      overlayState.dragOffset.x = e.clientX - rect.left;
+      overlayState.dragOffset.y = e.clientY - rect.top;
+      document.addEventListener('mousemove', onDrag);
+      document.addEventListener('mouseup', stopDrag);
+    }
+    function onDrag(e) {
+      if (!overlayState.dragging) return;
+      const container = overlayWrapper.parentElement;
+      const w = container.offsetWidth;
+      const h = container.offsetHeight;
+      let nx = (e.clientX - container.getBoundingClientRect().left - overlayState.dragOffset.x) / w;
+      let ny = (e.clientY - container.getBoundingClientRect().top - overlayState.dragOffset.y) / h;
+      overlayState.x = Math.max(0, Math.min(1 - overlayState.w * overlayState.scale, nx));
+      overlayState.y = Math.max(0, Math.min(1 - overlayState.h * overlayState.scale, ny));
+      updateOverlayTransform();
+    }
+    function stopDrag() {
+      overlayState.dragging = false;
+      document.removeEventListener('mousemove', onDrag);
+      document.removeEventListener('mouseup', stopDrag);
+    }
+    function startResize(e) {
+      e.stopPropagation();
+      overlayState.resizing = true;
+      overlayState.resizeStart.x = e.clientX;
+      overlayState.resizeStart.y = e.clientY;
+      overlayState.resizeStart.w = overlayState.w;
+      overlayState.resizeStart.h = overlayState.h;
+      document.addEventListener('mousemove', onResize);
+      document.addEventListener('mouseup', stopResize);
+    }
+    function onResize(e) {
+      if (!overlayState.resizing) return;
+      const container = overlayWrapper.parentElement;
+      const w = container.offsetWidth;
+      const h = container.offsetHeight;
+      let dx = (e.clientX - overlayState.resizeStart.x) / w;
+      let dy = (e.clientY - overlayState.resizeStart.y) / h;
+      let newW = overlayState.resizeStart.w + dx;
+      let newH = overlayState.resizeStart.h + dy;
+      newW = Math.max(0.1, Math.min(1, newW));
+      newH = Math.max(0.1, Math.min(1, newH));
+      overlayState.w = newW;
+      overlayState.h = newH;
+      updateOverlayTransform();
+    }
+    function stopResize() {
+      overlayState.resizing = false;
+      document.removeEventListener('mousemove', onResize);
+      document.removeEventListener('mouseup', stopResize);
+    }
+    function startRotate(e) {
+      e.stopPropagation();
+      overlayState.rotating = true;
+      const container = overlayWrapper.parentElement;
+      const rect = clothesOverlay.getBoundingClientRect();
+      overlayState.rotateStart.x = e.clientX;
+      overlayState.rotateStart.y = e.clientY;
+      overlayState.rotateStart.angle = overlayState.rotate;
+      document.addEventListener('mousemove', onRotate);
+      document.addEventListener('mouseup', stopRotate);
+    }
+    function onRotate(e) {
+      if (!overlayState.rotating) return;
+      const container = overlayWrapper.parentElement;
+      const rect = clothesOverlay.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      const angle = Math.atan2(e.clientY - cy, e.clientX - cx) * 180 / Math.PI;
+      overlayState.rotate = angle;
+      updateOverlayTransform();
+    }
+    function stopRotate() {
+      overlayState.rotating = false;
+      document.removeEventListener('mousemove', onRotate);
+      document.removeEventListener('mouseup', stopRotate);
+    }
+    // --- Auto-resize overlay based on photo ---
+    function autoResizeOverlay() {
+      if (!uploadedImg || !selectedClothes) return;
+      resetOverlayState();
+      updateOverlayTransform();
+      injectHandles();
+    }
+    // --- Download Look ---
+    downloadBtn.addEventListener('click', () => {
+      if (!photoPreview.src || !selectedClothes) return;
+      if (!uploadedImg.complete) {
+        alert('Image is still loading. Please wait.');
+        return;
+      }
+      const container = overlayWrapper.parentElement;
+      const w = container.offsetWidth;
+      const h = container.offsetHeight;
+      // Create canvas
+      const canvas = document.createElement('canvas');
+      canvas.width = uploadedImg.naturalWidth;
+      canvas.height = uploadedImg.naturalHeight;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(uploadedImg, 0, 0, canvas.width, canvas.height);
+      const overlayImg = new Image();
+      overlayImg.crossOrigin = 'anonymous';
+      overlayImg.onload = function() {
+        // Overlay: use current transform
+        const scaleW = overlayState.w * canvas.width * overlayState.scale;
+        const scaleH = overlayState.h * canvas.height * overlayState.scale;
+        const x = overlayState.x * canvas.width;
+        const y = overlayState.y * canvas.height;
+        ctx.save();
+        ctx.translate(x + scaleW/2, y + scaleH/2);
+        ctx.rotate(overlayState.rotate * Math.PI / 180);
+        ctx.drawImage(overlayImg, -scaleW/2, -scaleH/2, scaleW, scaleH);
+        ctx.restore();
+        const link = document.createElement('a');
+        link.download = 'virtual-tryon.png';
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+      };
+      overlayImg.onerror = function() {
+        alert('Failed to load clothing image for download.');
+      };
+      overlayImg.src = selectedClothes;
+    });
+    // --- Init ---
+    renderClothesGallery();
+  </script>
+</body>
+</html> 

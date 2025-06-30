@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Grocery - Walmart </title>
+    <title>Grocery - BuyMore</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -687,6 +687,19 @@
                 margin-left: 0;
             }
         }
+
+        /* Fix sidebar positioning on mobile */
+        #sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            z-index: 50;
+            transform: translateX(-100%);
+        }
+        #sidebar.sidebar-open {
+            transform: translateX(0);
+        }
     </style>
 </head>
 <body class="bg-gray-50 font-poppins">
@@ -702,15 +715,37 @@
         </div>
     </div>
 
+    <!-- Full-width Navbar at the very top -->
+    <header class="sticky top-0 z-30 bg-custom-blue px-2 py-2 md:px-4 md:py-3 flex items-center justify-between w-full" data-delay="0.2">
+        <div class="flex items-center gap-2">
+            <!-- Hamburger for sidebar toggle -->
+            <button id="hamburgerBtn" class="p-2 rounded hover:bg-custom-gold/20 focus:outline-none transition-all duration-200">
+                <i class="fas fa-bars-staggered text-xl text-white"></i>
+            </button>
+            <!-- Navbar Logo (always visible) -->
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Walmart_logo.svg/2000px-Walmart_logo.svg.png" alt="Walmart Logo" class="w-32 md:w-48 h-auto object-contain filter invert brightness-0" style="max-width: 120px; min-width: 80px;" />
+        </div>
+        <div class="flex items-center gap-2 md:gap-4">
+            <div class="relative flex items-center w-32 sm:w-48 md:w-72">
+                <span class="absolute left-2 top-1/2 -translate-y-1/2 text-white opacity-70"><i class="fas fa-magnifying-glass"></i></span>
+                <input type="text" id="product-search" placeholder="Search groceries..." class="pl-8 pr-2 py-1 md:py-2 rounded bg-custom-blue-white text-sm focus:outline-none focus:bg-white focus:text-custom-blue transition w-full border-none placeholder:text-custom-blue font-medium text-custom-blue" />
+            </div>
+            <div class="relative flex items-center">
+                <a href="cart.html" class="flex items-center justify-center hover:bg-custom-gold/20 rounded-full w-9 h-9 transition-all duration-200">
+                    <i class="fas fa-bag-shopping text-xl text-white"></i>
+                </a>
+                <span class="absolute -top-1 -right-1 bg-custom-gold text-custom-blue text-[10px] rounded-full w-4 h-4 flex items-center justify-center cart-badge font-bold">0</span>
+            </div>
+        </div>
+    </header>
+
     <div class="page-content loaded" id="pageContent">
-        <div class="flex h-screen flex-col md:flex-row">
+        <div id="mainContent" class="flex-1 flex flex-col min-h-0 transition-all duration-300">
             <!-- Sidebar (Drawer for mobile) -->
             <div id="sidebarDrawer" class="fixed inset-0 z-40 bg-black bg-opacity-40 transition-opacity duration-300 md:static md:bg-transparent md:z-0 md:w-64 md:block" style="display: none;"></div>
-            <div id="sidebar" class="w-64 bg-white shadow-lg flex flex-col fixed z-50 top-0 left-0 h-full transform -translate-x-full transition-transform duration-300 md:static md:translate-x-0 md:h-auto md:block">
-                <div class="p-6 border-b flex justify-center items-center stagger-item" data-delay="0.1">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Walmart_logo.svg/2000px-Walmart_logo.svg.png" alt="Walmart Logo" class="w-32 md:w-40 h-auto object-contain">
-                </div>
-
+            <!-- Sidebar Overlay -->
+            <div id="sidebarOverlay" class="hidden fixed inset-0 bg-black bg-opacity-20 z-40 transition-opacity duration-300"></div>
+            <div id="sidebar" class="w-64 bg-custom-blue-white shadow-xl flex flex-col fixed z-50 top-0 left-0 h-full rounded-r-3xl transition-transform duration-300" tabindex="0" aria-label="Sidebar navigation">
                 <nav class="flex-1 p-4">
                     <ul class="space-y-2" id="sidebar-nav">
                         <li class="sidebar-item rounded-lg px-3 py-2 cursor-pointer stagger-item" data-delay="0.2" data-link="index.html">
@@ -732,7 +767,6 @@
                             </a>
                         </li>
                     </ul>
-
                     <!-- Last Orders -->
                     <div class="mt-8 stagger-item" data-delay="0.5">
                         <h3 class="text-sm font-semibold text-gray-700 mb-3">Last Orders</h3>
@@ -765,146 +799,109 @@
             </div>
 
             <!-- Main Content -->
-            <div class="flex-1 flex flex-col min-h-0 w-full">
-                <!-- Topbar -->
-                <header class="bg-custom-blue-white shadow-sm border-b px-4 py-4 md:px-6 md:py-6 stagger-item flex items-center justify-between w-full" data-delay="0.2">
-                    <!-- Hamburger for mobile -->
-                    <button id="hamburgerBtn" class="md:hidden p-2 rounded-lg hover:bg-gray-200 focus:outline-none mr-2">
-                        <i class="fas fa-bars text-xl text-custom-blue"></i>
-                    </button>
-                    <div class="flex-1 flex items-center justify-between">
-                        <div class="flex items-center space-x-2 md:space-x-6">
-                            <!-- Mobile Logo (visible only on small screens) -->
-                            <div class="md:hidden flex items-center">
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Walmart_logo.svg/2000px-Walmart_logo.svg.png" alt="Walmart Logo" class="w-24 h-auto object-contain">
-                            </div>
-                            <!-- Desktop cart count (hidden on mobile) -->
-                            <div class="hidden md:block text-center">
-                                <div class="text-2xl font-bold text-custom-blue" id="grocery-count">0</div>
-                                <div class="text-xs text-gray-500 uppercase tracking-wider">Items in cart</div>
-                            </div>
+            <main class="flex-1 p-2 sm:p-4 md:p-6 overflow-y-auto">
+                <!-- Explore Section -->
+                <div class="mb-6 sm:mb-8 stagger-item" data-delay="0.4">
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 sm:mb-6 gap-2 sm:gap-0">
+                        <div>
+                            <h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-gray-800 mb-1">Fresh Groceries</h2>
+                            <p class="text-base sm:text-lg text-gray-500">Fresh, organic, and locally sourced groceries</p>
                         </div>
-                        <div class="flex items-center space-x-2 md:space-x-4">
-                            <div class="relative flex items-center search-container w-40 sm:w-56 md:w-96 lg:w-[500px]">
-                                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"><i class="fas fa-search"></i></span>
-                                <input type="text" id="product-search" placeholder="Search groceries..." class="pl-10 pr-4 py-2 md:py-3 rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-custom-blue transition w-full shadow-sm border border-gray-200" />
+                        <div class="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
+                            <div class="flex space-x-2">
+                                <button class="px-4 py-2 bg-custom-blue text-white rounded-full text-sm font-medium category-btn btn-animate" data-category="all">All</button>
+                                <button class="px-4 py-2 bg-gray-200 text-gray-700 rounded-full text-sm font-medium hover:bg-gray-300 category-btn btn-animate" data-category="fruits">Fruits</button>
+                                <button class="px-4 py-2 bg-gray-200 text-gray-700 rounded-full text-sm font-medium hover:bg-gray-300 category-btn btn-animate" data-category="vegetables">Vegetables</button>
+                                <button class="px-4 py-2 bg-gray-200 text-gray-700 rounded-full text-sm font-medium hover:bg-gray-300 category-btn btn-animate" data-category="dairy">Dairy</button>
                             </div>
-                            <div class="cart-button-container">
-                                <a href="cart.html" class="relative flex items-center justify-center bg-custom-blue hover:bg-custom-dark-blue transition-colors rounded-full shadow-md w-8 h-8 md:w-auto md:px-4 md:py-2 btn-animate">
-                                    <i class="fas fa-shopping-cart text-white text-sm md:mr-2"></i>
-                                    <span class="hidden md:inline text-white font-medium text-sm">Cart</span>
-                                </a>
-                                <span class="absolute -top-1 -right-1 bg-custom-gold text-custom-dark-blue text-xs rounded-full w-5 h-5 flex items-center justify-center cart-badge">0</span>
+                            <div class="flex space-x-2 items-center">
+                                <button class="p-2 text-gray-600 hover:bg-gray-100 rounded-lg btn-animate">
+                                    <i class="fas fa-filter"></i>
+                                </button>
                             </div>
                         </div>
                     </div>
-                </header>
 
-                <!-- Main Content Area -->
-                <main class="flex-1 p-2 sm:p-4 md:p-6 overflow-y-auto">
-                    <!-- Explore Section -->
-                    <div class="mb-6 sm:mb-8 stagger-item" data-delay="0.4">
-                        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 sm:mb-6 gap-2 sm:gap-0">
-                            <div>
-                                <h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-gray-800 mb-1">Fresh Groceries</h2>
-                                <p class="text-base sm:text-lg text-gray-500">Fresh, organic, and locally sourced groceries</p>
+                    <!-- Hero Banners -->
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
+                        <!-- Large Banner -->
+                        <div class="lg:col-span-2 banner-gradient rounded-2xl lg:rounded-l-none p-4 sm:p-6 text-white relative overflow-hidden stagger-item" data-delay="0.5">
+                            <div class="relative z-10">
+                                <h3 class="text-lg sm:text-2xl font-bold mb-2 sm:mb-3">Fresh & Organic: Up to 30% OFF</h3>
+                                <p class="text-sm sm:text-base opacity-90 mb-2 sm:mb-4">Get fresh groceries delivered to your doorstep</p>
+                                <button class="bg-custom-gold text-custom-dark-blue px-4 sm:px-5 py-2 rounded-lg font-semibold hover:bg-yellow-400 transition-colors btn-animate text-xs sm:text-sm">
+                                    Shop Groceries
+                                </button>
                             </div>
-                            <div class="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
-                                <div class="flex space-x-2">
-                                    <button class="px-4 py-2 bg-green-600 text-white rounded-full text-sm font-medium category-btn btn-animate" data-category="all">All</button>
-                                    <button class="px-4 py-2 bg-gray-200 text-gray-700 rounded-full text-sm font-medium hover:bg-gray-300 category-btn btn-animate" data-category="fruits">Fruits</button>
-                                    <button class="px-4 py-2 bg-gray-200 text-gray-700 rounded-full text-sm font-medium hover:bg-gray-300 category-btn btn-animate" data-category="vegetables">Vegetables</button>
-                                    <button class="px-4 py-2 bg-gray-200 text-gray-700 rounded-full text-sm font-medium hover:bg-gray-300 category-btn btn-animate" data-category="dairy">Dairy</button>
-                                </div>
-                                <div class="flex space-x-2 items-center">
-                                    <button class="p-2 text-gray-600 hover:bg-gray-100 rounded-lg btn-animate">
-                                        <i class="fas fa-filter"></i>
-                                    </button>
-                                </div>
-                            </div>
+                            <div class="absolute top-0 right-0 w-24 sm:w-48 h-24 sm:h-48 bg-white opacity-10 rounded-full -mr-12 sm:-mr-24 -mt-12 sm:-mt-24"></div>
                         </div>
 
-                        <!-- Hero Banners -->
-                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
-                            <!-- Large Banner -->
-                            <div class="lg:col-span-2 banner-gradient rounded-2xl lg:rounded-l-none p-4 sm:p-6 md:p-8 text-white relative overflow-hidden stagger-item" data-delay="0.5">
-                                <div class="relative z-10">
-                                    <h3 class="text-lg sm:text-2xl md:text-3xl font-bold mb-2 sm:mb-4">Fresh & Organic: Up to 30% OFF</h3>
-                                    <p class="text-sm sm:text-base md:text-lg opacity-90">Get fresh groceries delivered to your doorstep</p>
-                                    <button class="mt-4 sm:mt-6 bg-white text-green-600 px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors btn-animate text-xs sm:text-sm">
-                                        Shop Groceries
-                                    </button>
-                                </div>
-                                <div class="absolute top-0 right-0 w-24 sm:w-48 md:w-64 h-24 sm:h-48 md:h-64 bg-white opacity-10 rounded-full -mr-12 sm:-mr-24 md:-mr-32 -mt-12 sm:-mt-24 md:-mt-32"></div>
+                        <!-- Small Banner -->
+                        <div class="bg-custom-blue-white rounded-2xl p-3 sm:p-5 relative overflow-hidden stagger-item" data-delay="0.6">
+                            <div class="relative z-10">
+                                <h4 class="text-base sm:text-lg font-bold text-custom-dark-blue mb-1 sm:mb-2">Organic Produce</h4>
+                                <p class="text-gray-700 mb-2 sm:mb-3 text-xs sm:text-sm">Fresh from the farm</p>
+                                <button class="bg-custom-blue text-white px-3 py-2 rounded-lg text-xs sm:text-sm font-medium hover:bg-custom-dark-blue transition-colors btn-animate">
+                                    Explore Organic
+                                </button>
                             </div>
-
-                            <!-- Small Banner -->
-                            <div class="bg-green-200 rounded-2xl p-3 sm:p-5 md:p-6 relative overflow-hidden stagger-item" data-delay="0.6">
-                                <div class="relative z-10">
-                                    <h4 class="text-base sm:text-lg md:text-xl font-bold text-gray-800 mb-1 sm:mb-2">Organic Produce</h4>
-                                    <p class="text-gray-700 mb-2 sm:mb-4 text-xs sm:text-sm">Fresh from the farm</p>
-                                    <button class="bg-green-600 text-white px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium hover:bg-green-700 transition-colors btn-animate">
-                                        Explore Organic
-                                    </button>
-                                </div>
-                                <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?w=200&h=200&fit=crop" 
-                                     alt="Fresh Vegetables" class="absolute bottom-0 right-0 w-20 h-20 sm:w-28 sm:h-28 md:w-32 md:h-32 object-cover rounded-tl-2xl">
-                            </div>
-                        </div>
-
-                        <!-- Product Grid -->
-                        <div id="product-grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-2 sm:gap-3 mb-6 sm:mb-8">
-                            <!-- Product cards will be rendered by JS -->
-                        </div>
-
-                        <!-- Bottom Cards -->
-                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-                            <!-- Fresh Delivery Card -->
-                            <div class="card-fresh rounded-2xl p-3 sm:p-5 md:p-6 relative overflow-hidden stagger-item" data-delay="0.7">
-                                <div class="relative z-10">
-                                    <h4 class="text-base sm:text-lg md:text-xl font-bold mb-1 sm:mb-2">Fresh Delivery</h4>
-                                    <p class="opacity-90 mb-2 sm:mb-4 text-xs sm:text-sm">Same day delivery available</p>
-                                    <button class="bg-white text-blue-600 px-3 sm:px-4 py-2 rounded-lg font-semibold hover:bg-gray-100 transition-colors btn-animate text-xs sm:text-sm">
-                                        Learn More
-                                    </button>
-                                </div>
-                                <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=150&h=150&fit=crop" 
-                                     alt="Delivery" class="absolute bottom-0 right-0 w-20 h-20 sm:w-28 sm:h-28 md:w-32 md:h-32 object-cover rounded-tl-2xl">
-                            </div>
-
-                            <!-- Organic Card -->
-                            <div class="card-organic rounded-2xl p-3 sm:p-5 md:p-6 relative overflow-hidden stagger-item" data-delay="0.8">
-                                <div class="relative z-10">
-                                    <h4 class="text-base sm:text-lg md:text-xl font-bold mb-1 sm:mb-2">100% Organic</h4>
-                                    <p class="opacity-90 mb-2 sm:mb-4 text-xs sm:text-sm">Certified organic products</p>
-                                    <button class="bg-white text-green-600 px-3 sm:px-4 py-2 rounded-lg font-semibold hover:bg-gray-100 transition-colors btn-animate text-xs sm:text-sm">
-                                        View Products
-                                    </button>
-                                </div>
-                                <div class="absolute bottom-0 right-0 flex space-x-1 sm:space-x-2">
-                                    <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?w=80&h=80&fit=crop" 
-                                         alt="Organic 1" class="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 object-cover rounded-full border-2 border-white">
-                                    <img src="https://images.unsplash.com/photo-1519996529931-28324d5a630e?w=80&h=80&fit=crop" 
-                                         alt="Organic 2" class="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 object-cover rounded-full border-2 border-white">
-                                </div>
-                            </div>
-
-                            <!-- Local Farmers Card -->
-                            <div class="card-local rounded-2xl p-3 sm:p-5 md:p-6 relative overflow-hidden stagger-item" data-delay="0.9">
-                                <div class="relative z-10">
-                                    <h4 class="text-base sm:text-lg md:text-xl font-bold mb-1 sm:mb-2">Support Local Farmers</h4>
-                                    <p class="opacity-90 mb-2 sm:mb-4 text-xs sm:text-sm">Fresh from local farms</p>
-                                    <button class="bg-white text-orange-600 px-3 sm:px-4 py-2 rounded-lg font-semibold hover:bg-gray-100 transition-colors btn-animate text-xs sm:text-sm">
-                                        Shop Local
-                                    </button>
-                                </div>
-                                <img src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=200&h=200&fit=crop" 
-                                     alt="Local Farm" class="absolute bottom-0 right-0 w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 object-cover rounded-tl-2xl">
-                            </div>
+                            <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?w=150&h=150&fit=crop" 
+                                 alt="Fresh Vegetables" class="absolute bottom-0 right-0 w-16 h-16 sm:w-24 sm:h-24 object-cover rounded-tl-2xl">
                         </div>
                     </div>
-                </main>
-            </div>
+
+                    <!-- Product Grid -->
+                    <div id="product-grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-2 sm:gap-3 mb-6 sm:mb-8">
+                        <!-- Product cards will be rendered by JS -->
+                    </div>
+
+                    <!-- Bottom Cards -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                        <!-- Fresh Delivery Card -->
+                        <div class="card-fresh rounded-2xl p-3 sm:p-5 relative overflow-hidden stagger-item" data-delay="0.7">
+                            <div class="relative z-10">
+                                <h4 class="text-base sm:text-lg font-bold mb-1 sm:mb-2">Fresh Delivery</h4>
+                                <p class="opacity-90 mb-2 sm:mb-3 text-xs sm:text-sm">Same day delivery available</p>
+                                <button class="bg-white text-blue-600 px-3 py-2 rounded-lg font-semibold hover:bg-gray-100 transition-colors btn-animate text-xs sm:text-sm">
+                                    Learn More
+                                </button>
+                            </div>
+                            <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=120&h=120&fit=crop" 
+                                 alt="Delivery" class="absolute bottom-0 right-0 w-16 h-16 sm:w-24 sm:h-24 object-cover rounded-tl-2xl">
+                        </div>
+
+                        <!-- Organic Card -->
+                        <div class="card-organic rounded-2xl p-3 sm:p-5 relative overflow-hidden stagger-item" data-delay="0.8">
+                            <div class="relative z-10">
+                                <h4 class="text-base sm:text-lg font-bold mb-1 sm:mb-2">100% Organic</h4>
+                                <p class="opacity-90 mb-2 sm:mb-3 text-xs sm:text-sm">Certified organic products</p>
+                                <button class="bg-white text-green-600 px-3 py-2 rounded-lg font-semibold hover:bg-gray-100 transition-colors btn-animate text-xs sm:text-sm">
+                                    View Products
+                                </button>
+                            </div>
+                            <div class="absolute bottom-0 right-0 flex space-x-1 sm:space-x-2">
+                                <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?w=60&h=60&fit=crop" 
+                                     alt="Organic 1" class="w-8 h-8 sm:w-12 sm:h-12 object-cover rounded-full border-2 border-white">
+                                <img src="https://images.unsplash.com/photo-1519996529931-28324d5a630e?w=60&h=60&fit=crop" 
+                                     alt="Organic 2" class="w-8 h-8 sm:w-12 sm:h-12 object-cover rounded-full border-2 border-white">
+                            </div>
+                        </div>
+
+                        <!-- Local Farmers Card -->
+                        <div class="card-local rounded-2xl p-3 sm:p-5 relative overflow-hidden stagger-item" data-delay="0.9">
+                            <div class="relative z-10">
+                                <h4 class="text-base sm:text-lg font-bold mb-1 sm:mb-2">Support Local Farmers</h4>
+                                <p class="opacity-90 mb-2 sm:mb-3 text-xs sm:text-sm">Fresh from local farms</p>
+                                <button class="bg-white text-orange-600 px-3 py-2 rounded-lg font-semibold hover:bg-gray-100 transition-colors btn-animate text-xs sm:text-sm">
+                                    Shop Local
+                                </button>
+                            </div>
+                            <img src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=150&h=150&fit=crop" 
+                                 alt="Local Farm" class="absolute bottom-0 right-0 w-20 h-20 sm:w-32 sm:h-32 object-cover rounded-tl-2xl">
+                        </div>
+                    </div>
+                </div>
+            </main>
         </div>
     </div>
 
@@ -912,28 +909,39 @@
     <div id="toast" class="toast"></div>
 
     <script>
-        // Sidebar drawer toggle for mobile
         const sidebar = document.getElementById('sidebar');
-        const sidebarDrawer = document.getElementById('sidebarDrawer');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
         const hamburgerBtn = document.getElementById('hamburgerBtn');
+
         function openSidebar() {
-            sidebar.style.transform = 'translateX(0)';
-            sidebarDrawer.style.display = 'block';
+            sidebar.classList.add('sidebar-open');
+            sidebarOverlay.classList.remove('hidden');
+            sidebarOverlay.style.opacity = '1';
         }
         function closeSidebar() {
-            sidebar.style.transform = 'translateX(-100%)';
-            sidebarDrawer.style.display = 'none';
+            sidebar.classList.remove('sidebar-open');
+            sidebarOverlay.classList.add('hidden');
+            sidebarOverlay.style.opacity = '0';
         }
-        hamburgerBtn.addEventListener('click', openSidebar);
-        sidebarDrawer.addEventListener('click', closeSidebar);
-        // Hide sidebar on resize to md+
-        window.addEventListener('resize', function() {
-            if (window.innerWidth >= 768) {
-                sidebar.style.transform = 'translateX(0)';
-                sidebarDrawer.style.display = 'none';
+        function toggleSidebar() {
+            sidebar.classList.toggle('sidebar-open');
+            if (sidebar.classList.contains('sidebar-open')) {
+                sidebarOverlay.classList.remove('hidden');
+                sidebarOverlay.style.opacity = '1';
             } else {
-                sidebar.style.transform = 'translateX(-100%)';
+                sidebarOverlay.classList.add('hidden');
+                sidebarOverlay.style.opacity = '0';
             }
+        }
+
+        // Hamburger click toggles sidebar
+        hamburgerBtn.addEventListener('click', toggleSidebar);
+        // Overlay click closes sidebar
+        sidebarOverlay.addEventListener('click', closeSidebar);
+
+        // On resize, always close sidebar and overlay
+        window.addEventListener('resize', function() {
+            closeSidebar();
         });
 
         // Initialize page directly without transitions

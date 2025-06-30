@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cart - Walmart </title>
+    <title>Cart - BuyMore</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -533,9 +533,40 @@
             background-color: #e8f5e8;
             border-left: 4px solid #51cf66;
         }
+
+        /* Auto-hide sidebar for desktop */
+        @media (min-width: 768px) {
+            #sidebar {
+                transform: translateX(-256px);
+                transition: transform 0.3s cubic-bezier(0.4,0,0.2,1), box-shadow 0.3s, background 0.3s;
+                z-index: 50;
+            }
+            #sidebar.sidebar-open {
+                transform: translateX(0);
+            }
+            #sidebarTrigger {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 18px;
+                height: 100vh;
+                z-index: 60;
+                background: transparent;
+                cursor: pointer;
+                transition: background 0.2s;
+            }
+            #sidebarTrigger:hover {
+                background: rgba(0,83,226,0.07);
+            }
+        }
     </style>
 </head>
 <body class="bg-gray-50 font-poppins">
+    <!-- Hidden elements for sidebar cart info (for JS compatibility) -->
+    <span id="sidebar-item-count" style="display:none"></span>
+    <span id="sidebar-total" style="display:none"></span>
+    <!-- Sidebar Trigger for Desktop -->
+    <div id="sidebarTrigger" style="display:none;"></div>
     <!-- Page Transition Overlay -->
     <div class="page-transition" id="pageTransition" style="display: none;">
         <div class="transition-content">
@@ -552,52 +583,57 @@
         <div class="flex h-screen flex-col md:flex-row">
             <!-- Sidebar (Drawer for mobile) -->
             <div id="sidebarDrawer" class="fixed inset-0 z-40 bg-black bg-opacity-40 transition-opacity duration-300 md:static md:bg-transparent md:z-0 md:w-64 md:block" style="display: none;"></div>
-            <div id="sidebar" class="w-64 bg-white shadow-lg flex flex-col fixed z-50 top-0 left-0 h-full transform -translate-x-full transition-transform duration-300 md:static md:translate-x-0 md:h-auto md:block">
-                <div class="p-6 border-b flex justify-center items-center stagger-item" data-delay="0.1">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Walmart_logo.svg/2000px-Walmart_logo.svg.png" alt="Walmart Logo" class="w-32 md:w-40 h-auto object-contain">
-                </div>
-
+            <!-- Sidebar Overlay -->
+            <div id="sidebarOverlay" class="hidden fixed inset-0 bg-black bg-opacity-20 z-40 transition-opacity duration-300"></div>
+            <div id="sidebar" class="w-64 bg-custom-blue-white shadow-xl flex flex-col fixed z-50 top-0 left-0 h-full rounded-r-3xl transition-transform duration-300" tabindex="0" aria-label="Sidebar navigation">
                 <nav class="flex-1 p-4">
                     <ul class="space-y-2" id="sidebar-nav">
                         <li class="sidebar-item rounded-lg px-3 py-2 cursor-pointer stagger-item" data-delay="0.2" data-link="index.html">
                             <a href="index.html" class="flex items-center text-inherit no-underline w-full h-full">
-                                <i class="fas fa-tshirt text-gray-500 mr-3"></i>Clothing and Shoes
+                                <i class="fas fa-tshirt text-gray-500 mr-3"></i>
+                                Clothing and Shoes
                             </a>
                         </li>
                         <li class="sidebar-item rounded-lg px-3 py-2 cursor-pointer stagger-item" data-delay="0.3" data-link="grocery.html">
                             <a href="grocery.html" class="flex items-center text-inherit no-underline w-full h-full">
-                                <i class="fas fa-shopping-basket text-gray-500 mr-3"></i>Grocery
+                                <i class="fas fa-shopping-basket text-gray-500 mr-3"></i>
+                                Grocery
                             </a>
                         </li>
                         <li class="sidebar-item rounded-lg px-3 py-2 cursor-pointer active stagger-item" data-delay="0.4" data-link="cart.html">
                             <a href="cart.html" class="flex items-center text-inherit no-underline w-full h-full">
-                                <i class="fas fa-shopping-cart text-white mr-3"></i>Shopping Cart
+                                <i class="fas fa-shopping-cart text-white mr-3"></i>
+                                Shopping Cart
                             </a>
                         </li>
                     </ul>
-
+                    <!-- Last Orders -->
                     <div class="mt-8 stagger-item" data-delay="0.5">
-                        <h3 class="text-sm font-semibold text-gray-700 mb-3">Cart Summary</h3>
-                        <div class="bg-custom-blue-white rounded-lg p-3">
-                            <div class="flex justify-between items-center mb-2">
-                                <span class="text-xs text-gray-600">Items:</span>
-                                <span class="text-xs font-semibold text-custom-blue" id="sidebar-item-count">0</span>
+                        <h3 class="text-sm font-semibold text-gray-700 mb-3">Last Orders</h3>
+                        <div class="space-y-3">
+                            <div class="bg-gray-50 rounded-lg p-3 cursor-pointer hover:bg-gray-100 transition-colors last-order-item" data-product-id="1">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex-1">
+                                        <p class="text-xs text-gray-600">WMX Rubber Zebra Sandal</p>
+                                        <p class="text-xs text-blue-600">$36.00</p>
+                                    </div>
+                                    <button class="add-to-cart-btn ml-2">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
                             </div>
-                            <div class="flex justify-between items-center">
-                                <span class="text-xs text-gray-600">Total:</span>
-                                <span class="text-xs font-semibold text-custom-blue" id="sidebar-total">$0.00</span>
+                            <div class="bg-gray-50 rounded-lg p-3 cursor-pointer hover:bg-gray-100 transition-colors last-order-item" data-product-id="2">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex-1">
+                                        <p class="text-xs text-gray-600">Supper Skinny Jogger</p>
+                                        <p class="text-xs text-blue-600">$89.00</p>
+                                    </div>
+                                    <button class="add-to-cart-btn ml-2">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="mt-6 stagger-item" data-delay="0.6">
-                        <div class="flex items-center justify-between mb-3">
-                            <h3 class="text-sm font-semibold text-gray-700">Shopping Lists</h3>
-                            <button onclick="openSaveListModal()" class="text-blue-600 hover:text-blue-700 text-xs">
-                                <i class="fas fa-plus"></i>
-                            </button>
-                        </div>
-                        <div id="sidebar-shopping-lists" class="space-y-2"></div>
                     </div>
                 </nav>
             </div>
@@ -610,9 +646,9 @@
                     </button>
                     <div class="flex-1 flex items-center justify-between">
                         <div class="flex items-center space-x-2 md:space-x-6">
-                            <!-- Mobile Logo (visible only on small screens) -->
-                            <div class="md:hidden flex items-center">
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Walmart_logo.svg/2000px-Walmart_logo.svg.png" alt="Walmart Logo" class="w-24 h-auto object-contain">
+                            <!-- Walmart Logo (visible on all screens) -->
+                            <div class="flex items-center">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Walmart_logo.svg/2000px-Walmart_logo.svg.png" alt="Walmart Logo" class="w-24 md:w-32 h-auto object-contain">
                             </div>
                             <!-- Desktop cart count (hidden on mobile) -->
                             <div class="hidden md:block text-center">
@@ -747,7 +783,7 @@
                     </div>
                     <div class="bg-gray-50 rounded-lg p-4">
                         <h4 class="font-semibold text-gray-800 mb-2">Items to Save:</h4>
-                        <div id="saveListItems" class="space-y-2"></div>
+                        <div id="saveListItems" class="space-y-2" style="max-height:300px;overflow-y:auto;"></div>
                     </div>
                 </div>
                 <div class="flex justify-end space-x-3 mt-6">
@@ -777,28 +813,39 @@
     <div id="toast" class="toast"></div>
 
     <script>
-        // Sidebar drawer toggle for mobile
         const sidebar = document.getElementById('sidebar');
-        const sidebarDrawer = document.getElementById('sidebarDrawer');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
         const hamburgerBtn = document.getElementById('hamburgerBtn');
+
         function openSidebar() {
-            sidebar.style.transform = 'translateX(0)';
-            sidebarDrawer.style.display = 'block';
+            sidebar.classList.add('sidebar-open');
+            sidebarOverlay.classList.remove('hidden');
+            sidebarOverlay.style.opacity = '1';
         }
         function closeSidebar() {
-            sidebar.style.transform = 'translateX(-100%)';
-            sidebarDrawer.style.display = 'none';
+            sidebar.classList.remove('sidebar-open');
+            sidebarOverlay.classList.add('hidden');
+            sidebarOverlay.style.opacity = '0';
         }
-        hamburgerBtn.addEventListener('click', openSidebar);
-        sidebarDrawer.addEventListener('click', closeSidebar);
-        // Hide sidebar on resize to md+
-        window.addEventListener('resize', function() {
-            if (window.innerWidth >= 768) {
-                sidebar.style.transform = 'translateX(0)';
-                sidebarDrawer.style.display = 'none';
+        function toggleSidebar() {
+            sidebar.classList.toggle('sidebar-open');
+            if (sidebar.classList.contains('sidebar-open')) {
+                sidebarOverlay.classList.remove('hidden');
+                sidebarOverlay.style.opacity = '1';
             } else {
-                sidebar.style.transform = 'translateX(-100%)';
+                sidebarOverlay.classList.add('hidden');
+                sidebarOverlay.style.opacity = '0';
             }
+        }
+
+        // Hamburger click toggles sidebar
+        hamburgerBtn.addEventListener('click', toggleSidebar);
+        // Overlay click closes sidebar
+        sidebarOverlay.addEventListener('click', closeSidebar);
+
+        // On resize, always close sidebar and overlay
+        window.addEventListener('resize', function() {
+            closeSidebar();
         });
 
         // Initialize page directly without transitions
@@ -845,20 +892,28 @@
             }
         });
 
-        // Product data
+        // Replace the products array with the full one from index.html
         const products = [
-            { id: 1, name: 'WMX Rubber Zebra Sandal', price: 36, img: 'https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=300&h=300&fit=crop' },
-            { id: 2, name: 'Supper Skinny Jogger', price: 89, img: 'https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?w=300&h=300&fit=crop' },
-            { id: 3, name: 'Premium Cotton T-Shirt', price: 24, img: 'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=300&h=300&fit=crop' },
-            { id: 4, name: 'Pro Runner Shoes', price: 120, img: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=300&h=300&fit=crop' },
-            { id: 5, name: 'Women Peach Dress', price: 59, img: 'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?w=300&h=300&fit=crop' },
-            { id: 6, name: 'Women Mint Blazer', price: 79, img: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=300&h=300&fit=crop' },
-            { id: 7, name: 'Organic Bananas', price: 2.99, img: 'https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?w=300&h=300&fit=crop' },
-            { id: 8, name: 'Fresh Milk', price: 4.49, img: 'https://images.unsplash.com/photo-1550583724-b2692b85b150?w=300&h=300&fit=crop' },
-            { id: 9, name: 'Organic Apples', price: 3.99, img: 'https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?w=300&h=300&fit=crop' },
-            { id: 10, name: 'Fresh Tomatoes', price: 2.49, img: 'https://images.unsplash.com/photo-1546094096-0df4bcaaa337?w=300&h=300&fit=crop' },
-            { id: 11, name: 'Organic Carrots', price: 1.99, img: 'https://images.unsplash.com/photo-1447175008436-170170e8a4e3?w=300&h=300&fit=crop' },
-            { id: 12, name: 'Greek Yogurt', price: 5.99, img: 'https://images.unsplash.com/photo-1488477181946-6428a0291777?w=300&h=300&fit=crop' }
+            { id: 1, name: 'WMX Rubber Zebra Sandal', desc: 'Comfortable summer footwear', price: 36, category: 'men', img: 'https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=300&h=300&fit=crop', colors: ['black', 'gray-300'] },
+            { id: 2, name: 'Supper Skinny Jogger', desc: 'In Brown - Premium comfort', price: 89, category: 'men', img: 'https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?w=300&h=300&fit=crop', colors: ['brown-600', 'gray-300'] },
+            { id: 3, name: 'Premium Cotton T-Shirt', desc: 'Soft and breathable', price: 24, category: 'men', img: 'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=300&h=300&fit=crop', colors: ['blue-500', 'red-500'] },
+            { id: 4, name: 'Pro Runner Shoes', desc: 'Lightweight performance', price: 120, category: 'men', img: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=300&h=300&fit=crop', colors: ['gray-800', 'blue-600'] },
+            { id: 5, name: 'Women Peach Dress', desc: 'Elegant and stylish', price: 59, category: 'women', img: 'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?w=300&h=300&fit=crop', colors: ['peach', 'mint'] },
+            { id: 6, name: 'Women Mint Blazer', desc: 'Fresh pastel look', price: 79, category: 'women', img: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=300&h=300&fit=crop', colors: ['mint', 'pastel-yellow'] },
+            { id: 7, name: 'Classic Denim Jacket', desc: 'Timeless denim style', price: 65, category: 'men', img: 'https://images.unsplash.com/photo-1576995853123-5a10305d93c0?w=300&h=300&fit=crop', colors: ['blue-600', 'blue-800'] },
+            { id: 8, name: 'Leather Crossbody Bag', desc: 'Premium leather quality', price: 95, category: 'women', img: 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=300&h=300&fit=crop', colors: ['brown-600', 'black'] },
+            { id: 9, name: 'Athletic Shorts', desc: 'Perfect for workouts', price: 32, category: 'men', img: 'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=300&h=300&fit=crop', colors: ['gray-600', 'blue-500'] },
+            { id: 10, name: 'Summer Maxi Dress', desc: 'Flowery summer vibes', price: 68, category: 'women', img: 'https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=300&h=300&fit=crop', colors: ['pink-300', 'blue-300'] },
+            { id: 11, name: 'Formal Oxford Shoes', desc: 'Professional office wear', price: 145, category: 'men', img: 'https://images.unsplash.com/photo-1549298916-b41d501d3772?w=300&h=300&fit=crop', colors: ['brown-800', 'black'] },
+            { id: 12, name: 'Knit Sweater', desc: 'Cozy winter warmth', price: 55, category: 'women', img: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=300&h=300&fit=crop', colors: ['gray-400', 'beige'] },
+            { id: 13, name: 'Cargo Pants', desc: 'Utility and style', price: 48, category: 'men', img: 'https://images.unsplash.com/photo-1473966968600-fa801b869a1a?w=300&h=300&fit=crop', colors: ['olive', 'khaki'] },
+            { id: 14, name: 'Silk Blouse', desc: 'Elegant evening wear', price: 72, category: 'women', img: 'https://images.unsplash.com/photo-1564257631407-3deb25e9c8e6?w=300&h=300&fit=crop', colors: ['white', 'cream'] },
+            { id: 15, name: 'Hiking Boots', desc: 'Adventure ready', price: 165, category: 'men', img: 'https://images.unsplash.com/photo-1549298916-b41d501d3772?w=300&h=300&fit=crop', colors: ['brown-600', 'gray-700'] },
+            { id: 16, name: 'Pencil Skirt', desc: 'Office professional', price: 42, category: 'women', img: 'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=300&h=300&fit=crop', colors: ['black', 'navy'] },
+            { id: 17, name: 'Polo Shirt', desc: 'Casual comfort', price: 28, category: 'men', img: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=300&h=300&fit=crop', colors: ['white', 'blue-500'] },
+            { id: 18, name: 'Evening Gown', desc: 'Red carpet ready', price: 189, category: 'women', img: 'https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=300&h=300&fit=crop', colors: ['black', 'red-600'] },
+            { id: 19, name: 'Track Suit', desc: 'Athletic performance', price: 85, category: 'men', img: 'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=300&h=300&fit=crop', colors: ['gray-600', 'blue-600'] },
+            { id: 20, name: 'Designer Handbag', desc: 'Luxury fashion statement', price: 245, category: 'women', img: 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=300&h=300&fit=crop', colors: ['brown-600', 'black'] }
         ];
 
         // Cart management with enhanced animations
@@ -874,7 +929,7 @@
             const sidebarItemCount = document.getElementById('sidebar-item-count');
             const sidebarTotal = document.getElementById('sidebar-total');
 
-            console.log('Updating cart with items:', cart); // Debug log
+            let missingProducts = [];
 
             if (cart.length === 0) {
                 cartItems.innerHTML = '';
@@ -884,8 +939,6 @@
                 cartActions.innerHTML = '';
                 sidebarItemCount.textContent = '0';
                 sidebarTotal.textContent = '$0.00';
-                
-                // Clear summary values
                 document.getElementById('subtotal').textContent = '$0.00';
                 document.getElementById('tax').textContent = '$0.00';
                 document.getElementById('total').textContent = '$0.00';
@@ -893,26 +946,20 @@
             }
 
             emptyCartState.classList.add('hidden');
-            
             let totalItems = 0;
             let subtotal = 0;
-
+            let renderedCount = 0;
             cartItems.innerHTML = cart.map((item, index) => {
                 const product = products.find(p => p.id === item.id);
                 if (!product) {
-                    console.warn('Product not found for ID:', item.id); // Debug log
-                    return '';
+                    missingProducts.push(item.id);
+                    return `<div class='bg-red-100 text-red-700 p-2 rounded mb-2'>Product with ID <b>${item.id}</b> not found. <button onclick='clearCart()' class='ml-2 px-2 py-1 bg-red-500 text-white rounded text-xs'>Clear Cart</button></div>`;
                 }
-                
+                renderedCount++;
                 const itemTotal = product.price * item.qty;
                 totalItems += item.qty;
                 subtotal += itemTotal;
-                
-                // Determine category for styling
                 const category = product.category || 'default';
-                
-                console.log(`Item ${product.name}: $${product.price} x ${item.qty} = $${itemTotal.toFixed(2)}`); // Debug log
-
                 return `
                     <div class="cart-item bg-white border border-gray-100 rounded-xl p-4 transition-all duration-300 stagger-item ${category}" data-delay="${0.1 + index * 0.1}">
                         <div class="flex items-center space-x-4">
@@ -941,27 +988,24 @@
                 `;
             }).join('');
 
+            if (renderedCount === 0 && cart.length > 0) {
+                cartItems.innerHTML += `<div class='bg-yellow-100 text-yellow-800 p-3 rounded mt-2'>No products could be displayed. <b>Your cart may be corrupted or out of sync.</b> <button onclick='clearCart()' class='ml-2 px-2 py-1 bg-yellow-500 text-white rounded text-xs'>Clear Cart</button></div>`;
+            }
+
             const tax = subtotal * 0.08;
             const total = subtotal + tax;
-
-            console.log(`Subtotal: $${subtotal.toFixed(2)}, Tax: $${tax.toFixed(2)}, Total: $${total.toFixed(2)}`); // Debug log
-
             cartCount.textContent = totalItems;
             itemCountText.textContent = `${totalItems} item${totalItems !== 1 ? 's' : ''}`;
             sidebarItemCount.textContent = totalItems;
             sidebarTotal.textContent = `$${total.toFixed(2)}`;
-
             document.getElementById('subtotal').textContent = `$${subtotal.toFixed(2)}`;
             document.getElementById('tax').textContent = `$${tax.toFixed(2)}`;
             document.getElementById('total').textContent = `$${total.toFixed(2)}`;
-
             cartActions.innerHTML = `
                 <button onclick="proceedToCheckout()" class="w-full bg-custom-blue text-white py-3 rounded-lg font-semibold hover:bg-custom-dark-blue transition-colors btn-animate">
                     <i class="fas fa-lock mr-2"></i>Proceed to Checkout
                 </button>
             `;
-            
-            // Trigger staggered animation for cart items
             setTimeout(() => {
                 const newStaggerItems = cartItems.querySelectorAll('.stagger-item');
                 newStaggerItems.forEach((item, index) => {
@@ -1269,6 +1313,43 @@
         
         // Expose test function globally
         window.addTestItems = addTestItems;
+
+        // Auto-hide/unhide sidebar for desktop
+        function isDesktop() {
+            return window.innerWidth >= 768;
+        }
+        function showSidebarTrigger() {
+            if (isDesktop()) {
+                document.getElementById('sidebarTrigger').style.display = 'block';
+            } else {
+                document.getElementById('sidebarTrigger').style.display = 'none';
+            }
+        }
+        showSidebarTrigger();
+        window.addEventListener('resize', showSidebarTrigger);
+
+        // Desktop auto-hide logic
+        if (document.getElementById('sidebarTrigger')) {
+            document.getElementById('sidebarTrigger').addEventListener('mouseenter', function() {
+                if (isDesktop()) {
+                    sidebar.classList.add('sidebar-open');
+                }
+            });
+            sidebar.addEventListener('mouseleave', function(e) {
+                if (isDesktop()) {
+                    // Only hide if mouse leaves sidebar to the right, not to overlay
+                    if (!sidebar.contains(e.relatedTarget) && e.relatedTarget !== document.getElementById('sidebarTrigger')) {
+                        sidebar.classList.remove('sidebar-open');
+                    }
+                }
+            });
+        }
+        // On page load, hide sidebar on desktop
+        window.addEventListener('DOMContentLoaded', function() {
+            if (isDesktop()) {
+                sidebar.classList.remove('sidebar-open');
+            }
+        });
     </script>
 </body>
 </html> 

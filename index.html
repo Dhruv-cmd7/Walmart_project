@@ -637,6 +637,166 @@
             transform: translateY(0) scale(1);
             opacity: 1;
         }
+
+        /* Enhanced Topbar Glassmorphism & Solid Color */
+        header.sticky {
+            box-shadow: 0 4px 24px rgba(0, 83, 226, 0.08);
+            background: linear-gradient(90deg, #0053e2 60%, #007bff 100%);
+            border-bottom: none;
+        }
+
+        header .fa-bag-shopping {
+            transition: color 0.3s, transform 0.2s;
+        }
+        header .fa-bag-shopping:hover {
+            color: #ffc220 !important;
+            transform: scale(1.15) rotate(-8deg);
+        }
+
+        header .cart-badge {
+            min-width: 22px !important;
+            height: 22px !important;
+            font-size: 12px !important;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.12) !important;
+            border: 2px solid #fff !important;
+        }
+
+        header a:focus, header button:focus {
+            outline: 2px solid #ffc220;
+            outline-offset: 2px;
+        }
+
+        .cart-badge.success-animation {
+            box-shadow: 0 0 0 4px #ffc22055;
+        }
+
+        /* Sidebar Aesthetic Enhancements */
+        #sidebar {
+            transform: translateX(-256px);
+            transition: transform 0.3s cubic-bezier(0.4,0,0.2,1), box-shadow 0.3s, background 0.3s;
+            z-index: 50;
+        }
+        #sidebar.sidebar-open {
+            transform: translateX(0);
+        }
+        #sidebarOverlay {
+            transition: opacity 0.3s;
+            opacity: 0;
+            z-index: 40;
+        }
+        #sidebarOverlay:not(.hidden) {
+            opacity: 1;
+        }
+        @media (min-width: 768px) {
+            #sidebar {
+                position: fixed;
+                left: 0;
+                top: 0;
+                height: 100vh;
+                z-index: 50;
+            }
+            #mainContent {
+                margin-left: 0 !important;
+                transition: none;
+            }
+        }
+
+        /* Enhanced Search Bar */
+        header .relative.flex.items-center.w-32,
+        header .relative.flex.items-center.w-32.sm\:w-48.md\:w-72 {
+            background: #f0f5ff;
+            border-radius: 9999px;
+            box-shadow: 0 2px 12px rgba(0,83,226,0.07);
+            padding: 0.5px 0;
+            transition: box-shadow 0.3s, background 0.3s;
+            min-height: 36px;
+            height: 36px;
+            width: 220px;
+        }
+        @media (min-width: 640px) {
+            header .relative.flex.items-center.w-32.sm\:w-48.md\:w-72 {
+                width: 320px;
+            }
+        }
+        @media (min-width: 768px) {
+            header .relative.flex.items-center.w-32.sm\:w-48.md\:w-72 {
+                width: 420px;
+            }
+        }
+        @media (min-width: 1024px) {
+            header .relative.flex.items-center.w-32.sm\:w-48.md\:w-72 {
+                width: 520px;
+            }
+        }
+        header .relative.flex.items-center.w-32:focus-within,
+        header .relative.flex.items-center.w-32.sm\:w-48.md\:w-72:focus-within {
+            background: #fff;
+            box-shadow: 0 4px 24px rgba(0,83,226,0.13);
+        }
+        header input#product-search {
+            background: transparent;
+            border: none;
+            border-radius: 9999px;
+            font-size: 1rem;
+            font-weight: 500;
+            color: #0053e2;
+            padding-left: 2.2rem;
+            padding-right: 0.8rem;
+            height: 32px;
+            min-height: 32px;
+            transition: background 0.3s, color 0.3s;
+        }
+        header input#product-search::placeholder {
+            color: #b6c6e3;
+            font-weight: 400;
+        }
+        header .fa-magnifying-glass {
+            left: 1rem;
+            color: #b6c6e3;
+            font-size: 1.1rem;
+        }
+
+        /* Enhanced Cart Icon */
+        header .relative.flex.items-center > a[aria-label="View cart"] {
+            background: linear-gradient(135deg, #f0f5ff 60%, #e6eeff 100%);
+            border: 1.5px solid #e0e7ef;
+            box-shadow: 0 2px 8px rgba(0,83,226,0.07);
+            transition: background 0.3s, box-shadow 0.3s, border 0.3s, transform 0.2s;
+            position: relative;
+        }
+        header .relative.flex.items-center > a[aria-label="View cart"]:hover {
+            background: linear-gradient(135deg, #ffc220 60%, #ffe066 100%);
+            border: 1.5px solid #ffc220;
+            box-shadow: 0 4px 16px rgba(255,194,32,0.13);
+            transform: scale(1.08) rotate(-6deg);
+        }
+        header .fa-bag-shopping {
+            color: #0053e2;
+            font-size: 1.4rem;
+            transition: color 0.3s, transform 0.2s;
+        }
+        header .relative.flex.items-center > a[aria-label="View cart"]:hover .fa-bag-shopping {
+            color: #001e60;
+        }
+
+        /* Enhanced Cart Badge */
+        header .cart-badge {
+            background: linear-gradient(135deg, #ffc220 60%, #ffe066 100%) !important;
+            color: #001e60 !important;
+            border: 2px solid #fff !important;
+            box-shadow: 0 2px 8px rgba(255,194,32,0.18) !important;
+            font-size: 13px !important;
+            min-width: 22px !important;
+            height: 22px !important;
+            top: -10px !important;
+            right: -10px !important;
+            z-index: 20 !important;
+            font-weight: 700 !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            transition: box-shadow 0.3s, background 0.3s, color 0.3s;
+        }
     </style>
 </head>
 <body class="bg-gray-50 font-poppins">
@@ -652,43 +812,68 @@
         </div>
     </div>
 
-    <div class="page-content loaded" id="pageContent">
-    <div class="flex h-screen flex-col md:flex-row">
-        <!-- Sidebar (Drawer for mobile) -->
-        <div id="sidebarDrawer" class="fixed inset-0 z-40 bg-black bg-opacity-40 transition-opacity duration-300 md:static md:bg-transparent md:z-0 md:w-64 md:block" style="display: none;"></div>
-        <div id="sidebar" class="w-64 bg-white shadow-lg flex flex-col fixed z-50 top-0 left-0 h-full transform -translate-x-full transition-transform duration-300 md:static md:translate-x-0 md:h-auto md:block">
-                <div class="p-6 border-b flex justify-center items-center stagger-item" data-delay="0.1">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Walmart_logo.svg/2000px-Walmart_logo.svg.png" alt="Walmart Logo" class="w-32 md:w-40 h-auto object-contain">
+    <!-- Full-width Navbar at the very top -->
+    <header class="sticky top-0 z-30 bg-custom-blue px-2 py-2 md:px-4 md:py-3 flex items-center justify-between w-full" data-delay="0.2">
+        <div class="flex items-center gap-2">
+            <!-- Hamburger for sidebar toggle -->
+            <button id="hamburgerBtn" class="p-2 rounded hover:bg-custom-gold/20 focus:outline-none transition-all duration-200">
+                <i class="fas fa-bars-staggered text-xl text-white"></i>
+            </button>
+            <!-- Navbar Logo (always visible) -->
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Walmart_logo.svg/2000px-Walmart_logo.svg.png" alt="Walmart Logo" class="w-32 md:w-48 h-auto object-contain filter invert brightness-0" style="max-width: 120px; min-width: 80px;" />
+        </div>
+        <div class="flex items-center gap-2 md:gap-4">
+            <div class="relative flex items-center w-32 sm:w-48 md:w-72">
+                <span class="absolute left-2 top-1/2 -translate-y-1/2 text-white opacity-70"><i class="fas fa-magnifying-glass"></i></span>
+                <input type="text" id="product-search" placeholder="Search..." class="pl-8 pr-2 py-1 md:py-2 rounded bg-custom-blue-white text-sm focus:outline-none focus:bg-white focus:text-custom-blue transition w-full border-none placeholder:text-custom-blue font-medium text-custom-blue" />
             </div>
-            <nav class="flex-1 p-4">
-                <ul class="space-y-2" id="sidebar-nav">
+            <div class="relative flex items-center">
+                <a href="cart.html" class="flex items-center justify-center hover:bg-custom-gold/20 rounded-full w-9 h-9 transition-all duration-200" aria-label="View cart">
+                    <i class="fas fa-bag-shopping text-xl text-white"></i>
+                </a>
+                <span class="absolute -top-1 -right-1 bg-custom-gold text-custom-blue text-[10px] rounded-full w-4 h-4 flex items-center justify-center cart-badge font-bold" aria-label="Cart items">0</span>
+            </div>
+        </div>
+    </header>
+
+    <div class="page-content loaded" id="pageContent">
+        <div id="mainContent" class="flex-1 flex flex-col min-h-0 transition-all duration-300">
+            <!-- Sidebar (Drawer for mobile) -->
+            <div id="sidebarDrawer" class="fixed inset-0 z-40 bg-black bg-opacity-40 transition-opacity duration-300 md:static md:bg-transparent md:z-0 md:w-64 md:block" style="display: none;"></div>
+            <!-- Sidebar Overlay -->
+            <div id="sidebarOverlay" class="hidden fixed inset-0 bg-black bg-opacity-20 z-40 transition-opacity duration-300"></div>
+            <div id="sidebar" class="w-64 bg-custom-blue-white shadow-xl flex flex-col fixed z-50 top-0 left-0 h-full rounded-r-3xl transition-transform duration-300" tabindex="0" aria-label="Sidebar navigation">
+                <nav class="flex-1 p-4">
+                    <ul class="space-y-2" id="sidebar-nav">
                         <li class="sidebar-item rounded-lg px-3 py-2 cursor-pointer active stagger-item" data-delay="0.2" data-link="index.html">
-                        <a href="index.html" class="flex items-center text-inherit no-underline w-full h-full">
-                            <i class="fas fa-tshirt text-white mr-3"></i>
-                            Clothing and Shoes
-                        </a>
-                    </li>
+                            <a href="index.html" class="flex items-center text-inherit no-underline w-full h-full">
+                                <i class="fas fa-tshirt text-white mr-3"></i>
+                                Clothing and Shoes
+                            </a>
+                        </li>
                         <li class="sidebar-item rounded-lg px-3 py-2 cursor-pointer stagger-item" data-delay="0.3" data-link="grocery.html">
-                        <a href="grocery.html" class="flex items-center text-inherit no-underline w-full h-full">
-                            <i class="fas fa-shopping-basket text-gray-500 mr-3"></i>
-                            Grocery
-                        </a>
-                    </li>
-                        <li class="sidebar-item rounded-lg px-3 py-2 cursor-pointer stagger-item" data-delay="0.4" data-link="#gifts">
-                        <i class="fas fa-gift text-gray-500 mr-3"></i>
-                        Gifts and Living
-                    </li>
-                </ul>
-                <!-- Last Orders -->
+                            <a href="grocery.html" class="flex items-center text-inherit no-underline w-full h-full">
+                                <i class="fas fa-shopping-basket text-gray-500 mr-3"></i>
+                                Grocery
+                            </a>
+                        </li>
+                        <li class="sidebar-item rounded-lg px-3 py-2 cursor-pointer stagger-item" data-delay="0.4" data-link="cart.html">
+                            <a href="cart.html" class="flex items-center text-inherit no-underline w-full h-full">
+                                <i class="fas fa-shopping-cart text-gray-500 mr-3"></i>
+                                Shopping Cart
+                            </a>
+                        </li>
+                    </ul>
+                    <!-- Last Orders -->
                     <div class="mt-8 stagger-item" data-delay="0.5">
-                    <h3 class="text-sm font-semibold text-gray-700 mb-3">Last Orders</h3>
-                    <div class="space-y-3">
+                        <h3 class="text-sm font-semibold text-gray-700 mb-3">Last Orders</h3>
+                        <div class="space-y-3">
                             <div class="bg-gray-50 rounded-lg p-3 cursor-pointer hover:bg-gray-100 transition-colors last-order-item" data-product-id="1">
                                 <div class="flex items-center justify-between">
                                     <div class="flex-1">
-                            <p class="text-xs text-gray-600">WMX Rubber Zebra Sandal</p>
-                            <p class="text-xs text-blue-600">$36.00</p>
-                        </div>
+                                        <p class="text-xs text-gray-600">WMX Rubber Zebra Sandal</p>
+                                        <p class="text-xs text-blue-600">$36.00</p>
+                                    </div>
                                     <button class="add-to-cart-btn ml-2">
                                         <i class="fas fa-plus"></i>
                                     </button>
@@ -697,54 +882,23 @@
                             <div class="bg-gray-50 rounded-lg p-3 cursor-pointer hover:bg-gray-100 transition-colors last-order-item" data-product-id="2">
                                 <div class="flex items-center justify-between">
                                     <div class="flex-1">
-                            <p class="text-xs text-gray-600">Supper Skinny Jogger</p>
-                            <p class="text-xs text-blue-600">$89.00</p>
+                                        <p class="text-xs text-gray-600">Supper Skinny Jogger</p>
+                                        <p class="text-xs text-blue-600">$89.00</p>
                                     </div>
                                     <button class="add-to-cart-btn ml-2">
                                         <i class="fas fa-plus"></i>
                                     </button>
                                 </div>
                             </div>
+                        </div>
                     </div>
-                </div>
-            </nav>
-        </div>
+                </nav>
+            </div>
 
-        <!-- Main Content -->
-        <div class="flex-1 flex flex-col min-h-0">
-            <!-- Topbar -->
-                <header class="bg-custom-blue-white shadow-sm border-b px-4 py-4 md:px-6 md:py-6 stagger-item flex items-center justify-between" data-delay="0.2">
-                <!-- Hamburger for mobile -->
-                <button id="hamburgerBtn" class="md:hidden p-2 rounded-lg hover:bg-gray-200 focus:outline-none mr-2">
-                    <i class="fas fa-bars text-xl text-custom-blue"></i>
-                </button>
-                <div class="flex-1 flex items-center justify-between">
-                    <div class="flex items-center space-x-2 md:space-x-6">
-                            <!-- Mobile Logo (visible only on small screens) -->
-                            <div class="md:hidden flex items-center">
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Walmart_logo.svg/2000px-Walmart_logo.svg.png" alt="Walmart Logo" class="w-24 h-auto object-contain">
-                            </div>
-                    </div>
-                    <div class="flex items-center space-x-2 md:space-x-4">
-                            <div class="relative flex items-center search-container w-40 sm:w-56 md:w-96 lg:w-[500px]">
-                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"><i class="fas fa-search"></i></span>
-                                <input type="text" id="product-search" placeholder="Search products..." class="pl-10 pr-4 py-2 md:py-3 rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-custom-blue transition w-full shadow-sm border border-gray-200" />
-                            </div>
-                            <div class="cart-button-container">
-                                <a href="cart.html" class="relative flex items-center justify-center bg-custom-blue hover:bg-custom-dark-blue transition-colors rounded-full shadow-md w-8 h-8 md:w-auto md:px-4 md:py-2 btn-animate">
-                                    <i class="fas fa-shopping-cart text-white text-sm md:mr-2"></i>
-                                    <span class="hidden md:inline text-white font-medium text-sm">Cart</span>
-                                </a>
-                                <span class="absolute -top-1 -right-1 bg-custom-gold text-custom-dark-blue text-xs rounded-full w-5 h-5 flex items-center justify-center cart-badge" style="min-width: 20px; height: 20px; font-size: 10px; font-weight: 700;">8</span>
-                            </div>
-                    </div>
-                </div>
-            </header>
-
-            <!-- Main Content Area -->
+            <!-- Main Content -->
             <main class="flex-1 p-2 sm:p-4 md:p-6 overflow-y-auto">
                 <!-- Explore Section -->
-                    <div class="mb-6 sm:mb-8 stagger-item" data-delay="0.4">
+                <div class="mb-6 sm:mb-8 stagger-item" data-delay="0.4">
                     <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 sm:mb-6 gap-2 sm:gap-0">
                         <div>
                             <h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-gray-800 mb-1">Clothing and Shoes</h2>
@@ -752,12 +906,12 @@
                         </div>
                         <div class="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
                             <div class="flex space-x-2">
-                                    <button class="px-4 py-2 bg-custom-blue text-white rounded-full text-sm font-medium category-btn btn-animate" data-category="all">All</button>
-                                    <button class="px-4 py-2 bg-gray-200 text-gray-700 rounded-full text-sm font-medium hover:bg-gray-300 category-btn btn-animate" data-category="men">Men</button>
-                                    <button class="px-4 py-2 bg-gray-200 text-gray-700 rounded-full text-sm font-medium hover:bg-gray-300 category-btn btn-animate" data-category="women">Women</button>
+                                <button class="px-4 py-2 bg-custom-blue text-white rounded-full text-sm font-medium category-btn btn-animate" data-category="all">All</button>
+                                <button class="px-4 py-2 bg-gray-200 text-gray-700 rounded-full text-sm font-medium hover:bg-gray-300 category-btn btn-animate" data-category="men">Men</button>
+                                <button class="px-4 py-2 bg-gray-200 text-gray-700 rounded-full text-sm font-medium hover:bg-gray-300 category-btn btn-animate" data-category="women">Women</button>
                             </div>
                             <div class="flex space-x-2 items-center">
-                                    <button class="p-2 text-gray-600 hover:bg-gray-100 rounded-lg btn-animate">
+                                <button class="p-2 text-gray-600 hover:bg-gray-100 rounded-lg btn-animate">
                                     <i class="fas fa-filter"></i>
                                 </button>
                             </div>
@@ -767,33 +921,33 @@
                     <!-- Hero Banners -->
                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
                         <!-- Large Banner -->
-                            <div class="lg:col-span-2 banner-gradient rounded-2xl lg:rounded-l-none p-4 sm:p-6 text-white relative overflow-hidden stagger-item" data-delay="0.5">
+                        <div class="lg:col-span-2 banner-gradient rounded-2xl lg:rounded-l-none p-4 sm:p-6 text-white relative overflow-hidden stagger-item" data-delay="0.5">
                             <div class="relative z-10">
-                                    <h3 class="text-lg sm:text-2xl font-bold mb-2 sm:mb-3">Step Into Style: Up to 50% OFF</h3>
-                                    <p class="text-sm sm:text-base opacity-90 mb-2 sm:mb-4">Discover the latest fashion trends and exclusive deals</p>
-                                    <button class="bg-custom-gold text-custom-dark-blue px-4 sm:px-5 py-2 rounded-lg font-semibold hover:bg-yellow-400 transition-colors btn-animate text-xs sm:text-sm">
+                                <h3 class="text-lg sm:text-2xl font-bold mb-2 sm:mb-3">Step Into Style: Up to 50% OFF</h3>
+                                <p class="text-sm sm:text-base opacity-90 mb-2 sm:mb-4">Discover the latest fashion trends and exclusive deals</p>
+                                <button class="bg-custom-gold text-custom-dark-blue px-4 sm:px-5 py-2 rounded-lg font-semibold hover:bg-yellow-400 transition-colors btn-animate text-xs sm:text-sm">
                                     Shop Fashion
                                 </button>
-                                </div>
-                                <div class="absolute top-0 right-0 w-24 sm:w-48 h-24 sm:h-48 bg-white opacity-10 rounded-full -mr-12 sm:-mr-24 -mt-12 sm:-mt-24"></div>
+                            </div>
+                            <div class="absolute top-0 right-0 w-24 sm:w-48 h-24 sm:h-48 bg-white opacity-10 rounded-full -mr-12 sm:-mr-24 -mt-12 sm:-mt-24"></div>
                         </div>
 
                         <!-- Small Banner -->
-                            <div class="bg-custom-blue-white rounded-2xl p-3 sm:p-5 relative overflow-hidden stagger-item" data-delay="0.6">
+                        <div class="bg-custom-blue-white rounded-2xl p-3 sm:p-5 relative overflow-hidden stagger-item" data-delay="0.6">
                             <div class="relative z-10">
-                                    <h4 class="text-base sm:text-lg font-bold text-custom-dark-blue mb-1 sm:mb-2">New Season Arrivals</h4>
-                                    <p class="text-gray-700 mb-2 sm:mb-3 text-xs sm:text-sm">Refresh your wardrobe</p>
-                                    <button class="bg-custom-blue text-white px-3 py-2 rounded-lg text-xs sm:text-sm font-medium hover:bg-custom-dark-blue transition-colors btn-animate">
+                                <h4 class="text-base sm:text-lg font-bold text-custom-dark-blue mb-1 sm:mb-2">New Season Arrivals</h4>
+                                <p class="text-gray-700 mb-2 sm:mb-3 text-xs sm:text-sm">Refresh your wardrobe</p>
+                                <button class="bg-custom-blue text-white px-3 py-2 rounded-lg text-xs sm:text-sm font-medium hover:bg-custom-dark-blue transition-colors btn-animate">
                                     Explore Fashion
                                 </button>
-                                </div>
-                                <img src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?w=150&h=150&fit=crop" 
-                                     alt="Fashion Model" class="absolute bottom-0 right-0 w-16 h-16 sm:w-24 sm:h-24 object-cover rounded-tl-2xl">
+                            </div>
+                            <img src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?w=150&h=150&fit=crop" 
+                                 alt="Fashion Model" class="absolute bottom-0 right-0 w-16 h-16 sm:w-24 sm:h-24 object-cover rounded-tl-2xl">
                         </div>
                     </div>
 
                     <!-- Product Grid -->
-                        <div id="product-grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-2 sm:gap-3 mb-6 sm:mb-8">
+                    <div id="product-grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-2 sm:gap-3 mb-6 sm:mb-8">
                         <!-- Product cards will be rendered by JS -->
                     </div>
 
@@ -843,7 +997,7 @@
                         </div>
                     </div>
                 </main>
-                </div>
+            </div>
         </div>
     </div>
 
@@ -851,28 +1005,39 @@
     <div id="toast" class="toast"></div>
 
     <script>
-        // Sidebar drawer toggle for mobile
         const sidebar = document.getElementById('sidebar');
-        const sidebarDrawer = document.getElementById('sidebarDrawer');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
         const hamburgerBtn = document.getElementById('hamburgerBtn');
+
         function openSidebar() {
-            sidebar.style.transform = 'translateX(0)';
-            sidebarDrawer.style.display = 'block';
+            sidebar.classList.add('sidebar-open');
+            sidebarOverlay.classList.remove('hidden');
+            sidebarOverlay.style.opacity = '1';
         }
         function closeSidebar() {
-            sidebar.style.transform = 'translateX(-100%)';
-            sidebarDrawer.style.display = 'none';
+            sidebar.classList.remove('sidebar-open');
+            sidebarOverlay.classList.add('hidden');
+            sidebarOverlay.style.opacity = '0';
         }
-        hamburgerBtn.addEventListener('click', openSidebar);
-        sidebarDrawer.addEventListener('click', closeSidebar);
-        // Hide sidebar on resize to md+
-        window.addEventListener('resize', function() {
-            if (window.innerWidth >= 768) {
-                sidebar.style.transform = 'translateX(0)';
-                sidebarDrawer.style.display = 'none';
+        function toggleSidebar() {
+            sidebar.classList.toggle('sidebar-open');
+            if (sidebar.classList.contains('sidebar-open')) {
+                sidebarOverlay.classList.remove('hidden');
+                sidebarOverlay.style.opacity = '1';
             } else {
-                sidebar.style.transform = 'translateX(-100%)';
+                sidebarOverlay.classList.add('hidden');
+                sidebarOverlay.style.opacity = '0';
             }
+        }
+
+        // Hamburger click toggles sidebar
+        hamburgerBtn.addEventListener('click', toggleSidebar);
+        // Overlay click closes sidebar
+        sidebarOverlay.addEventListener('click', closeSidebar);
+
+        // On resize, always close sidebar and overlay
+        window.addEventListener('resize', function() {
+            closeSidebar();
         });
 
         // Initialize page directly without transitions
